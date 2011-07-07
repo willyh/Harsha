@@ -1,4 +1,10 @@
 DinerApp::Application.routes.draw do
+  resources :menu_items
+
+  match '/create', 	:to => 'menu_items#new'
+  match '/display', 	:to => 'menu_items#index'
+
+  root :to => 'menu_items#new'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

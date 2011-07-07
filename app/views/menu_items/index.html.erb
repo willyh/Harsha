@@ -1,0 +1,10 @@
+<h1>Listing Menu Items</h1>
+
+<ul>
+  <% @menu_items.each do |item| %>
+    <li>
+      <%= link_to item.name, item %><br />
+      <%= "Price: #{format_price item.price}" %>
+    <li>
+  <% end %>
+</ul>
