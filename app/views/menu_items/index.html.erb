@@ -4,7 +4,31 @@
   <% @menu_items.each do |item| %>
     <li>
       <%= link_to item.name, item %><br />
-      <%= "Price: #{format_price item.price}" %>
-    <li>
+      <%= "Price: #{format_price item.price}" %><br />
+      <% if item.description? %>
+        <%= "#{item.description}" %><br />
+      <% end %>
+      <%= link_to "edit", edit_menu_item_path(item) %>
+      | <%= link_to "remove", item, :method => :delete, :title => "Delete #{item.name}" %>
+    </li>
   <% end %>
 </ul>
+<h2>Add a menu item</h2>
+<%= form_for(@menu_item) do |f| %>
+<%= render 'shared/error_messages', :object => f.object %>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :price %><br />
+    <%= f.text_field :price %><br />
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_field :description %><br />
+  </div>
+  <div class="actions">
+    <%= f.submit "Create item" %>
+  </div>
+<% end %>
