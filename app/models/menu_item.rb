@@ -2,6 +2,7 @@ class MenuItem < ActiveRecord::Base
   attr_accessible :name, :price, :description
 
   validates :name, :presence => true
+# need to reject duplicate names
 
   validates :price, 	:presence 	=> true
 
