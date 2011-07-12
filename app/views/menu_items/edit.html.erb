@@ -5,33 +5,14 @@
   <% @menu_items.each do |item|%>
     <% if item.id == @menu_item.id %>
       <%= form_for(@menu_item) do |f| %>
-      <%= render 'shared/error_messages', :object => f.object %>
-        <div class="field">
-	  <%= f.label :name %><br />
-	  <%= f.text_field :name %>
-        </div>
-        <div class="field">
-          <%= f.label :price %><br />
-          <%= f.text_field :price %><br />
-        </div>
-        <div class="field">
-          <%= f.label :description %><br />
-          <%= f.text_field :description %><br />
-        </div>
+        <%= render 'shared/error_messages', :object => f.object %>
+        <%= render 'shared/menu_item_entries', :f => f %>
         <div class="actions">
           <%= f.submit "Update #{item.name}" %>
         </div>
       <% end %>
     <% else %>
-      <li>
-        <%= link_to item.name, item %><br />
-        <%= "Price: #{format_price item.price}" %><br />
-      <% if item.description? %>
-        <%= "#{item.description}" %><br />
-      <% end %>
-        <%= link_to "edit", edit_menu_item_path(item) %>
-        | <%= link_to "remove", item, :method => :delete, :title => "Delete #{item.name}" %>
-      </li>
+      <%= render 'shared/describe_each', :item => item %>
     <% end %>
   <% end %>
 </ul>

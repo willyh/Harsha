@@ -1,0 +1,9 @@
+    <li>
+      <%= link_to item.name, item %><br />
+      <%= "Price: #{format_price item.price}" %><br />
+      <% if item.description? %>
+        <%= "#{item.description}" %><br />
+      <% end %>
+      <%= link_to "edit", edit_menu_item_path(item) %>
+      | <%= link_to "remove", item, :method => :delete, :title => "Delete #{item.name}" %>
+    </li>

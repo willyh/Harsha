@@ -6,7 +6,9 @@ class MenuItemsController < ApplicationController
 
   def create
     @menu_item = MenuItem.new(params[:menu_item])
+    @menu_item.category = "Other" if @menu_item.category.blank?
     if @menu_item.save
+      MenuItem.categories << @menu_item.category
       redirect_to display_path
     else
       @menu_items = MenuItem.all
@@ -26,6 +28,7 @@ class MenuItemsController < ApplicationController
   def update
     @menu_item = MenuItem.find(params[:id])
     if @menu_item.update_attributes(params[:menu_item])
+      MenuItem.categories << @menu_item.category
       redirect_to display_path
     else
       @menu_items = MenuItem.all
