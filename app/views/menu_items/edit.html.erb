@@ -1,18 +1,32 @@
 <h1>
   <%= "Edit #{@menu_item.name}" %>
 </h1>
+
+<% categories ||= [] %>
+<% @menu_items.each do |item| %>
+  <% categories << item.category.capitalize unless categories.include? item.category.capitalize %>
+<% end %>
+
+<% categories.each do |categ| %>
+  
+    <%= link_to categ, display_path(:category => categ) %>
+  
+<% end %>
+
 <ul>
   <% @menu_items.each do |item|%>
-    <% if item.id == @menu_item.id %>
-      <%= form_for(@menu_item) do |f| %>
-        <%= render 'shared/error_messages', :object => f.object %>
-        <%= render 'shared/menu_item_entries', :f => f %>
-        <div class="actions">
-          <%= f.submit "Update #{item.name}" %>
-        </div>
+    <% if item.category.capitalize == params[:category] %>
+      <% if item.id == @menu_item.id %>
+        <%= form_for(@menu_item) do |f| %>
+          <%= render 'shared/error_messages', :object => f.object %>
+          <%= render 'shared/menu_item_entries', :f => f, :categories => categories  %>
+          <div class="actions">
+            <%= f.submit "Update #{item.name}" %>
+          </div>
+        <% end %>
+      <% else %>
+        <%= render 'shared/describe_each', :item => item %>
       <% end %>
-    <% else %>
-      <%= render 'shared/describe_each', :item => item %>
     <% end %>
   <% end %>
 </ul>

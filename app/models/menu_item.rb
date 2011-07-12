@@ -1,7 +1,4 @@
 class MenuItem < ActiveRecord::Base
-  @@categories ||= []
-
-  def self.categories; @@categories; end
 
   attr_accessible :name, :price, :description, :category
 

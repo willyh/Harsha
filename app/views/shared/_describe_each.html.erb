@@ -4,6 +4,6 @@
       <% if item.description? %>
         <%= "#{item.description}" %><br />
       <% end %>
-      <%= link_to "edit", edit_menu_item_path(item) %>
+      <%= link_to "edit", edit_menu_item_path(item, :category => item.category )%>
       | <%= link_to "remove", item, :method => :delete, :title => "Delete #{item.name}" %>
     </li>

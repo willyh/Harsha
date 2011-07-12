@@ -1,16 +1,24 @@
   <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
+    <%= f.label :name %>
+    <%= f.text_field :name %><br />
   </div>
   <div class="field">
-    <%= f.label :price %><br />
+    <%= f.label :price %>
     <%= f.text_field :price %><br />
   </div>
   <div class="field">
-    <%= f.label :description %><br />
+    <%= f.label :description %>
     <%= f.text_field :description %><br />
   </div>
   <div class="field">
-    <%= f.label :category %><br />
-    <%= f.text_field :category %><br />
+    <% if params[:category] %>
+      <%= f.label :category %><br />
+    <% categories.each do |c| %>
+      <%= f.radio_button :category, c, :checked => params[:category] == c.capitalize %>
+      <%= f.label :category, c %><br />
+    <% end %>
+    <% else %>
+      <%= f.label :category %>
+      <%= f.text_field :category %><br />
+    <% end %>
   </div>
