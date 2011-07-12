@@ -7,17 +7,12 @@
   <% end %>
 </h1>
 
-
-<% categories = [] %>
+<% categories ||= [] %>
 <% @menu_items.each do |item| %>
   <% categories << item.category.capitalize unless categories.include? item.category.capitalize %>
 <% end %>
 
-<% categories.each do |categ| %>
-  
-    <%= link_to categ, display_path(:category => categ) %>
-  
-<% end %>
+<%= render 'shared/categories', :categories => categories %>
 
 <ul>
   <% @menu_items.each do |item| %>

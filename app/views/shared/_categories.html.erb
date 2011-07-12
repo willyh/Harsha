@@ -1,0 +1,10 @@
+<nav class="category">
+  <ul>
+    <% categories.each do |categ| %>
+      <li>
+        <%= link_to categ, display_path(:category => categ) %>
+      </li>
+    <% end %>
+  </ul>
+</nav>
+
