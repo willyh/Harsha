@@ -1,7 +1,3 @@
-<h1>
-  <%= "Edit #{@menu_item.name}" %>
-</h1>
-
 <% categories ||= [] %>
 <% @menu_items.each do |item| %>
   <% categories << item.category.capitalize unless categories.include? item.category.capitalize %>

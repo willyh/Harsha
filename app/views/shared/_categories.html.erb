@@ -2,7 +2,7 @@
   <ul>
     <% categories.each do |categ| %>
       <li>
-        <%= link_to categ, display_path(:category => categ) %>
+        <%= link_to categ, menu_path(:category => categ) %>
       </li>
     <% end %>
   </ul>

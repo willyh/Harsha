@@ -12,11 +12,7 @@
   </div>
   <div class="field">
     <% if params[:category] %>
-      <%= f.label :category %><br />
-    <% categories.each do |c| %>
-      <%= f.radio_button :category, c, :checked => params[:category] == c.capitalize %>
-      <%= f.label :category, c %><br />
-    <% end %>
+      <%= f.hidden_field :category, :value => params[:category] %>
     <% else %>
       <%= f.label :category %>
       <%= f.text_field :category %><br />

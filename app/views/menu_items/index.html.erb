@@ -1,12 +1,4 @@
 <% category = params[:category] %>
-<h1>
-  <% if category %>
-    <%= "Listing #{category} Items" %>
-  <% else %>
-    <%= "Listing Categories" %>
-  <% end %>
-</h1>
-
 <% categories ||= [] %>
 <% @menu_items.each do |item| %>
   <% categories << item.category.capitalize unless categories.include? item.category.capitalize %>
@@ -22,10 +14,10 @@
   <% end %>
 </ul>
 
-<h2>
-  <% menu = category || "Menu Item" %>
-  <%= "Add a #{menu}" %>
-</h2>
+<h1>
+  <% menu = category || "Menu Items" %>
+  <%= "Add to #{menu}" %>
+</h1>
 <%= form_for(@menu_item) do |f| %>
   <%= render 'shared/error_messages', :object => f.object %>
   <%= render 'shared/menu_item_entries', :f => f, :categories => categories %>
