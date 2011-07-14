@@ -2,7 +2,9 @@
       <%= link_to item.name, item %><br />
       <%= "Price: #{format_price item.price}" %><br />
       <% if item.description? %>
+      <descr>
         <%= "#{item.description}" %><br />
+      </descr>
       <% end %>
       <%= link_to "edit", edit_menu_item_path(item, :category => item.category )%><br />
       <delete>

@@ -45,6 +45,10 @@ ul li {
   padding: 0 20px;
   font-size: 250%;
 }
+ul li descr {
+  font-size: 70%;
+  font-style: italic;
+}
 nav {
   background-color: #333333;
   white-space: nowrap;
@@ -90,3 +94,4 @@ delete {
 delete:hover {
   background: #990000;
 }
+
