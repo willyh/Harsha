@@ -19,4 +19,12 @@ module OrdersHelper
     end
     return false
   end
+  def remove_item order, item
+    arr = order.items.split("\n")
+    if arr.delete_at arr.index(item)
+      items = arr.join("\n")
+      price = order.price - item.split(" ").first.delete("$").to_f
+      order.update_attributes(:items => items, :price => price)
+    end
+  end
 end

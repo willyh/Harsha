@@ -25,9 +25,12 @@
     <h1>Your Order</h1>
     <ul>
     <% if @order.items %>
+      <% if params[:remove] && @order.items=~ /[#{params[:remove]}]/ %>
+	<% remove_item @order, params[:remove] %>
+      <% end %>
       <% @order.items.split("\n").each do |item| %>
         <li>
-        <%= item %><br />
+        <%= item %> <%= link_to "remove", edit_order_path(@order, :remove => item) %><br />
         </li>
       <% end %>
     <% end %>
