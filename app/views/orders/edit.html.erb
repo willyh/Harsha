@@ -25,16 +25,18 @@
     <h1>Your Order</h1>
     <ul>
     <% if @order.items %>
-    <% @order.items.split("\n").each do |item| %>
-      <li>
-      <%= item %><br />
-      </li>
-    <% end %>
+      <% @order.items.split("\n").each do |item| %>
+        <li>
+        <%= item %><br />
+        </li>
+      <% end %>
     <% end %>
     </ul>
-    <%= "#{format_price @order.price}" %><br />
+    <%= "Total: #{format_price @order.price}" %><br />
     <%= f.label "Your name:" %>
     <%= f.text_field :customer_name %><br />
+    <%= f.label "Pickup Time:" %>
+    <%= f.select :pickup_time, options_for_select(available_times) %><br />
     <%= f.submit "Complete Order" %>
   <% end %>
 <% end %>
