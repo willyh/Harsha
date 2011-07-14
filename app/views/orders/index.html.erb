@@ -1,0 +1,13 @@
+<% @orders.each do |o|%>
+    <h1><%= "#{o.customer_name}'s Order" %></h1>
+    <ul>
+    <% if o.items %>
+      <% o.items.split("\n").each do |item| %>
+        <li>
+        <%= item %><br />
+        </li>
+      <% end %>
+    <% end %>
+    </ul>
+    <%= "#{format_price o.price}" %><br />
+<% end %>

@@ -7,7 +7,7 @@ class MenuItemsController < ApplicationController
 
   def create
     @menu_item = MenuItem.new(params[:menu_item])
-    @menu_item.category = @menu_item.category || "Other"
+    @menu_item.category = @menu_item.category.capitalize || "Other"
     if @menu_item.save
       redirect_to menu_path :category => @menu_item.category
     else

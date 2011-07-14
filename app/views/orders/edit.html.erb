@@ -1,0 +1,41 @@
+<% form_for(@order) do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+    <% menu = {} %>
+    <% @menu_items.each do |item| %>
+      <% menu[item.category] ||= [] %>
+      <% menu[item.category] << item %>
+    <% end %>
+  <nav class="category">
+    <ul>
+      <% menu.each do |c,item| %>
+      <li>
+	<%= link_to c, edit_order_path(@order, :category => c) %>
+      </li>
+      <% end %>
+    </ul>
+  </nav>
+  <% if params[:category] %>
+    <h1> <%= params[:category] %></h1><br />
+    <% menu[params[:category]].each do |item| %>
+      <%= f.radio_button :item_addition, "#{item.price} #{item.name}" %>
+      <%= f.label "#{item.name} #{format_price item.price}" %><br />
+    <% end %>
+  <%= f.submit "Add Item to order" %><br />
+  <% else %>
+    <h1>Your Order</h1>
+    <ul>
+    <% if @order.items %>
+    <% @order.items.split("\n").each do |item| %>
+      <li>
+      <%= item %><br />
+      </li>
+    <% end %>
+    <% end %>
+    </ul>
+    <%= "#{format_price @order.price}" %><br />
+    <%= f.label "Your name:" %>
+    <%= f.text_field :customer_name %><br />
+    <%= f.submit "Complete Order" %>
+  <% end %>
+<% end %>
+<%= link_to "View Order", edit_order_path( @order ) %>

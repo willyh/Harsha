@@ -1,8 +1,8 @@
 <nav class="category">
   <ul>
-    <% categories.each do |categ| %>
+    <% categories.each do |c, item| %>
       <li>
-        <%= link_to categ, menu_path(:category => categ) %>
+        <%= link_to c, menu_path(:category => c) %>
       </li>
     <% end %>
   </ul>
