@@ -11,4 +11,5 @@
     </ul>
     <%= "Total: #{format_price o.price}" %><br />
     <%= "Pickup Time: #{o.pickup_time}" %><br />
+    <%= link_to "Delete #{o.customer_name}'s Order", o, :method => :delete %><br />
 <% end %>

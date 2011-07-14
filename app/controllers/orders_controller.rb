@@ -36,4 +36,13 @@ class OrdersController < ApplicationController
     @head = "All Orders"
     @orders = Order.all
   end
+  def destroy
+    pickup_time = Order.find(params[:id]).pickup_time
+    Order.find(params[:id]).destroy
+    if pickup_time.nil?
+      redirect_to home_path
+    else
+      redirect_to orders_path
+    end
+  end
 end

@@ -40,4 +40,5 @@
     <%= f.submit "Complete Order" %>
   <% end %>
 <% end %>
-<%= link_to "View Order", edit_order_path( @order ) %>
+<%= link_to "Return to Order", edit_order_path( @order ) %><br />
+<%= link_to "Cancel", @order, :method => :delete, :confirm => "Are you sure?" %><br />
