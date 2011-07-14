@@ -24,7 +24,7 @@ class OrdersController < ApplicationController
     if params[:order] 
       if params[:order].has_key? :item_addition
         redirect_to edit_order_path @order if @order.update_attributes(@order.add_items params[:order])
-      elsif params[:order.has_key? :pickup_time
+      elsif params[:order].has_key? :pickup_time
         redirect_to orders_path if @order.update_attributes(params[:order])
       end
     else
