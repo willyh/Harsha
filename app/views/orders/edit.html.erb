@@ -41,4 +41,6 @@
   <% end %>
 <% end %>
 <%= link_to "Return to Order", edit_order_path( @order ) %><br />
+<delete>
 <%= link_to "Cancel", @order, :method => :delete, :confirm => "Are you sure?" %><br />
+</delete>

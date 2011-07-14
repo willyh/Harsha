@@ -6,6 +6,7 @@ module OrdersHelper
       prospective_time = (now + (n*5).minutes ).strftime("%I:%M")
       times << prospective_time unless has_pickup_time? Order.all, prospective_time
     end 
+    times << "Sorry We're Too Busy at the Moment" if times.empty?
     times
   end
   def round_up time

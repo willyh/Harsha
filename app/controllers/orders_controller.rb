@@ -21,13 +21,16 @@ class OrdersController < ApplicationController
 
   def update
     @order = Order.find(params[:id])
-    if params[:order].has_key? :customer_name
-      if @order.update_attributes(params[:order])
-        redirect_to orders_path
+    if params[:order] 
+      if params[:order].has_key? :item_addition
+        redirect_to edit_order_path @order if @order.update_attributes(@order.add_items params[:order])
+      elsif params[:order.has_key? :pickup_time
+        redirect_to orders_path if @order.update_attributes(params[:order])
       end
-    elsif @order.update_attributes(@order.add_items params[:order])
-      redirect_to edit_order_path @order
     else
+      @menu_items = MenuItem.all
+      @order = Order.find(params[:id])
+      @head = "Add to Order"
       render 'edit'
     end
   end

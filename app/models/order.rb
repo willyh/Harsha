@@ -2,7 +2,8 @@ class Order < ActiveRecord::Base
   attr_accessor :item_addition
   attr_accessible :customer_name, :pickup_time, :price, :items
 
-  validates :pickup_time, :uniqueness => true, :allow_nil => true
+  validates :pickup_time, :uniqueness => true, :allow_nil => true,
+		:format => { :with => /\d:\d/ }
 
   def format_price price
     if price.to_s =~ /\d*[.]\d{2,}/
@@ -20,7 +21,7 @@ class Order < ActiveRecord::Base
       hash[:price] = self.price + item_price
       hash[:items] = (self.items || "") + format_price(item_price) + " " + arr.join(" ")+ "\n"
     end
-  hash
+    hash
   end
   
 
