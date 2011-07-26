@@ -1,4 +1,5 @@
 class MenuItemsController < ApplicationController
+  before_filter :authorize, :except =>  [:index, :show, :home]
   def index
     @menu_items = MenuItem.all
     @menu_item = MenuItem.new 

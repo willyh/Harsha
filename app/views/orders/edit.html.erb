@@ -17,10 +17,14 @@
   <% if params[:category] %>
     <h1> <%= params[:category] %></h1><br />
     <% menu[params[:category]].each do |item| %>
-      <%= f.radio_button :item_addition, "#{item.price} #{item.name}" %>
-      <%= f.label "#{item.name} #{format_price item.price}" %><br />
+      <div class="field">
+        <%= f.radio_button :item_addition, "#{item.price} #{item.name}" %>
+        <%= f.label "#{item.name} #{format_price item.price}" %><br />
+      </div>
     <% end %>
-  <%= f.submit "Add Item to order" %><br />
+    <div class="actions">
+      <%= f.submit "Add Item to order" %><br />
+    </div>
   <% else %>
     <h1>Your Order</h1>
     <ul>
@@ -36,11 +40,17 @@
     <% end %>
     </ul>
     <%= "Total: #{format_price @order.price}" %><br />
-    <%= f.label "Your name:" %>
-    <%= f.text_field :customer_name %><br />
-    <%= f.label "Pickup Time:" %>
-    <%= f.select :pickup_time, options_for_select(available_times) %><br />
-    <%= f.submit "Complete Order" %>
+    <div class="field">
+      <%= f.label "Your name:" %>
+      <%= f.text_field :customer_name %><br />
+    </div>
+    <div class="field">
+      <%= f.label "Pickup Time:" %>
+      <%= f.select :pickup_time, options_for_select(available_times) %><br />
+    </div>
+    <div class="actions">
+      <%= f.submit "Complete Order" %>
+    </div>
   <% end %>
 <% end %>
 <%= link_to "Return to Order", edit_order_path( @order ) %><br />

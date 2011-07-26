@@ -1,6 +1,30 @@
 <% form_for(@order) do |f| %>
   <%= render 'shared/error_messages', :object => f.object %>
-  <%= f.hidden_field :customer_name, :value => "" %>
-  <%= f.hidden_field :price, :value => 0 %>
-  <%= f.submit "New Order" %><br />
+<% categories = {} %>
+<% MenuItem.all.each do |item| %>
+  <% categories[item.category] ||= [] %>
+  <% categories[item.category] << item %>
+<% end %>
+<% menu = build_menu %>
+<table>
+<% categories.each do |key, values| %>
+  <th><%=key%></th>
+<% end %>
+<% menu.each do |key, val| %>
+<% puts "value is #{val}" %>
+<tr>
+  <% categories.each do |key, values| %>
+    <td>
+      <% if val[key] %>
+        <%= "#{val[key].name} #{format_price val[key].price}"  %><br />
+        <%= link_to 'add to bag', '#' %>
+      <% end %>
+    </td>
+  <% end %>
+</tr>
+<% end %>
+</table>
+  <div class="actions">
+    <%= link_to image_tag "submit-button.png" %><br />
+  </div>
 <% end %>

@@ -99,3 +99,14 @@ delete:hover {
   background: #990000;
 }
 
+table td{
+  padding-top: 15px;
+}
+table a {
+  color: #0000CC;
+}
+
+table a:hover {
+  color: #000066;
+  text-decoration: underline;
+}

@@ -6,8 +6,10 @@
         <%= "#{item.description}" %><br />
       </descr>
       <% end %>
+      <% if admin? %>
       <%= link_to "edit", edit_menu_item_path(item, :category => item.category )%><br />
       <delete>
 	<%= link_to "remove", item, :method => :delete, :title => "Delete #{item.name}" %><br />
       </delete>
+      <% end %>
     </li>

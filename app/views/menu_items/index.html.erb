@@ -7,14 +7,17 @@
 
 <%= render 'shared/categories', :categories => categories %>
 
-<ul>
 <% if categories[category] %>
+<ul>
   <% categories[category].each do |item| %>
     <%= render 'shared/describe_each', :item => item %>
   <% end %>
-<% end %>
 </ul>
+<% else %>
+  <h2>Select a Category Above</h2>
+<% end %>
 
+<% if admin? %>
 <h1>
   <% menu = category || "Menu Items" %>
   <%= "Add to #{menu}" %>
@@ -25,4 +28,5 @@
   <div class="actions">
     <%= f.submit "Create item" %>
   </div>
+<% end %>
 <% end %>

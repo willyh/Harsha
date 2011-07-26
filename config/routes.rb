@@ -1,10 +1,15 @@
 DinerApp::Application.routes.draw do
 
+  get "sessions/new"
+
   resources :menu_items
   resources :orders
+  resources :sessions, :only => [:new, :create, :destroy]
 
   match '/home',	:to => 'menu_items#home'
   match '/menu', 	:to => 'menu_items#index'
+  match '/login',	:to => 'sessions#new'
+  match '/logout',	:to => 'sessions#destroy'
 
   root :to => 'menu_items#home'
   # The priority is based upon order of creation:

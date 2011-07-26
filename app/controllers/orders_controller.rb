@@ -1,7 +1,10 @@
 class OrdersController < ApplicationController
+  helper_method :build_menu
+  before_filter :authorize, :except => [:new, :edit, :create, :update, :show ]
   def new
     @order = Order.new
-    @head = "Make an Order"
+    @head = "Place Your Order"
+    session[:order] = Order.new
   end
 
   def edit
@@ -25,7 +28,8 @@ class OrdersController < ApplicationController
       if params[:order].has_key? :item_addition
         redirect_to edit_order_path @order if @order.update_attributes(@order.add_items params[:order])
       elsif params[:order].has_key? :pickup_time
-        redirect_to orders_path if @order.update_attributes(params[:order])
+        flash[:success] = "Your order has been placed!"
+        redirect_to @order if @order.update_attributes(params[:order])
       end
     else
       @menu_items = MenuItem.all
@@ -48,4 +52,26 @@ class OrdersController < ApplicationController
       redirect_to orders_path
     end
   end
+
+  def show
+    @order = Order.find(params[:id])
+    @head = @order.customer_name
+  end
+  def build_menu
+    menu ={} 
+    menu[1] = {}
+    MenuItem.all.each do |item|
+      check 1, menu, item
+    end
+    menu
+  end
+  def check index, menu, item
+    menu[index] ||= {}
+    if menu[index][item.category]
+      check index + 1, menu, item
+    else
+      menu[index][item.category] = item
+    end
+  end
+
 end

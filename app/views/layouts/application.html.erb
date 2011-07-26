@@ -12,6 +12,9 @@
   <header> <%= "#{@head}" %> </header>
 
 </head>
+<% flash.each do |key, value| %>
+  <div class="flash <%= key %>"><%= value %></div>
+<% end %>
 <%= yield %>
 <body> 
 <nav class="navigation_bar">
@@ -20,14 +23,22 @@
       <%= link_to "Home", home_path %>
     </li>
     <li>
-      <%= link_to "Menu", menu_path %>
-    </li>
-    <li>
-      <%= link_to "Order", new_order_path %>
+      <%= link_to "Menu", new_order_path %>
     </li>
   </ul>
 </nav>
-
+<% if admin? %>
+<nav class="navigation_bar">
+  <ul>
+    <li>
+      <%= link_to "Edit Menu", menu_path %>
+    </li>
+    <li>
+      <%= link_to "Orders", orders_path %>
+    </li>
+  </ul>
+</nav>
+<% end %>
 </body>
 </div>
 </html>

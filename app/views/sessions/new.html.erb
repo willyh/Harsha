@@ -1,0 +1,15 @@
+<h1>Hints</h1>
+<ol>
+  <li>nyao</li>
+  <li>baby</li>
+  <li>plural</li>
+</ol>
+<%= form_for(:session, :url => sessions_path) do |f| %>
+  <div class="field">
+    <%= f.label :password %>
+    <%= f.password_field :password %><br />
+  </div>
+  <div class"actions">
+    <%= f.submit "Submit" %>
+  </div>
+<% end %>
