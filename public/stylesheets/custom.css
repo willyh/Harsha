@@ -100,6 +100,7 @@ delete:hover {
 }
 
 table td{
+  text-align: center;
   padding-top: 15px;
 }
 table a {
@@ -109,4 +110,14 @@ table a {
 table a:hover {
   color: #000066;
   text-decoration: underline;
+}
+
+div.field {
+  size: 200%;
+}
+
+th {
+  text-align: center;
+  background: #333;
+  color: #fff;
 }

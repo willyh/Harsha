@@ -1,7 +1,17 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  helper_method :admin?
+  helper_method :admin?, :get_categories
+
+  def get_categories
+    menu = {}
+    MenuItem.all.each do |item|
+      menu[item.category] ||= []
+      menu[item.category] << item
+    end
+    menu
+  end
+
 
   protected
 

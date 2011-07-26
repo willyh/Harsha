@@ -1,10 +1,9 @@
 class OrdersController < ApplicationController
   helper_method :build_menu
-  before_filter :authorize, :except => [:new, :edit, :create, :update, :show ]
+  before_filter :authorize, :except => [:new, :edit, :create, :update, :show, :destroy ]
   def new
-    @order = Order.new
     @head = "Place Your Order"
-    session[:order] = Order.new
+    @order = Order.new
   end
 
   def edit
@@ -15,9 +14,28 @@ class OrdersController < ApplicationController
 
   def create
     @order = Order.new(params[:order])
+    categories = get_categories
+    categories.each do |key, value|
+      if @order.items
+        @order.update_attributes(:items => "#{@order.items}\n#{params[key]}") if params[key]
+      else
+        @order.update_attributes(:items => "#{params[key]}") if params[key]
+      end
+    end
+    arr = @order.items.split("\n")
+    arr.each do |item|
+      if @order.price
+        @order.update_attributes(:price => @order.price + MenuItem.find_by_name(item).price)
+      else 
+        @order.update_attributes(:price => MenuItem.find_by_name(item).price)
+      end
+    end
+
     if @order.save
-      redirect_to edit_order_path @order
+      flash[:success] = "Your order has been placed!"
+      redirect_to @order
     else
+      @head = 'Place Your Order'
       render 'new'
     end
   end
@@ -28,8 +46,6 @@ class OrdersController < ApplicationController
       if params[:order].has_key? :item_addition
         redirect_to edit_order_path @order if @order.update_attributes(@order.add_items params[:order])
       elsif params[:order].has_key? :pickup_time
-        flash[:success] = "Your order has been placed!"
-        redirect_to @order if @order.update_attributes(params[:order])
       end
     else
       @menu_items = MenuItem.all
@@ -47,7 +63,7 @@ class OrdersController < ApplicationController
     pickup_time = Order.find(params[:id]).pickup_time
     Order.find(params[:id]).destroy
     if pickup_time.nil?
-      redirect_to home_path
+      redirect_to orders_path
     else
       redirect_to orders_path
     end
@@ -55,7 +71,11 @@ class OrdersController < ApplicationController
 
   def show
     @order = Order.find(params[:id])
-    @head = @order.customer_name
+    if @order.customer_name.blank?
+      @head = "Order"
+    else
+      @head = "#{@order.customer_name}'s Order"
+    end
   end
   def build_menu
     menu ={} 

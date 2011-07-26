@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
     if session[:password] == "kittens"
       flash[:success] = "Welcome Back Captain!"
     else
-      flash[:error] = "Access Denied"
+      flash[:error] = "Wrong password. Logout to try again"
     end
     redirect_to home_path
   end

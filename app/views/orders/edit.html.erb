@@ -1,10 +1,6 @@
 <% form_for(@order) do |f| %>
   <%= render 'shared/error_messages', :object => f.object %>
-    <% menu = {} %>
-    <% @menu_items.each do |item| %>
-      <% menu[item.category] ||= [] %>
-      <% menu[item.category] << item %>
-    <% end %>
+    <% menu = get_categories %>
   <nav class="category">
     <ul>
       <% menu.each do |c,item| %>

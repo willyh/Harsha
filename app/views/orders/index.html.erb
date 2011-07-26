@@ -1,17 +1,17 @@
+<ul>
 <% @orders.each do |o|%>
-    <h1><%= "#{o.customer_name}'s Order" %></h1>
-    <ul>
+    <li>
+    <h1><%= "#{o.customer_name}" %></h1>
     <% if o.items %>
       <% o.items.split("\n").each do |item| %>
-        <li>
-        <%= item %><br />
-        </li>
+        <%= "#{item} #{format_price MenuItem.find_by_name(item).price}" %><br />
       <% end %>
     <% end %>
-    </ul>
     <%= "Total: #{format_price o.price}" %><br />
     <%= "Pickup Time: #{o.pickup_time}" %><br />
     <delete>
      <%= link_to "Delete", o, :method => :delete %><br />
     </delete>
+    </li>
 <% end %>
+</ul>

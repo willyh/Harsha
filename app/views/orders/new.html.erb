@@ -11,20 +11,31 @@
   <th><%=key%></th>
 <% end %>
 <% menu.each do |key, val| %>
-<% puts "value is #{val}" %>
 <tr>
   <% categories.each do |key, values| %>
     <td>
       <% if val[key] %>
-        <%= "#{val[key].name} #{format_price val[key].price}"  %><br />
-        <%= link_to 'add to bag', '#' %>
+        <%= radio_button_tag key, val[key].name %>
+        <%= if admin?; val[key].name; else; link_to val[key].name, val[key];end %><br />
+        <%= format_price val[key].price %><br />
       <% end %>
     </td>
   <% end %>
 </tr>
 <% end %>
 </table>
+
+    <div class="field">
+      <%= f.label "Your name:" %>
+      <%= f.text_field :customer_name %><br />
+    </div>
+    <div class="field">
+      <%= f.label "Pickup Time:" %>
+      <%= f.select :pickup_time, options_for_select(available_times) %><br />
+    </div>
+
+
   <div class="actions">
-    <%= link_to image_tag "submit-button.png" %><br />
+    <%= image_submit_tag "place-order-button.png" %><br />
   </div>
 <% end %>

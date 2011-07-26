@@ -2,14 +2,25 @@ class Order < ActiveRecord::Base
   attr_accessor :item_addition
   attr_accessible :customer_name, :pickup_time, :price, :items
 
-  validates :pickup_time, :uniqueness => true, :allow_nil => true,
-		:format => { :with => /\d:\d/ }
+  validates :items,	:presence => true
+
+ # validates :customer_name, :presence => true
+
+  validates :pickup_time, :uniqueness => true, :format => { :with => /\d:\d/ }
 
   def format_price price
     if price.to_s =~ /\d*[.]\d{2,}/
       "$#{price}"
     else
       "$#{price}0"
+    end
+  end
+
+  def update_price
+puts "updating price"
+    arr = items.split("\n")
+    arr.each do |item|
+      self.update_attributes(:price => price + MenuItem.find_by_name(item))
     end
   end
 
@@ -26,4 +37,3 @@ class Order < ActiveRecord::Base
   
 
 end
-
