@@ -8,11 +8,8 @@ class OrdersController < ApplicationController
 
    def create
     categories = get_categories
-    items = ""
-    categories.each do |key, value|
-      items += "#{params[key]}\n" if params[key]
-    end
-    @order = Order.new(params[:order].merge({:items => items}))
+puts "f;lqewhr;oeqw #{params[:items]}"
+    @order = Order.new(params[:order].merge({:items => params[:items].join("\n")}))
 
     if @order.save
       flash[:success] = "Your order has been placed!"

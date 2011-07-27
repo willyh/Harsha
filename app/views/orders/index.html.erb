@@ -4,9 +4,10 @@
     <h1><%= "#{o.customer_name}" %></h1>
     <% if o.items %>
       <% o.items.split("\n").each do |item| %>
-        <%= "#{item} #{format_price MenuItem.find_by_name(item).price}" %><br />
+        <%= item %><br />
       <% end %>
     <% end %>
+    <p><%= o.instructions %></p>
     <%= "Total: #{format_price o.price}" %><br />
     <%= "Pickup Time: #{o.pickup_time}" %><br />
     <delete>

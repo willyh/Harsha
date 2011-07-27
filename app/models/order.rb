@@ -3,8 +3,6 @@ class Order < ActiveRecord::Base
 
   validates :items,	:presence => true
 
- # validates :customer_name, :presence => true
-
   validates :pickup_time, :uniqueness => true, :format => { :with => /\d:\d/ }
 
   before_create :update_price
@@ -39,3 +37,4 @@ class Order < ActiveRecord::Base
   
 
 end
+

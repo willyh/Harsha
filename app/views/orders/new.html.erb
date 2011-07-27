@@ -15,7 +15,7 @@
   <% categories.each do |key, values| %>
     <td>
       <% if val[key] %>
-        <%= radio_button_tag key, val[key].name, false, :class => "menu_item_radio_button" %>
+        <%= check_box_tag 'items[]', val[key].name, false, :class => "menu_item_radio_button" %>
         <%= if admin?; val[key].name; else; link_to val[key].name, val[key];end %><br />
         <%= format_price val[key].price %><br />
       <% end %>
@@ -31,7 +31,7 @@
     </div>
     <div class="field">
       <%= f.label "Any special instructions?" %><br />
-      <%= f.text_field :instructions, :class => "description_text_field" %>
+      <%= f.text_field :instructions, :class => "instructions_text_field" %>
     </div>
     <div class="field">
       <%= f.label "Pickup Time:" %>
@@ -42,6 +42,6 @@
 
 
   <div class="actions">
-    <%= image_submit_tag "place-order-button.png" %><br />
+    <%= image_submit_tag "place-order-button.png" %>
   </div>
 <% end %>

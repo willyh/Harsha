@@ -1,14 +1,14 @@
 <h1>Hints</h1>
-<ol>
-  <li>nyao</li>
-  <li>baby</li>
-  <li>plural</li>
-</ol>
+<ul>
+  <li>1. nyao</li>
+  <li>2. baby</li>
+  <li>3. plural</li>
+</ul>
 <% puts "l;ekwjq #{sessions_path}" %>
 <%= form_for(:session, :url => sessions_path) do |f| %>
   <div class="field">
     <%= f.label :password %>
-    <%= f.password_field :password %><br />
+    <%= f.password_field :password, :class => "name_text_field" %><br />
   </div>
   <div class"actions">
     <%= image_submit_tag "submit-button.png" %>

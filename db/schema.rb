@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110714184838) do
+ActiveRecord::Schema.define(:version => 20110727180706) do
 
   create_table "menu_items", :force => true do |t|
     t.string   "name"
@@ -24,10 +24,11 @@ ActiveRecord::Schema.define(:version => 20110714184838) do
   add_index "menu_items", ["name"], :name => "index_menu_items_on_name", :unique => true
 
   create_table "orders", :force => true do |t|
-    t.string   "pickup_time"
     t.string   "customer_name"
-    t.string   "items"
+    t.string   "pickup_time"
     t.float    "price"
+    t.string   "items"
+    t.string   "instructions"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
