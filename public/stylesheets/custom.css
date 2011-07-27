@@ -138,7 +138,7 @@ div.field {
   font-size: 60%;
 }
 .instructions_text_field {
-  width: 100%;
+  width: 95%;
   height: 60px;
   font-size:60%;
 }
@@ -163,4 +163,5 @@ th {
 }
 p {
   font-style: italic;
+  font-size: 80%;
 }
