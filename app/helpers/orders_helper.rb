@@ -1,7 +1,7 @@
 module OrdersHelper
   def available_times
     times = []
-    now = round_up Time.now
+    now = round_up Time.now.utc - 4.hours
     (1..24).each do |n|
       prospective_time = (now + (n*5).minutes ).strftime("%I:%M")
       times << prospective_time unless has_pickup_time? Order.all, prospective_time

@@ -1,6 +1,8 @@
 class MenuItem < ActiveRecord::Base
 
-  attr_accessible :name, :price, :description, :category
+  attr_accessible :name, :price, :description, :category, :photo
+
+  has_attached_file :photo
 
   validates :name, :presence => true,
 		:uniqueness => { :case_sensitive => false }

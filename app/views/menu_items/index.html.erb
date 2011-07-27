@@ -22,7 +22,7 @@
   <% menu = category || "Menu Items" %>
   <%= "Add to #{menu}" %>
 </h1>
-<%= form_for(@menu_item) do |f| %>
+<%= form_for(@menu_item, :html => {:multipart => true }) do |f| %>
   <%= render 'shared/error_messages', :object => f.object %>
   <%= render 'shared/menu_item_entries', :f => f %>
   <div class="actions">

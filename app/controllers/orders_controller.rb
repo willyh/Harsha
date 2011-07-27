@@ -8,7 +8,6 @@ class OrdersController < ApplicationController
 
    def create
     categories = get_categories
-puts "f;lqewhr;oeqw #{params[:items]}"
     @order = Order.new(params[:order].merge({:items => params[:items].join("\n")}))
 
     if @order.save

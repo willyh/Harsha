@@ -9,11 +9,11 @@
 <ul>
   <% categories[params[:category]].each do |item|%>
     <% if item.id == @menu_item.id %>
-      <%= form_for(@menu_item) do |f| %>
+      <%= form_for(@menu_item, :html => {:multipart => true}) do |f| %>
         <%= render 'shared/error_messages', :object => f.object %>
         <%= render 'shared/menu_item_entries', :f => f  %>
         <div class="actions">
-          <%= f.submit "Update #{item.name}" %>
+    <%= image_submit_tag "submit-button.png" %>
         </div>
       <% end %>
     <% else %>
