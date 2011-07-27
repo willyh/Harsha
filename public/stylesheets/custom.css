@@ -94,8 +94,9 @@ delete {
   border-style: solid;
   border-width: 20px;
   border-color: #993333;
-  width: 50%;
+  width: auto;
   margin-left: 25%;
+  margin-right: 25%;
 }
 delete:hover {
   background: #990000;
