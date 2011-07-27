@@ -1,6 +1,8 @@
+<ul>
   <% @order.items.split("\n").each do |item| %>
     <li>
-    <%= item %><br /> 
+    <%= "#{format_price MenuItem.find_by_name(item).price} #{item}"%><br /> 
     </li>
   <% end %>
-<h1><%= format_price @order.price %></h1>
+</ul>
+<h1><%="Your total is #{format_price @order.price}" %></h1>

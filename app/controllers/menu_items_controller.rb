@@ -45,6 +45,6 @@ class MenuItemsController < ApplicationController
   end
 
   def home
-    @head = "Sanitary Diner App"
+    @head = "Moto Cafe"
   end
 end

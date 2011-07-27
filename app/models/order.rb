@@ -1,6 +1,5 @@
 class Order < ActiveRecord::Base
-  attr_accessor :item_addition
-  attr_accessible :customer_name, :pickup_time, :price, :items
+  attr_accessible :customer_name, :pickup_time, :price, :items, :instructions
 
   validates :items,	:presence => true
 

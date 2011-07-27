@@ -27,4 +27,11 @@ module OrdersHelper
       order.update_attributes(:items => items, :price => price)
     end
   end
+  def calculate_price items
+    p = 0
+    items.each do |item|
+      p += MenuItem.find_by_name(item).price
+    end
+    p
+  end
 end

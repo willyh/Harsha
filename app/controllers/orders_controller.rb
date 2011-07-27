@@ -1,18 +1,12 @@
 class OrdersController < ApplicationController
   helper_method :build_menu
-  before_filter :authorize, :except => [:new, :edit, :create, :update, :show, :destroy ]
+  before_filter :authorize, :except => [:new, :create ]
   def new
     @head = "Place Your Order"
     @order = Order.new
   end
 
-  def edit
-    @menu_items = MenuItem.all
-    @order = Order.find(params[:id])
-    @head = "Add to Order"
-  end
-
-  def create
+   def create
     categories = get_categories
     items = ""
     categories.each do |key, value|
@@ -26,21 +20,6 @@ class OrdersController < ApplicationController
     else
       @head = 'Place Your Order'
       render 'new'
-    end
-  end
-
-  def update
-    @order = Order.find(params[:id])
-    if params[:order] 
-      if params[:order].has_key? :item_addition
-        redirect_to edit_order_path @order if @order.update_attributes(@order.add_items params[:order])
-      elsif params[:order].has_key? :pickup_time
-      end
-    else
-      @menu_items = MenuItem.all
-      @order = Order.find(params[:id])
-      @head = "Add to Order"
-      render 'edit'
     end
   end
 
