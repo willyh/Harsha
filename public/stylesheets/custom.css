@@ -113,9 +113,14 @@ table a:hover {
 }
 
 div.field {
-  size: 200%;
+  font-size: 200%;
 }
 
+.name_text_field {
+  height: 100px;
+  width: 600px;
+  font-size: 100%;
+}
 th {
   text-align: center;
   background: #333;

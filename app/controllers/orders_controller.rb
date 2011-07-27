@@ -13,23 +13,12 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @order = Order.new(params[:order])
     categories = get_categories
+    items = ""
     categories.each do |key, value|
-      if @order.items
-        @order.update_attributes(:items => "#{@order.items}\n#{params[key]}") if params[key]
-      else
-        @order.update_attributes(:items => "#{params[key]}") if params[key]
-      end
+      items += "#{params[key]}\n" if params[key]
     end
-    arr = @order.items.split("\n")
-    arr.each do |item|
-      if @order.price
-        @order.update_attributes(:price => @order.price + MenuItem.find_by_name(item).price)
-      else 
-        @order.update_attributes(:price => MenuItem.find_by_name(item).price)
-      end
-    end
+    @order = Order.new(params[:order].merge({:items => items}))
 
     if @order.save
       flash[:success] = "Your order has been placed!"
@@ -62,11 +51,7 @@ class OrdersController < ApplicationController
   def destroy
     pickup_time = Order.find(params[:id]).pickup_time
     Order.find(params[:id]).destroy
-    if pickup_time.nil?
       redirect_to orders_path
-    else
-      redirect_to orders_path
-    end
   end
 
   def show

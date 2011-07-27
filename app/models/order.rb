@@ -8,6 +8,8 @@ class Order < ActiveRecord::Base
 
   validates :pickup_time, :uniqueness => true, :format => { :with => /\d:\d/ }
 
+  before_create :update_price
+
   def format_price price
     if price.to_s =~ /\d*[.]\d{2,}/
       "$#{price}"
@@ -17,11 +19,12 @@ class Order < ActiveRecord::Base
   end
 
   def update_price
-puts "updating price"
-    arr = items.split("\n")
+    p = 0
+    arr = self.items.split("\n")
     arr.each do |item|
-      self.update_attributes(:price => price + MenuItem.find_by_name(item))
+      p += MenuItem.find_by_name(item).price
     end
+    self.price = p
   end
 
   def add_items hash

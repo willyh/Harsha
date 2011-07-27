@@ -1,6 +1,6 @@
   <% @order.items.split("\n").each do |item| %>
     <li>
-    <%= item %> <%= link_to "remove", edit_order_path(@order, :remove => item) %><br />
+    <%= item %><br /> 
     </li>
   <% end %>
 <h1><%= format_price @order.price %></h1>
