@@ -100,7 +100,7 @@ delete:hover {
 }
 
 table td{
-  text-align: center;
+  text-align: left;
   padding-top: 15px;
 }
 table a {
@@ -114,15 +114,42 @@ table a:hover {
 
 div.field {
   font-size: 200%;
+  float: left;
+  display: inline-block
 }
 
 .name_text_field {
-  height: 100px;
-  width: 600px;
+  height: 80px;
+  width: 500px;
+  font-size: 80%;
+}
+.price_text_field {
+  height: 80px;
+  width: 150px;
+  font-size: 70%;
+}
+
+.description_text_field {
+  width: 550px;
+  height: 60px;
+  font-size: 60%;
+}
+
+.time_select {
   font-size: 100%;
 }
+
+.menu_item_radio_button {
+  width: 50px;
+  height: 50px;
+  display: block;
+  clear: left;
+  float: left;
+}
+
 th {
-  text-align: center;
+  text-align: left;
+  padding: 0 2em;
   background: #333;
   color: #fff;
 }
