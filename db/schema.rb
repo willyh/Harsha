@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110727195222) do
+ActiveRecord::Schema.define(:version => 20110728152655) do
 
   create_table "menu_items", :force => true do |t|
     t.string   "name"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(:version => 20110727195222) do
     t.string   "instructions"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "completed"
   end
 
   add_index "orders", ["pickup_time"], :name => "index_orders_on_pickup_time", :unique => true

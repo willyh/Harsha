@@ -3,7 +3,9 @@ DinerApp::Application.routes.draw do
   get "sessions/new"
 
   resources :menu_items
-  resources :orders
+  resources :orders do
+    put 'complete', :on => :member
+  end
   resources :sessions, :only => [:new, :create, :destroy]
 
   match '/home',	:to => 'menu_items#home'

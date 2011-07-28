@@ -35,6 +35,16 @@ class Order < ActiveRecord::Base
     hash
   end
   
+  def complete admin
+    self.completed = true
+    self.save(!admin)
+  end
+
+  def print
+# change this when i get a printer
+# also get rid of the parameters on complete
+    self.complete(true)
+  end
 
 end
 

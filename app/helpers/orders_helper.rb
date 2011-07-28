@@ -3,15 +3,15 @@ module OrdersHelper
     times = []
     now = round_up Time.now.utc - 4.hours
     (1..24).each do |n|
-      prospective_time = (now + (n*5).minutes ).strftime("%I:%M")
-      times << prospective_time unless has_pickup_time? Order.all, prospective_time
+      prospective_time = (now + (n*time_interval).minutes ).strftime("%I:%M%p")
+      times << format_time(prospective_time) unless has_pickup_time? Order.all, prospective_time
     end 
     times << "Sorry We're Too Busy at the Moment" if times.empty?
     times
   end
   def round_up time
-    dif = time.min - time.min / 5 * 5
-    time + (5-dif).minutes
+    dif = time.min - time.min / time_interval * time_interval
+    time + (time_interval-dif).minutes
   end
   def has_pickup_time? orders, time
     orders.each do |o|
@@ -33,5 +33,14 @@ module OrdersHelper
       p += MenuItem.find_by_name(item).price
     end
     p
+  end
+
+  def format_time time
+    return time.slice(1,6) if time.first == "0"
+    time
+  end
+
+  def time_interval
+    5
   end
 end

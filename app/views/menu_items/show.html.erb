@@ -2,5 +2,5 @@
   <% image = image_tag @menu_item.photo.url %>
   <%= image unless image.to_s =~ /src="\/photos\/original\/missing.png"/ %>
   <%= "Price: #{format_price @menu_item.price}" %><br />
-  <%= @menu_item.description %>
+  <p><%= @menu_item.description %></p>
 </h1>

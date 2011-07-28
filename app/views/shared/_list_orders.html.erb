@@ -1,0 +1,18 @@
+<ul>
+<% @orders.each do |o|%>
+    <li>
+    <h1><%= "#{o.customer_name}" %></h1>
+    <% if o.items %>
+      <% o.items.split("\n").each do |item| %>
+        <%= item %><br />
+      <% end %>
+    <% end %>
+    <p><%= o.instructions %></p>
+    <%= "Total: #{format_price o.price}" %><br />
+    <%= "Pickup Time: #{o.pickup_time}" %><br />
+    <delete>
+     <%= link_to "Delete", o, :method => :delete %><br />
+    </delete>
+    </li>
+<% end %>
+</ul>
