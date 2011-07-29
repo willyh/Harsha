@@ -66,7 +66,7 @@ protected
   def time_from_string time_string
     arr = time_string.split(":")
     pm = 12.hours if arr.last.include?("PM")
-    hours = arr.first.to_i.hours + pm || 0
+    hours = arr.first.to_i.hours + (pm || 0)
     minutes = arr.last.slice(0,2).to_i.minutes
     hours + minutes
   end
