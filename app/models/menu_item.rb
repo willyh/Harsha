@@ -1,5 +1,4 @@
 class MenuItem < ActiveRecord::Base
-
   attr_accessible :name, :price, :description, :category, :photo
 
   has_attached_file :photo
@@ -13,4 +12,9 @@ class MenuItem < ActiveRecord::Base
 				:only_float => true,
 				:message => "must be a number"
   validates :category, :presence => true
+
+  def sold_out
+    self.out_of_stock = !self.out_of_stock
+  end
+
 end

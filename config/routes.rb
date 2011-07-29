@@ -2,7 +2,9 @@ DinerApp::Application.routes.draw do
 
   get "sessions/new"
 
-  resources :menu_items
+  resources :menu_items do
+    put 'sold_out', :on => :member
+  end
   resources :orders do
     put 'complete', :on => :member
   end

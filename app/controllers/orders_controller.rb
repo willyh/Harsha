@@ -9,9 +9,14 @@ class OrdersController < ApplicationController
    def create
     @order = Order.new((params[:order] || {}).merge({:items => (params[:items] || []).join("\n")}))
     if admin?
-      puts @order.save(false)
-      @order.print
-      redirect_to new_order_path
+      if @order.items.empty?
+        flash[:notice] = "I don't think you want to print out a blank receipt"
+        redirect_to new_order_path
+      else
+        puts @order.save(false)
+        @order.print
+        redirect_to new_order_path
+      end
     else
       if waited_too_long @order
         flash[:error] = "Please select a time later than #{@order.pickup_time}. We may need more than #{time_to_prepare_food @order.pickup_time} minutes to prepare your food"
@@ -75,7 +80,7 @@ protected
     menu ={} 
     menu[1] = {}
     MenuItem.all.each do |item|
-      check 1, menu, item
+      check 1, menu, item unless item.out_of_stock
     end
     menu
   end

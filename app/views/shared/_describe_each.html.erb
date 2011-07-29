@@ -3,11 +3,20 @@
       <%= "Price: #{format_price item.price}" %><br />
       <% if item.description? %>
       <descr>
-        <%= "#{item.description}" %><br />
+        <%= item.description %><br />
       </descr>
       <% end %>
       <% if admin? %>
-      <%= link_to "edit", edit_menu_item_path(item, :category => item.category )%><br />
+      <%= link_to "Edit Info", edit_menu_item_path(item, :category => item.category )%><br />
+      <% if item.out_of_stock %>
+        <div class="out_of_stock">	  
+	<%= link_to "Out of Stock", sold_out_menu_item_path(item), :method => :put %>
+	</div>
+      <% else %>
+	<div class="in_stock">
+	<%= link_to "In Stock" , sold_out_menu_item_path(item), :method => :put %>
+	</div>
+      <% end %>
       <delete>
 	<%= link_to "remove", item, :method => :delete, :title => "Delete #{item.name}" %><br />
       </delete>

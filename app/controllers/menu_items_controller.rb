@@ -47,4 +47,11 @@ class MenuItemsController < ApplicationController
   def home
     @head = "Moto Cafe"
   end
+
+  def sold_out
+    @order = MenuItem.find(params[:id])
+    @order.sold_out
+    @order.save
+    redirect_to menu_items_path :category => @order.category
+  end
 end
