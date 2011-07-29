@@ -6,8 +6,6 @@ class PaymentNotification < ActiveRecord::Base
   private
 
   def mark_order_as_completed
-puts "WFEL:KJTW:JHUFFLEPUFF"
-puts order.items
     if status == "Completed"
       order.complete
     end

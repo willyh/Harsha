@@ -23,7 +23,7 @@ class MenuItemsController < ApplicationController
   end
 
   def edit
-    @menu_items = MenuItem.all
+    @menu_items = MenuItem.all.sort{ |x,y| x.id<=>y.id }
     @menu_item = MenuItem.find(params[:id])
     @head = "Edit #{@menu_item.name}"
   end
