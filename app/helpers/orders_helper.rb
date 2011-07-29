@@ -3,8 +3,8 @@ module OrdersHelper
     times = []
     now = round_up Time.now.utc - 4.hours
     (1..24).each do |n|
-      prospective_time = (now + (n*time_interval).minutes ).strftime("%I:%M%p")
-      times << format_time(prospective_time) unless has_pickup_time? Order.all, prospective_time
+      prospective_time = format_time((now + (n*time_interval).minutes ).strftime("%I:%M%p"))
+      times << prospective_time unless has_pickup_time? Order.all, prospective_time
     end 
     times << "Sorry We're Too Busy at the Moment" if times.empty?
     times

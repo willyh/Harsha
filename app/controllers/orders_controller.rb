@@ -55,9 +55,10 @@ class OrdersController < ApplicationController
   end
 
   def complete
-    @order = Order.find(params[:id]).complete
-    flash[:success] = "thank you"
-    redirect_to home_path
+    @order = Order.find(params[:id])
+    @order.complete
+    flash[:success] = "Thank You"
+    redirect_to @order
   end
 
 protected

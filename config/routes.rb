@@ -1,5 +1,7 @@
 DinerApp::Application.routes.draw do
 
+  get "payment_notification/create"
+
   get "sessions/new"
 
   resources :menu_items do
@@ -10,6 +12,7 @@ DinerApp::Application.routes.draw do
   end
   resources :sessions, :only => [:new, :create, :destroy]
 
+  match '/payment_notifications',	:to => 'payment_notification#create'
   match '/home',	:to => 'menu_items#home'
   match '/menu', 	:to => 'menu_items#index'
   match '/login',	:to => 'sessions#new'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110729130811) do
+ActiveRecord::Schema.define(:version => 20110729181527) do
 
   create_table "menu_items", :force => true do |t|
     t.string   "name"
@@ -40,5 +40,14 @@ ActiveRecord::Schema.define(:version => 20110729130811) do
   end
 
   add_index "orders", ["pickup_time"], :name => "index_orders_on_pickup_time", :unique => true
+
+  create_table "payment_notifications", :force => true do |t|
+    t.text     "params"
+    t.integer  "order_id"
+    t.string   "status"
+    t.string   "transaction_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end
