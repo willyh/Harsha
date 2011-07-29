@@ -1,6 +1,5 @@
 class PaymentNotification < ActiveRecord::Base
   belongs_to :order
-  serialize :params
   after_create :mark_order_as_completed
 
   private
