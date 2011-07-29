@@ -12,9 +12,8 @@
 </h1>
   <% if !@order.completed || admin? %>
   <div class="actions">
-    <%= link_to (image_tag "place-order-button.png"),complete_order_path(@order), :method => :put %>
-<%= link_to "paymentnotification", payment_notifications_url %>
-    <%= link_to "Checkout", @order.paypal_url(order_url(@order), payment_notifications_url) %>
+    <%= link_to (image_tag "place-order-button.png"),complete_order_path(@order), :method => :put unless true%>
+    <%= link_to (image_tag "place-order-button.png"), @order.paypal_url(order_url(@order), payment_notifications_url) %>
   </div>
   <delete>
     <%= link_to "Cancel Order", @order, { :confirm => "Are you sure?", :method => :delete } %>
