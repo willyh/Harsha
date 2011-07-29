@@ -1,7 +1,7 @@
 class MenuItemsController < ApplicationController
   before_filter :authorize, :except =>  [:index, :show, :home]
   def index
-    @menu_items = MenuItem.all
+    @menu_items = MenuItem.all.sort{ |x,y| x.id<=>y.id }
     @menu_item = MenuItem.new 
     @head = params[:category] || "Menu"
   end
@@ -12,7 +12,7 @@ class MenuItemsController < ApplicationController
     if @menu_item.save
       redirect_to menu_path :category => @menu_item.category
     else
-      @menu_items = MenuItem.all
+      @menu_items = MenuItem.all.sort{ |x,y| x.id<=>y.id }
       render 'index'
     end
   end
@@ -33,7 +33,7 @@ class MenuItemsController < ApplicationController
     if @menu_item.update_attributes(params[:menu_item])
       redirect_to menu_path :category => @menu_item.category
     else
-      @menu_items = MenuItem.all
+      @menu_items = MenuItem.all.sort{ |x,y| x.id<=>y.id }
       render 'edit'
     end
   end
