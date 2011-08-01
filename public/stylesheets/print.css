@@ -1,0 +1,14 @@
+head{
+  visibility: hidden;
+}
+body{
+  visibility: hidden;
+}
+.print{
+  visibility: visible;
+  font: 12px sans-serif;
+  page-break-after: always;
+}
+delete {
+  visibility: hidden;
+}

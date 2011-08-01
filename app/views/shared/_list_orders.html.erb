@@ -1,6 +1,6 @@
 <ul>
 <% @orders.each do |o|%>
-    <li>
+    <li class="print">
     <h1><%= "#{o.customer_name}" %></h1>
     <% if o.items %>
       <% o.items.split("\n").each do |item| %>

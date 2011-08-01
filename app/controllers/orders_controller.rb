@@ -10,16 +10,16 @@ class OrdersController < ApplicationController
     @order = Order.new((params[:order] || {}).merge({:items => (params[:items] || []).join("\n")}))
     if admin?
       if @order.items.empty?
-        flash[:notice] = "I don't think you want to print out a blank receipt"
+        flash[:notice] = "I don't think you want an empty order"
         redirect_to new_order_path
       else
-        puts @order.save(false)
+        @order.save(false)
         @order.print
         redirect_to new_order_path
       end
     else
       if waited_too_long @order
-        flash[:error] = "Please select a time later than #{@order.pickup_time}. We may need more than #{time_to_prepare_food @order.pickup_time} minutes to prepare your food"
+        flash[:error] = "Please select a time later than #{@order.pickup_time}. We may need more than #{time_to_prepare @order.pickup_time} minutes to prepare your food"
         redirect_to new_order_path
       elsif @order.save()
         redirect_to @order
@@ -30,27 +30,25 @@ class OrdersController < ApplicationController
     end
   end
 
-  def index
-    @head = "All Orders"
-    @orders = Order.find(:all, :conditions => 'completed IS NOT NULL')
-  end
-  def destroy
-    pickup_time = Order.find(params[:id]).pickup_time
-    Order.find(params[:id]).destroy
-    if admin?
-      redirect_to new_order_path
-    else
-      flash[:notice] = "Your order has been cancelled"
-      redirect_to home_path
-    end
+  def show
+    @order = Order.find params[:id]
+    @head = !@order.customer_name.blank? ? "#{@order.customer_name}'s Order" : "Order"
   end
 
-  def show
-    @order = Order.find(params[:id])
-    if @order.customer_name.blank?
-      @head = "Order"
+  def destroy
+    if params[:id]=="clear"
+      Order.all.each do |o|
+        o.destroy
+      end
+      redirect_to new_order_path
     else
-      @head = "#{@order.customer_name}'s Order"
+      Order.find(params[:id]).destroy
+      if admin?
+        redirect_to new_order_path
+       else
+         flash[:notice] = "Your order has been cancelled"
+         redirect_to home_path
+       end
     end
   end
 
@@ -62,7 +60,7 @@ class OrdersController < ApplicationController
   end
 
 protected
-  def time_to_prepare_food pickup_time
+  def time_to_prepare pickup_time
     return (time_from_string(pickup_time) - (Time.now.utc.hour.hours-4.hours) - Time.now.utc.min.minutes)/60
   end
   def waited_too_long order

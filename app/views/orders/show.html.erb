@@ -9,14 +9,13 @@
 <h1>
   <%="Total: #{format_price @order.price}" %><br />
   <%= "Pickup time: #{@order.pickup_time}" %>
-save this info for paypal
-buyer_1311953869_per@gmail.com
-311971144
 </h1>
-  <% if !@order.completed || admin? %>
+  <% if !@order.completed %>
   <div class="actions">
-    <%= link_to (image_tag "place-order-button.png"),complete_order_path(@order), :method => :put unless true%>
-    <%= link_to (image_tag "place-order-button.png"), @order.paypal_url(order_url(@order), payment_notifications_url) %>
+    <%= link_to "order without paypal",complete_order_path(@order), :method => :put %><br />
+  <proceed>
+    <%= link_to "Place Order", @order.paypal_url(order_url(@order), payment_notifications_url) %>
+  </proceed>
   </div>
   <delete>
     <%= link_to "Cancel Order", @order, { :confirm => "Are you sure?", :method => :delete } %>

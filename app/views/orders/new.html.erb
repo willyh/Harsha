@@ -15,7 +15,7 @@
   <% categories.each do |key, values| %>
     <td>
       <% if val[key] %>
-        <%= check_box_tag 'items[]', val[key].name, false, :class => "menu_item_radio_button" %>
+        <%= check_box_tag 'items[]', val[key].name, false, :class => "menu_item_check_box" %>
         <%= val[key].name %>
 	<%= link_to "info", val[key] if !admin? && ( !val[key].description.blank? || val[key].to_s =~ /src="\/photos\/original\/missing.png"/ )  %><br />
         <%= format_price val[key].price %><br />
@@ -27,7 +27,12 @@
 </table>
   <% if admin? %>
     <div class="actions">
-      <%= image_submit_tag "print-button.png" %>
+    <proceed>
+      <%= link_to_function "Place Order", "$(this).up('form').submit()" %>
+    </proceed>
+    <other>
+      <%= link_to "Print", "JavaScript:window.print();" %>
+    </other>
     </div>
     <%= render 'shared/list_orders', { :@orders => Order.find(:all, :conditions => 'completed IS NOT NULL')} %>
   <% else %>
@@ -47,7 +52,20 @@
     </div>
 
   <div class="actions">
-    <%= image_submit_tag "proceed-button.png" %>
+    <proceed>
+      <%= link_to_function "Proceed", "$(this).up('form').submit()" %>
+    </proceed>
+
   </div>
   <% end %>
+<% end %>
+<%if admin?%>
+<delete>
+  <%= link_to "Clear Orders", clear_orders_path, { :confirm => "Clear Order Database?", :method => :delete } %>
+</delete>
+Note about Clear Orders*<br />
+<p>If someone starts an order they reserve a time slot<br />
+You don't see that order until they pay<br />
+"Clear Orders" deletes unfinished orders and makes all time slots available<br />
+Use "Clear Orders" before you close shop or before you open so you don't accidentally delete an order while someone is paying </p>
 <% end %>

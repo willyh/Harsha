@@ -9,6 +9,7 @@ DinerApp::Application.routes.draw do
   end
   resources :orders do
     put 'complete', :on => :member
+    get 'clear', :on => :collection
   end
   resources :sessions, :only => [:new, :create, :destroy]
 

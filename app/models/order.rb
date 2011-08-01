@@ -64,15 +64,9 @@ class Order < ActiveRecord::Base
     self.save
   end
 
-  def complete_admin? admin
-    self.completed = true
-    self.save(!admin)
-  end
-
   def print
-# change this when i get a printer
-# also get rid of complete_admin?
-    self.complete_admin?(true)
+    self.completed = true
+    self.save(false)
   end
 
 end
