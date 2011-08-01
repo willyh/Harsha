@@ -13,7 +13,7 @@
     <th><%=cat%></th>
   <% end %>
   <% tables[index].each do |row,items | %>
-  <col>
+  <tr>
     <% cats.each do |cat| %>
       <td>
         <% if items[cat] %>
@@ -24,7 +24,7 @@
         <% end %>
       </td>
     <% end %>
-  </col>
+  </tr>
   <% end %>
 </table>
 </div>
