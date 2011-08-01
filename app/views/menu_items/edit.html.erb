@@ -13,7 +13,9 @@
         <%= render 'shared/error_messages', :object => f.object %>
         <%= render 'shared/menu_item_entries', :f => f, :categories => categories  %>
         <div class="actions">
-    <%= image_submit_tag "submit-button.png" %>
+	<proceed>
+          <%= link_to_function "Submit", "$(this).up('form').submit()" %>
+	</proceed>
         </div>
       <% end %>
     <% else %>
