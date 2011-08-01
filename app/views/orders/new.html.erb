@@ -11,7 +11,7 @@
   <th><%=key%></th>
 <% end %>
 <% menu.each do |key, val| %>
-<tr>
+<col>
   <% categories.each do |key, values| %>
     <td>
       <% if val[key] %>
@@ -22,7 +22,7 @@
       <% end %>
     </td>
   <% end %>
-</tr>
+</col>
 <% end %>
 </table>
   <% if admin? %>

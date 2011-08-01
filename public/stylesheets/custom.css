@@ -10,6 +10,7 @@ body {
 }
 
 header {
+  margin-top: 10px;
   padding: 20px;
   font-size: 300%;
   text-align: center;
@@ -116,6 +117,12 @@ other:hover {background: #666600;}
 table td{
   text-align: left;
   padding-top: 15px;
+  border: 0;
+}
+td:nth-child(odd) {
+  background: #e5ecf9;
+  border: solid 2px;
+  border-color: #99ccff;
 }
 table a {
   color: #0000CC;
