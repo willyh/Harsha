@@ -7,6 +7,7 @@
 <% end %>
 <% tables = build_tables(categories) %>
 <% tables[:category_sets].each do |index, cats| %>
+<div>
 <table>
   <% cats.each do |cat| %>
     <th><%=cat%></th>
@@ -26,6 +27,7 @@
   </col>
   <% end %>
 </table>
+</div>
 <% end %>
   <% if admin? %>
     <div class="actions">
