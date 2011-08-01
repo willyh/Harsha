@@ -75,31 +75,19 @@ protected
     hours + minutes
   end
 
-  def build_menu
-    menu ={} 
-    menu[1] = {}
-    MenuItem.all.each do |item|
-      check 1, menu, item unless item.out_of_stock
+  def build_tables categories
+    i = 3
+    categories.each do |cat, item|
+      three_category_sets[i/3] ||= []
+      three_category_sets[i/3] << cat
+      i = i+1
     end
-    menu
-  end
-
-  def check index, menu, item
-    menu[index] ||= {}
-    if menu[index][item.category]
-      check index + 1, menu, item
-    else
-      menu[index][item.category] = item
+    i = 1
+    tables[:category_sets] = three_category_sets
+    three_category_sets.each do |category_set|
+      tables[i] = build_table category_set
+      i += 1
     end
+    tables
   end
-
-  def completed_yet
-    
-    unless  admin? || !Order.find(params[:id]).completed
-      flash[:error] = "Cannot delete an order once it has been placed"
-      redirect_to home_path
-      false
-    end
-  end
-
 end

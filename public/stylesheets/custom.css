@@ -114,12 +114,14 @@ delete:hover {background: #990000;}
 proceed:hover {background: #006600;}
 other:hover {background: #666600;}
 
+table {
+  margin: 0;
+}
 table td{
   text-align: left;
   padding-top: 15px;
-  border: 0;
 }
-td:nth-child(odd) {
+td {
   background: #e5ecf9;
   border: solid 2px;
   border-color: #99ccff;

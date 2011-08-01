@@ -43,4 +43,50 @@ module OrdersHelper
   def time_interval
     5
   end
+
+  def build_tables(categories)
+    i = 3
+    three_category_sets = {}
+    categories.each do |cat, item|
+      three_category_sets[i/3] ||= []
+      three_category_sets[i/3] << cat
+      i = i+1
+    end
+    i = 1
+    tables = {}
+    tables[:category_sets] = three_category_sets
+    three_category_sets.each do |category_set|
+      tables[i] = build_table(category_set)
+      i += 1
+    end
+    tables
+  end
+
+  def build_table categories
+    table = {}
+    table[1] = {}
+    MenuItem.all.each do |item|
+      check 1, table, item, categories unless item.out_of_stock
+    end
+    table
+  end
+
+  def check index, table, item, categories
+    table[index] ||= {}
+    if table[index][item.category]
+      check index + 1, table, item, categories
+    else
+      table[index][item.category] = item
+    end
+  end
+
+  def completed_yet
+    
+    unless  admin? || !Order.find(params[:id]).completed
+      flash[:error] = "Cannot delete an order once it has been placed"
+      redirect_to home_path
+      false
+    end
+  end
+
 end

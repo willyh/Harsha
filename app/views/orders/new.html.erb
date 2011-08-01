@@ -5,26 +5,28 @@
   <% categories[item.category] ||= [] %>
   <% categories[item.category] << item %>
 <% end %>
-<% menu = build_menu %>
+<% tables = build_tables(categories) %>
+<% tables[:category_sets].each do |index, cats| %>
 <table>
-<% categories.each do |key, values| %>
-  <th><%=key%></th>
-<% end %>
-<% menu.each do |key, val| %>
-<col>
-  <% categories.each do |key, values| %>
-    <td>
-      <% if val[key] %>
-        <%= check_box_tag 'items[]', val[key].name, false, :class => "menu_item_check_box" %>
-        <%= val[key].name %>
-	<%= link_to "info", val[key] if !admin? && ( !val[key].description.blank? || val[key].to_s =~ /src="\/photos\/original\/missing.png"/ )  %><br />
-        <%= format_price val[key].price %><br />
-      <% end %>
-    </td>
+  <% cats.each do |cat| %>
+    <th><%=cat%></th>
   <% end %>
-</col>
-<% end %>
+  <% tables[index].each do |row,items | %>
+  <col>
+    <% cats.each do |cat| %>
+      <td>
+        <% if items[cat] %>
+          <%= check_box_tag 'items[]', items[cat].name, false, :class => "menu_item_check_box" %>
+          <%= items[cat].name %>
+	  <%= link_to "info", items[cat] if !admin? && ( !items[cat].description.blank? || items[cat].to_s =~ /src="\/photos\/original\/missing.png"/ )  %><br />
+          <%= format_price items[cat].price %><br />
+        <% end %>
+      </td>
+    <% end %>
+  </col>
+  <% end %>
 </table>
+<% end %>
   <% if admin? %>
     <div class="actions">
     <proceed>
