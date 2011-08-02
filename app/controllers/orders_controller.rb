@@ -37,7 +37,7 @@ class OrdersController < ApplicationController
   def show
     redirect_to new_order_path if !params[:id]
     if !Order.exists?(params[:id])
-      flash[:error] = "404:error order not found ~(=^エ^=)ノ"
+      flash[:error] = "404:error order not found "
       redirect_to home_path
     else
       @order = Order.find params[:id]
@@ -109,7 +109,7 @@ protected
     if params[:id].nil?
       redirect_to new_order_path
     elsif !Order.exists?(params[:id])
-      flash[:error] = "404:error order not found ~(=^エ^=)ノ"
+      flash[:error] = "404:error order not found "
       redirect_to home_path
     else
       unless  admin? || !Order.find(params[:id]).completed
