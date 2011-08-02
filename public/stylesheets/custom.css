@@ -124,7 +124,7 @@ table td{
 td {
   background: #e5ecf9;
   border: solid 2px;
-  border-color: #99ccff;
+  border-color: #333;
 }
 table a {
   color: #0000CC;
@@ -224,4 +224,8 @@ div.in_stock a {
 }
 div.in_stock:hover {
   background: #ccc;
+}
+hidden {
+  visibility: hidden;
+  margin: 0;
 }

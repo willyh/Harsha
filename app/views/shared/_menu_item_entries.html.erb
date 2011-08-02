@@ -22,3 +22,10 @@
   <div class="field">
     <%= f.file_field :photo, :class => "name_text_field" unless true %>
   </div>
+  <div class="actions">
+  <proceed>
+    <%= link_to_function "Submit", "$(this).up('form').submit()" %>
+  </proceed>
+  </div>
+    <hidden><%= f.submit %></hidden>
+

@@ -6,4 +6,23 @@ module MenuItemsHelper
       "$#{price}0"
     end
   end
+  
+  def separate_and categories
+    hash = {}
+    categories.each do |index, cats|
+      hash[index/3 + 1] ||= []
+      hash[index/3 + 1] << cats
+    end
+    hash
+  end
+
+  def assign_numbers_to categories
+    hash = {}
+    index = 1
+    categories.each do |category|
+      hash[index] = category
+      index += 1
+    end
+    hash
+  end
 end

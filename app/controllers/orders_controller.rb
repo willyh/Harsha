@@ -5,6 +5,9 @@ class OrdersController < ApplicationController
     @head = "Place Your Order"
     @order = Order.new
   end
+  def index
+    redirect_to new_order_path
+  end
 
    def create
     @order = Order.new((params[:order] || {}).merge({:items => (params[:items] || []).join("\n")}))
@@ -15,12 +18,13 @@ class OrdersController < ApplicationController
       else
         @order.save(false)
         @order.print
-        redirect_to new_order_path
+        render new_order_path
       end
     else
       if waited_too_long @order
         flash[:error] = "Please select a time later than #{@order.pickup_time}. We may need more than #{time_to_prepare @order.pickup_time} minutes to prepare your food"
-        redirect_to new_order_path
+        @head = "Place Your Order"
+        render 'new'
       elsif @order.save()
         redirect_to @order
       else
@@ -31,8 +35,14 @@ class OrdersController < ApplicationController
   end
 
   def show
-    @order = Order.find params[:id]
-    @head = !@order.customer_name.blank? ? "#{@order.customer_name}'s Order" : "Order"
+    redirect_to new_order_path if !params[:id]
+    if !Order.exists?(params[:id])
+      flash[:error] = "404:error order not found :'("
+      redirect_to home_path
+    else
+      @order = Order.find params[:id]
+      @head = !@order.customer_name.blank? ? "#{@order.customer_name}'s Order" : "Order"
+    end
   end
 
   def destroy
@@ -42,13 +52,18 @@ class OrdersController < ApplicationController
       end
       redirect_to new_order_path
     else
-      Order.find(params[:id]).destroy
-      if admin?
-        redirect_to new_order_path
-       else
-         flash[:notice] = "Your order has been cancelled"
-         redirect_to home_path
-       end
+      if Order.exists? params[:id]
+        Order.find(params[:id]).destroy
+        if admin?
+          redirect_to new_order_path
+         else
+           flash[:notice] = "Your order has been cancelled"
+           redirect_to home_path
+         end
+      else
+        flash[:error] = "Your order has already been deleted"
+	redirect_to home_path
+      end
     end
   end
 
@@ -90,4 +105,20 @@ protected
     end
     tables
   end
+  def completed_yet
+    if params[:id].nil?
+      redirect_to new_order_path
+    elsif !Order.exists?(params[:id])
+      flash[:error] = "404:error order not found :'("
+      redirect_to home_path
+    else
+      unless  admin? || !Order.find(params[:id]).completed
+        flash[:error] = "Cannot delete an order once it has been placed"
+        redirect_to home_path
+        false
+      end
+    end
+  end
+
+
 end

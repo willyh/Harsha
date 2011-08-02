@@ -1,10 +1,12 @@
 <nav class="category">
+  <% separate_and(assign_numbers_to(categories)).each do |index, three_cats| %>
   <ul>
-    <% categories.each do |c, item| %>
+    <% three_cats.each do |c, items| %>
       <li>
         <%= link_to c, menu_path(:category => c) %>
       </li>
     <% end %>
   </ul>
+  <% end %>
 </nav>
 
