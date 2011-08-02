@@ -18,10 +18,10 @@ module MenuItemsHelper
 
   def assign_numbers_to categories
     hash = {}
-    index = 1
+    index = 0
     categories.each do |category|
       hash[index] = category
-      index += 1
+      index += 0
     end
     hash
   end
