@@ -1,6 +1,6 @@
 <h1>Hints</h1>
 <ul>
-  <li>1. nyao(aka meow)</li>
+  <li>1. nyao ~(=^エ^=)ノ(aka meow)</li>
   <li>2. baby</li>
   <li>3. plural</li>
 </ul>
@@ -10,6 +10,9 @@
     <%= f.password_field :password, :class => "name_text_field" %><br />
   </div>
   <div class"actions">
-    <%= image_submit_tag "submit-button.png" %>
+    <proceed>
+      <%= link_to_function "Submit", "$(this).up('form').submit()" %>
+    </proceed>
+    <hidden><%= f.submit %></hidden>
   </div>
 <% end %>
