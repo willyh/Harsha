@@ -21,7 +21,7 @@ module MenuItemsHelper
     index = 0
     categories.each do |category|
       hash[index] = category
-      index += 0
+      index += 1
     end
     hash
   end
