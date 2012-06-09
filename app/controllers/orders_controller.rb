@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   helper_method :build_menu
   before_filter :completed_yet, :except => [:new, :create, :show, :complete ]
   def new
-    @head = "Place Your Order"
+    @head = "Check Out Our Menu!"
     @order = Order.new
   end
   def index
@@ -23,12 +23,12 @@ class OrdersController < ApplicationController
     else
       if waited_too_long @order
         flash[:error] = "Please select a time later than #{@order.pickup_time}. We may need more than #{time_to_prepare @order.pickup_time} minutes to prepare your food"
-        @head = "Place Your Order"
+        @head = "Check Out Our Menu!"
         render 'new'
       elsif @order.save()
         redirect_to @order
       else
-        @head = 'Place Your Order'
+        @head = 'Check Out Our Menu!"'
         render 'new'
       end
     end

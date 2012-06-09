@@ -23,16 +23,17 @@
 <body> 
 <div class="navigation_bar">
 	<div class="nav_item" onclick="location.href='<%=home_url%>';">
-    Home
-  </div>
-	<div class="nav_item" onclick="location.href='<%=new_order_url%>';">
-    Menu
-  </div>
+	Home
+    </div>
+    <div class="nav_item">
+      <%= link_to "Menu", new_order_path %>
+    </div>
+  </table>
 </div>
 <% if admin? %>
 <div class="navigation_bar">
-	<div class="nav_item" onclick="location.href='<%=menu_url%>';">
-     Edit Menu
+  <div class="nav_item">
+    <%= link_to "Edit Menu", menu_path %>
   </div>
 </div>
 <% end %>
