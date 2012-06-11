@@ -1,33 +1,67 @@
 <% form_for(@order) do |f| %>
   <%= render 'shared/error_messages', :object => f.object %>
-<% categories = {} %>
-<% MenuItem.all.sort{ |x,y| x.id<=>y.id }.each do |item| %>
-  <% categories[item.category] ||= [] %>
-  <% categories[item.category] << item %>
-<% end %>
-<% tables = build_tables(categories) %>
-<% tables[:category_sets].each do |index, cats| %>
-<div>
-<table>
-  <% cats.each do |cat| %>
-    <th><%=cat%></th>
+
+  <% categories = {} %>
+  <% MenuItem.all.sort{ |x,y| x.id<=>y.id }.each do |item| %>
+    <% categories[item.category] ||= [] %>
+    <% categories[item.category] << item %>
   <% end %>
-  <% tables[index].each do |row,items | %>
-  <tr>
-    <% cats.each do |cat| %>
-      <td>
-        <% if items[cat] %>
-          <%= items[cat].name %>
-	  <%= link_to "info", items[cat] if !admin? && ( !items[cat].description.blank? || items[cat].to_s =~ /src="\/photos\/original\/missing.png"/ )  %><br />
-          <%= format_price items[cat].price %><br />
-        <% end %>
-      </td>
+
+  <div id="fuzz" onclick="hideLarge();"></div>
+  <% categories.each_value do |items| %>
+    <% items.each do |item| %>
+      <div id="<%= item.name.gsub(' ', '_') %>_large-info" class="large-item-info"
+        onclick="hideLarge();">
+        <h2>
+          <%=item.name%>
+        </h2>
+      </div>
     <% end %>
-  </tr>
   <% end %>
-</table>
-</div>
-<% end %>
+
+  <div style="float:left;">
+    <% categories.each do |cat, items| %>
+    <div style="text-align:left;">
+      <h1><%=cat%></h1>
+      <ul>
+        <% items.each do |item| %>
+          <li id="<%= item.name.gsub(' ', '_') %>" class="item-name">
+            <%= item.name %>
+            <%= link_to "info", item if ( !item.description.blank? || item.to_s =~ /src="\/photos\/original\/missing.png"/ )  %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <% end %>
+  </div>
+
+  <div id="item-view" class="floaty-box" style="float:right;">
+    <% categories.each do |cat, items| %>
+      <% items.each do |item| %>
+        <div id="<%= item.name.gsub(' ', '_')%>_info" class="item-info">
+          <div class="frame">
+            <img src="http://www.matusita-kai.or.jp/eiyou-ka/9-cooking/images/dango-mochi1.gif"></img>
+          </div>
+          <div class="description">
+            <h2>
+              <%= item.name %>
+            </h2>
+            <%= format_price item.price %>
+            <p>
+              <%= item.description %>
+            </p>
+          </div>
+        </div>
+        
+      <% end %>
+    <% end %>
+  </div>
+
+
+
+
+
+
 <% if false # remove this line to enable ordering %>
     <hidden><%= f.submit %></hidden>
   <% if admin? %>

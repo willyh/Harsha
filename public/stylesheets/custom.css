@@ -4,8 +4,10 @@ head{
 
 body {
   visibility: visible;
-  background: #99ccff;
+  background: #fff;
   text-align: center;
+  width: 700px;
+  background: #6699cc;
 }
 
 .header {
@@ -18,6 +20,18 @@ body {
   border-style: solid;
   border-width: 10px;
   border-color: #336699;
+}
+
+h1 {
+  color: #eee;
+  border-bottom: 5px solid #225588;
+}
+
+h2 {
+  font-weight: bold;
+  background: #e3c542;
+  box-shadow: 0 0 4px 4px #b7a420;
+  margin-bottom: 5px;
 }
 
 a {
@@ -47,19 +61,83 @@ td {
 
 ul {
   text-align: left;
+  width: 100%;
+  padding: 0;
 }
 
 li {
   list-style: none;
+  padding: 10px;
+  margin: 15px;
+  border-style: solid;
+  border-width: medium;
+  border-color: #05cd05;
+  width: 200px;
+  background: #2af52a;
+  box-shadow: 1px 1px 3px 3px #4477aa;
 }
 li:hover {
-
+  background: #05c805;
 }
 .navigation_bar {
   font-weight: bold;
   display:table;
   font-size: 200%;
   width:100%;
+}
+
+.floaty-box {
+  background: #225588;
+  width: 420px;
+  height: 470px;
+}
+
+.frame {
+  background: #99bbff;
+  margin: 10px;
+  height: 300px;
+  width: 390px;
+  padding: 5px;
+}
+
+.description {
+  text-align: left;
+  background: #99bbff;
+  margin: 10px;
+  padding: 5px;
+  height: 120px;
+  box-shadow: 2px 2px 4px 3px #003366;
+}
+
+.item-info {
+  cursor: pointer;
+  display:none;
+}
+
+#fuzz {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height: 100%;
+  z-index:100;
+  background: black;
+  opacity: .6;
+  text-align:left;
+  display:none;
+}
+
+.large-item-info {
+  display:none;
+  font-size: 150%;
+  position:fixed;
+  height: 500px;
+  width: 580px;
+  z-index: 200;
+  border:5px solid #222;
+  background: #77aadd;
+  top: 25px;
+  left: 50px; 
 }
 
 .nav_item {
@@ -111,6 +189,11 @@ other:hover {background: #666600;}
 .description_text_field {
 }
 .instructions_text_field {
+}
+
+.sticky {
+  position:fixed;
+  top:0;
 }
 
 .menu_item_check_box {
