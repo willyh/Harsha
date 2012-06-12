@@ -1,29 +1,122 @@
-<% category = params[:category] %>
 <% categories = {} %>
-<% @menu_items.each do |item| %>
+<% MenuItem.all.sort{ |x,y| x.id<=>y.id }.each do |item| %>
   <% categories[item.category] ||= [] %>
   <% categories[item.category] << item %>
 <% end %>
 
-<%= render 'shared/categories', :categories => categories %>
+<div style="float:left;width:275px;">
+  <div style="text-align:left;">
+    <h1>
+      New Item
+    </h1>
+    <ul>
+      <li id="new-item">
+        New Item
+      </li>
+    </ul>
+  </div>
 
-<% if categories[category] %>
-<ul>
-  <% categories[category].each do |item| %>
-    <%= render 'shared/describe_each', :item => item %>
+  <% categories.each do |cat, items| %>
+  <div style="text-align:left;">
+    <h1><%=cat%></h1>
+    <ul>
+      <% items.each do |item| %>
+        <li id="<%= item.id %>" class="item-name">
+          <%= item.name %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
   <% end %>
-</ul>
-<% else %>
-  <p>select a category above to edit existing items</p>
-<% end %>
+</div>
 
-<% if admin? %>
-<h1>
-  <% menu = category || "Menu Items" %>
-  <%= "Add to #{menu}" %>
-</h1>
-<%= form_for(@menu_item, :html => {:multipart => true }) do |f| %>
-  <%= render 'shared/error_messages', :object => f.object %>
-  <%= render 'shared/menu_item_entries', :f => f, :categories => categories %>
-<% end %>
-<% end %>
+<div id="item-view" class="floaty-box" style="float:right;">
+  <div id="new-item_info" class="item-info" style="cursor:default;">
+  <% form_for(@menu_item) do |f| %>
+    <%= render 'shared/error_messages', :object => f.object %>
+
+      <div class="frame">
+        Select a Category:
+        <% options = {'New Category' => ''} %>
+        <% categories.each_key do |key| %>
+          <% options[key] = key %>
+        <% end %>
+        <%= select_tag(:category_selector, options_for_select(options), :class => 'category_selector') %>
+        <hidden class="new_category_field" >
+          <%=f.text_field :category, :value=>@menu_item.category %>
+        </hidden>
+      </div>
+      <div class="description">
+        <h2>
+          <%= f.text_field :name, :class=>"field", :value=>@menu_item.name %>
+        </h2>
+        $<%= f.text_field :price, :class=>"field", :value=>@menu_item.price %>
+        <p>
+        <%= f.text_area :description, :class=>"field", :style => "height:27px", :value=>@menu_item.description %>
+        </p>
+      </div>
+
+    <hidden><%=f.submit %></hidden>
+  <% end %>
+  </div>
+
+  <% categories.each do |cat, items| %>
+    <% items.each do |item| %>
+      <div id="<%= item.id%>_info" class="item-info" style="cursor:default;">
+      <% form_for(item) do |f| %>
+        <%= render 'shared/error_messages', :object => f.object %>
+
+          <div class="frame">
+            Select a Category:
+            <% options = {'New Category' => ''} %>
+            <% categories.each_key do |key| %>
+              <% options[key] = key %>
+            <% end %>
+            <%= select_tag(:category_selector, options_for_select(options,item.category), :class => 'category_selector') %>
+            <hidden class="new_category_field" >
+              <%=f.text_field :category, :value=>item.category %>
+            </hidden>
+          </div>
+          <div class="description">
+            <h2>
+              <%= f.text_field :name, :class=>"field", :value=>item.name %>
+            </h2>
+            $<%= f.text_field :price, :class=>"field", :value=>item.price %>
+            <p>
+            <%= f.text_area :description, :class=>"field", :style => "height:27px", :value=>item.description %>
+            </p>
+            <hidden><%=f.text_field :category, :value=>item.category %></hidden>
+          </div>
+
+        <hidden><%=f.submit %></hidden>
+      <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".category_selector").each(function() {
+      if ($(this).val().length == 0) {
+        $(this).parent().find('.new_category_field').show();
+      }
+    });
+  });
+  $("#new-item").mouseover(function() {
+    $(".item-info").hide();
+    $("#new-item_info").show();
+  });
+
+  $(".category_selector").change(function() {
+      hidden = $(this).parent().find('.new_category_field');
+      hidden.find("#menu_item_category").val($(this).val());
+      cat_field = $("#new_category_field");
+    if ($(this).val().length == 0) {
+      hidden.show();
+    }
+    else {
+      hidden.hide();
+    }
+  });
+</script>

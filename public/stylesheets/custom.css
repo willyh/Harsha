@@ -66,6 +66,7 @@ ul {
 }
 
 li {
+  cursor: default;
   list-style: none;
   padding: 10px;
   margin: 15px;
@@ -78,12 +79,17 @@ li {
 }
 li:hover {
   background: #05c805;
+  box-shadow: 1px 1px 1px 1px #4477aa;
 }
 .navigation_bar {
   font-weight: bold;
   display:table;
   font-size: 200%;
   width:100%;
+}
+
+p {
+  font-style: italic;
 }
 
 .floaty-box {
@@ -125,19 +131,21 @@ li:hover {
   opacity: .6;
   text-align:left;
   display:none;
+  cursor: pointer;
 }
 
 .large-item-info {
   display:none;
   font-size: 150%;
   position:fixed;
-  height: 500px;
+  height: 520px;
   width: 580px;
   z-index: 200;
   border:5px solid #222;
   background: #77aadd;
   top: 25px;
   left: 50px; 
+  cursor: pointer;
 }
 
 .nav_item {
@@ -178,17 +186,7 @@ proceed:hover {background: #006600;}
 other:hover {background: #666600;}
 
 .field {
-  width: 100%;
-}
-
-.name_text_field {
-}
-.price_text_field {
-}
-
-.description_text_field {
-}
-.instructions_text_field {
+  width: 95%;
 }
 
 .sticky {
@@ -196,18 +194,10 @@ other:hover {background: #666600;}
   top:0;
 }
 
-.menu_item_check_box {
-  width: 25px;
-  height: 25px;
-  float: left;
+.entry {
+  width: 180px;
 }
 
-.menu_item_radio_button {
-}
-
-p {
-  font-style: italic;
-}
 div.out_of_stock {
   margin: 0 23%;
   background: #fff;
@@ -218,6 +208,7 @@ div.out_of_stock {
   font-weight: bold;
   color: #CC0033;
 }
+
 div.out_of_stock a{
   color: #CC0033;
 }
@@ -241,6 +232,5 @@ div.in_stock:hover {
   background: #ccc;
 }
 hidden {
-  visibility: hidden;
-  margin: 0;
+  display:none;
 }

@@ -10,11 +10,17 @@
   <div id="fuzz" onclick="hideLarge();"></div>
   <% categories.each_value do |items| %>
     <% items.each do |item| %>
-      <div id="<%= item.name.gsub(' ', '_') %>_large-info" class="large-item-info"
+      <div id="<%= item.id %>_large-info" class="large-item-info"
         onclick="hideLarge();">
         <h2>
           <%=item.name%>
         </h2>
+        <img src="http://oixi.jp/rakuda-gohan/img/25/jsqQXiAwMTSDdYONg0-XcOKZ.jpg"></img>
+        <br />
+        <%= format_price item.price %>
+        <p>
+          <%= item.description %>
+        </p>
       </div>
     <% end %>
   <% end %>
@@ -25,9 +31,8 @@
       <h1><%=cat%></h1>
       <ul>
         <% items.each do |item| %>
-          <li id="<%= item.name.gsub(' ', '_') %>" class="item-name">
+          <li id="<%= item.id %>" class="item-name">
             <%= item.name %>
-            <%= link_to "info", item if ( !item.description.blank? || item.to_s =~ /src="\/photos\/original\/missing.png"/ )  %>
           </li>
         <% end %>
       </ul>
@@ -38,7 +43,7 @@
   <div id="item-view" class="floaty-box" style="float:right;">
     <% categories.each do |cat, items| %>
       <% items.each do |item| %>
-        <div id="<%= item.name.gsub(' ', '_')%>_info" class="item-info">
+        <div id="<%= item.id %>_info" class="item-info">
           <div class="frame">
             <img src="http://www.matusita-kai.or.jp/eiyou-ka/9-cooking/images/dango-mochi1.gif"></img>
           </div>
@@ -109,3 +114,21 @@ You don't see that order until they pay<br />
 "Clear Orders" deletes unfinished orders and makes all time slots available<br />
 Use "Clear Orders" before you close shop or before you open so you don't accidentally delete an order while someone is paying </p>
 <% end %>
+<script type="text/javascript">
+    $(document).ready(function() {
+        hideLarge();
+    });
+
+    $(".item-info").click(function() {
+      var name = $(this).attr("id");
+      name = name.slice(0, name.length - 5);
+      var item = $("#"+name+"_large-info");
+
+      $("#fuzz").show();
+      item.show();
+    });
+    function hideLarge() {
+      $("#fuzz").hide();
+      $(".large-item-info").hide();
+    }
+</script>

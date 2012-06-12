@@ -9,6 +9,7 @@
   <%= stylesheet_link_tag 'print', :media => 'print' %>
   <%= stylesheet_link_tag 'custom', :media => 'screen' %>
   <meta content-"width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 
 <head>
   <link rel="shortcut icon" href="/favicon.ico"/>
@@ -26,32 +27,29 @@
 	<div class="nav_item" onclick="location.href='<%=home_url%>';">
     Home
   </div>
+<% unless admin? %>
 	<div class="nav_item" onclick="location.href='<%=new_order_url%>';">
     Menu
   </div>
-</div>
-<% if admin? %>
-<div class="navigation_bar">
+<% else %>
 	<div class="nav_item" onclick="location.href='<%=menu_url%>';">
      Edit Menu
   </div>
-</div>
 <% end %>
+</div>
 </body>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $(".item-info").hide();
-        hideLarge();
     });
 
     $(".item-name").mouseover(function() {
        $(".item-info").hide();
       var name = $(this).attr("id");
+      name = name+"_info";
 
-      var item = $("#"+name+"_info");
-
+      var item = $("#"+name);
       item.show();
     });
 
@@ -68,19 +66,6 @@
         var right_pos = $("body").width();
         $stickyEl.css('left',right_pos-$stickyEl.width());
       });
-    }
-
-    $(".item-info").click(function() {
-      var name = $(this).attr("id");
-      name = name.slice(0, name.length - 5);
-      var item = $("#"+name+"_large-info");
-
-      $("#fuzz").show();
-      item.show();
-    });
-    function hideLarge() {
-      $("#fuzz").hide();
-      $(".large-item-info").hide();
     }
   </script>
 
