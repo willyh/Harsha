@@ -6,6 +6,9 @@
 
 <div style="float:left;width:275px;">
   <div style="text-align:left;">
+  <% form_for(@menu_item) do |f| %>
+    <%= render 'shared/error_messages', :object => f.object %>
+  <% end %>
     <h1>
       New Item
     </h1>
@@ -33,7 +36,6 @@
 <div id="item-view" class="floaty-box" style="float:right;">
   <div id="new-item_info" class="item-info" style="cursor:default;">
   <% form_for(@menu_item) do |f| %>
-    <%= render 'shared/error_messages', :object => f.object %>
 
       <div class="frame">
         Select a Category:
@@ -86,9 +88,9 @@
             <%= f.text_area :description, :class=>"field", :style => "height:27px", :value=>item.description %>
             </p>
             <hidden><%=f.text_field :category, :value=>item.category %></hidden>
+            <hidden><%=f.submit %></hidden>
           </div>
 
-        <hidden><%=f.submit %></hidden>
       <% end %>
       </div>
     <% end %>
@@ -96,13 +98,6 @@
 </div>
 
 <script type="text/javascript">
-  $(document).ready(function() {
-    $(".category_selector").each(function() {
-      if ($(this).val().length == 0) {
-        $(this).parent().find('.new_category_field').show();
-      }
-    });
-  });
   $("#new-item").mouseover(function() {
     $(".item-info").hide();
     $("#new-item_info").show();

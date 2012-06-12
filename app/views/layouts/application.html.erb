@@ -41,17 +41,27 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $(".item-info").hide();
+      $(".item-info").hide();
+      $(".category_selector").each(function() {
+        if ($(this).val().length == 0) {
+          $(this).parent().find('.new_category_field').show();
+        }
+        errorItem = $("#<%= @menu_item.id || "new-item" if @menu_item %>_info");
+        if (errorItem != null) {
+          errorItem.show();
+        }
+      });
+
+      $(".item-name").mouseover(function() {
+         $(".item-info").hide();
+        var name = $(this).attr("id");
+        name = name+"_info";
+
+        var item = $("#"+name);
+        item.show();
+      });
     });
 
-    $(".item-name").mouseover(function() {
-       $(".item-info").hide();
-      var name = $(this).attr("id");
-      name = name+"_info";
-
-      var item = $("#"+name);
-      item.show();
-    });
 
     var $window = $(window),
         $stickyEl = $('#item-view');

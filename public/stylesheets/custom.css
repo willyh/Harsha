@@ -232,5 +232,5 @@ div.in_stock:hover {
   background: #ccc;
 }
 hidden {
-  display:none;
+  visibility:hidden;
 }

@@ -1,9 +1,8 @@
 class MenuItemsController < ApplicationController
   before_filter :authorize, :except =>  [:show, :home]
   def index
-    @menu_items = MenuItem.all.sort{ |x,y| x.id<=>y.id }
     @menu_item = MenuItem.new 
-    @head = params[:category] || "Menu"
+    @head = "Check Out Your Menu"
   end
 
   def create
@@ -14,7 +13,6 @@ class MenuItemsController < ApplicationController
     if @menu_item.save
       redirect_to menu_path
     else
-      @menu_items = MenuItem.all.sort{ |x,y| x.id<=>y.id }
       @head = "Error"
       render 'index'
     end
@@ -25,7 +23,6 @@ class MenuItemsController < ApplicationController
     if @menu_item.update_attributes(params[:menu_item])
       redirect_to menu_path
     else
-      @menu_items = MenuItem.all.sort{ |x,y| x.id<=>y.id }
       @head = "Error"
       render 'index'
     end
@@ -37,9 +34,9 @@ class MenuItemsController < ApplicationController
   end
 
   def edit
-    @menu_items = MenuItem.all.sort{ |x,y| x.id<=>y.id }
+    redirect_to menu_path
     @menu_item = MenuItem.find(params[:id])
-    @head = "Edit #{@menu_item.name}"
+    @head = "Check Out Your Menu!"
   end
 
   def destroy
