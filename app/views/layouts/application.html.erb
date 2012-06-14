@@ -42,15 +42,23 @@
 <script type="text/javascript">
     $(document).ready(function() {
       $(".item-info").hide();
+        <% if @menu_item && @menu_item.id %>
+          <%= "$('##{@menu_item.id}_info').show()" %>
+        <% else %>
+          <%= "$('.item-info').first().show();" %>
+        <% end %>
+
       $(".category_selector").each(function() {
+        hidden = $(this).parent().find('.new_category_field');
+        $(this).val(hidden.find("#menu_item_category").val());
         if ($(this).val().length == 0) {
-          $(this).parent().find('.new_category_field').show();
+          hidden.show();
         }
-        errorItem = $("#<%= @menu_item.id || "new-item" if @menu_item %>_info");
-        if (errorItem != null) {
-          errorItem.show();
+        else {
+          hidden.hide();
         }
       });
+    });
 
       $(".item-name").mouseover(function() {
          $(".item-info").hide();
@@ -60,7 +68,6 @@
         var item = $("#"+name);
         item.show();
       });
-    });
 
 
     var $window = $(window),

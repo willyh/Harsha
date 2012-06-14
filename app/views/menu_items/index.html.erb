@@ -35,7 +35,7 @@
 
 <div id="item-view" class="floaty-box" style="float:right;">
   <div id="new-item_info" class="item-info" style="cursor:default;">
-  <% form_for(@menu_item) do |f| %>
+  <% form_for(@new_item) do |f| %>
 
       <div class="frame">
         Select a Category:
@@ -45,20 +45,20 @@
         <% end %>
         <%= select_tag(:category_selector, options_for_select(options), :class => 'category_selector') %>
         <hidden class="new_category_field" >
-          <%=f.text_field :category, :value=>@menu_item.category %>
+          <%=f.text_field :category, :value=>@new_item.category %>
         </hidden>
+        <div><%=f.submit %></div>
       </div>
       <div class="description">
         <h2>
-          <%= f.text_field :name, :class=>"field", :value=>@menu_item.name %>
+          <%= f.text_field :name, :class=>"field", :value=>@new_item.name %>
         </h2>
-        $<%= f.text_field :price, :class=>"field", :value=>@menu_item.price %>
+        $<%= f.text_field :price, :class=>"field", :value=>@new_item.price %>
         <p>
-        <%= f.text_area :description, :class=>"field", :style => "height:27px", :value=>@menu_item.description %>
+        <%= f.text_area :description, :class=>"field", :style => "height:27px", :value=>@new_item.description %>
         </p>
       </div>
 
-    <hidden><%=f.submit %></hidden>
   <% end %>
   </div>
 
@@ -78,6 +78,7 @@
             <hidden class="new_category_field" >
               <%=f.text_field :category, :value=>item.category %>
             </hidden>
+            <div><%=f.submit %></div>
           </div>
           <div class="description">
             <h2>
@@ -87,8 +88,6 @@
             <p>
             <%= f.text_area :description, :class=>"field", :style => "height:27px", :value=>item.description %>
             </p>
-            <hidden><%=f.text_field :category, :value=>item.category %></hidden>
-            <hidden><%=f.submit %></hidden>
           </div>
 
       <% end %>
