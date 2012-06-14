@@ -81,7 +81,8 @@
 
         $stickyEl.toggleClass('sticky', windowTop > elTop);
         var right_pos = $("body").width();
-        $stickyEl.css('left',right_pos-$stickyEl.width());
+        var left_pos = $("body").offset().left;
+        $stickyEl.css('left',left_pos+right_pos-$stickyEl.width());
       });
     }
   </script>
