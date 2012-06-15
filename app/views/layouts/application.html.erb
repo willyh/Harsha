@@ -40,16 +40,17 @@
 </body>
 
 <script type="text/javascript">
-    var $stickyEl = $('.static-box');
 
     $(document).ready(function() {
       setStickyPosition();
       var right_pos = $("body").width();
       var left_pos = $("body").offset().left;
-      $(".floaty-box").css('left',left_pos+right_pos-$stickyEl.outerWidth());
+      $(".floaty-box").css('left',left_pos+right_pos-$(".floaty-box").outerWidth());
 
-      $(".floaty-box").hide();
-      $(".static-box").show();
+      if($(".static-box").length != 0) {
+        $(".floaty-box").hide();
+        $(".static-box").show();
+      }
 
       $(".item-info").hide();
         <% if @menu_item && @menu_item.id %>
@@ -70,7 +71,7 @@
       });
     });
 
-    $(".item-name").mouseover(function() {
+    $(".item-name").bind('mouseover tap', function() {
        $(".item-info").hide();
       var name = $(this).attr("id");
       name = name+"_info";
@@ -79,33 +80,41 @@
       item.show();
     });
 
+      var $stickyEl = $('.static-box');
       var $window = $(window);
-      var elTop = $stickyEl.offset().top;
+      var elTop;
+      if( $stickyEl.length != 0 ) {
+        elTop = $stickyEl.offset().top;
+      } else {
+        elTop = $(".header").outerHeight();
+      }
 
     function setStickyPosition() {
       var windowTop = $window.scrollTop();
 
-      if(windowTop > elTop) {
-        $(".floaty-box").show();
+      if($stickyEl.length != 0) {
+        if(windowTop > elTop) {
+          $(".floaty-box").show();
+        } else {
+          $(".floaty-box").hide();
+        }
       } else {
-        $(".floaty-box").hide();
+        $(".floaty-box").toggleClass("sticky", windowTop > elTop);
       }
     }
 
     $window.resize(function() {
       var right_pos = $("body").width();
       var left_pos = $("body").offset().left;
-      $(".floaty-box").css('left',left_pos+right_pos-$stickyEl.outerWidth());
+      $(".floaty-box").css('left',left_pos+right_pos-$(".floaty-box").outerWidth());
     });
 
-    if( $stickyEl != null) {
-      $(window).scroll(function() {
-        setStickyPosition();
-      });
-      $('body').bind('touchmove', function() {
-        setStickyPosition();
-      });
-    }
+    $(window).scroll(function() {
+      setStickyPosition();
+    });
+    $('body').bind('touchmove', function() {
+      setStickyPosition();
+    });
   </script>
 
 </html>

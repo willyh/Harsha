@@ -40,10 +40,35 @@
     <% end %>
   </div>
 
-  <div id="item-view" class="floaty-box" style="float:right;">
+<!-- static display -->
+<div id="item-view" class="static-box" style="float:right;">
     <% categories.each do |cat, items| %>
       <% items.each do |item| %>
-        <div id="<%= item.id %>_info" class="item-info">
+        <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info">
+          <div class="frame">
+            <img src="http://www.matusita-kai.or.jp/eiyou-ka/9-cooking/images/dango-mochi1.gif"></img>
+          </div>
+          <div class="description">
+            <h2>
+              <%= item.name %>
+            </h2>
+            <%= format_price item.price %>
+            <p>
+              <%= item.description %>
+            </p>
+          </div>
+        </div>
+        
+      <% end %>
+    <% end %>
+</div>
+
+<!-- /static display -->
+<!-- floaty display -->
+  <div id="item-view" class="sticky floaty-box" style="float:right;">
+    <% categories.each do |cat, items| %>
+      <% items.each do |item| %>
+        <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info">
           <div class="frame">
             <img src="http://www.matusita-kai.or.jp/eiyou-ka/9-cooking/images/dango-mochi1.gif"></img>
           </div>
@@ -61,6 +86,10 @@
       <% end %>
     <% end %>
   </div>
+<!-- floaty display -->
+
+
+
 
 
 
@@ -117,7 +146,9 @@ Use "Clear Orders" before you close shop or before you open so you don't acciden
 <script type="text/javascript">
     $(document).ready(function() {
         hideLarge();
-        $("#fuzz").css('height', $(document).height);
+        $("#fuzz").css('height', $(document).height());
+        $(".large-item-info").css('top', $window.outerHeight()/2 - $(".large-item-info").outerHeight()/2);
+        $(".large-item-info").css('left', $window.outerWidth()/2 - $(".large-item-info").outerWidth()/2);
     });
 
     $(".item-info").click(function() {
