@@ -93,6 +93,9 @@
       });
       $('body').bind('touchmove', function() {
         setStickyPosition();
+        if( windowTop < elTop ) {
+          $stickyEll.top(elTop);
+        }
       });
     }
   </script>
