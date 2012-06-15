@@ -33,8 +33,10 @@
   <% end %>
 </div>
 
-<div id="item-view" class="floaty-box" style="float:right;">
-  <div id="new-item_info" class="item-info" style="cursor:default;">
+<!-- static display -->
+
+<div id="item-view" class="static-box" style="float:right;">
+  <div class="new-item_info item-info" style="cursor:default;">
   <% form_for(@new_item) do |f| %>
 
       <div class="frame">
@@ -64,7 +66,7 @@
 
   <% categories.each do |cat, items| %>
     <% items.each do |item| %>
-      <div id="<%= item.id%>_info" class="item-info" style="cursor:default;">
+      <div class="<%= item.id%>_info item-info" style="cursor:default;">
       <% form_for(item) do |f| %>
         <%= render 'shared/error_messages', :object => f.object %>
 
@@ -96,10 +98,78 @@
   <% end %>
 </div>
 
+<!-- /static display -->
+<!-- floaty display -->
+
+<div id="item-view" class="floaty-box" style="float:right;">
+  <div class="new-item_info item-info" style="cursor:default;">
+  <% form_for(@new_item) do |f| %>
+
+      <div class="frame">
+        Select a Category:
+        <% options = {'New Category' => ''} %>
+        <% categories.each_key do |key| %>
+          <% options[key] = key %>
+        <% end %>
+        <%= select_tag(:category_selector, options_for_select(options), :class => 'category_selector') %>
+        <hidden class="new_category_field" >
+          <%=f.text_field :category, :value=>@new_item.category %>
+        </hidden>
+        <div><%=f.submit %></div>
+      </div>
+      <div class="description">
+        <h2>
+          <%= f.text_field :name, :class=>"field", :value=>@new_item.name %>
+        </h2>
+        $<%= f.text_field :price, :class=>"field", :value=>@new_item.price %>
+        <p>
+        <%= f.text_area :description, :class=>"field", :style => "height:27px", :value=>@new_item.description %>
+        </p>
+      </div>
+
+  <% end %>
+  </div>
+
+  <% categories.each do |cat, items| %>
+    <% items.each do |item| %>
+      <div class="<%= item.id%>_info item-info" style="cursor:default;">
+      <% form_for(item) do |f| %>
+        <%= render 'shared/error_messages', :object => f.object %>
+
+          <div class="frame">
+            Select a Category:
+            <% options = {'New Category' => ''} %>
+            <% categories.each_key do |key| %>
+              <% options[key] = key %>
+            <% end %>
+            <%= select_tag(:category_selector, options_for_select(options,item.category), :class => 'category_selector') %>
+            <hidden class="new_category_field" >
+              <%=f.text_field :category, :value=>item.category %>
+            </hidden>
+            <div><%=f.submit %></div>
+          </div>
+          <div class="description">
+            <h2>
+              <%= f.text_field :name, :class=>"field", :value=>item.name %>
+            </h2>
+            $<%= f.text_field :price, :class=>"field", :value=>item.price %>
+            <p>
+            <%= f.text_area :description, :class=>"field", :style => "height:27px", :value=>item.description %>
+            </p>
+          </div>
+
+      <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<!-- /floaty display -->
+
 <script type="text/javascript">
-  $("#new-item").mouseover(function() {
+  $(".new-item").mouseover(function() {
     $(".item-info").hide();
-    $("#new-item_info").show();
+    $(".new-item_info").show();
   });
 
   $(".category_selector").change(function() {

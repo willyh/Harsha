@@ -40,22 +40,22 @@
 </body>
 
 <script type="text/javascript">
-    var $stickyEl = $('#item-view');
+    var $stickyEl = $('.static-box');
 
     $(document).ready(function() {
-      loadPage();
-    });
-    $( 'html' ).live( 'pageinit', function() {
-      loadPage()
-    });
-    function loadPage() {
       setStickyPosition();
+      var right_pos = $("body").width();
+      var left_pos = $("body").offset().left;
+      $(".floaty-box").css('left',left_pos+right_pos-$stickyEl.outerWidth());
+
+      $(".floaty-box").hide();
+      $(".static-box").show();
 
       $(".item-info").hide();
         <% if @menu_item && @menu_item.id %>
-          <%= "$('##{@menu_item.id}_info').show()" %>
+          <%= "$('.#{@menu_item.id}_info').show()" %>
         <% else %>
-          <%= "$('.item-info').first().show();" %>
+          <%= "$('.new-item_info').show();" %>
         <% end %>
 
       $(".category_selector").each(function() {
@@ -68,24 +68,16 @@
           hidden.hide();
         }
       });
-    }
+    });
 
-    $(".item-name").bind('vmousedown', function() {
+    $(".item-name").mouseover(function() {
        $(".item-info").hide();
       var name = $(this).attr("id");
       name = name+"_info";
 
-      var item = $("#"+name);
+      var item = $("."+name);
       item.show();
     });
-    /*$(".item-name").mouseover(function() {
-       $(".item-info").hide();
-      var name = $(this).attr("id");
-      name = name+"_info";
-
-      var item = $("#"+name);
-      item.show();
-    });*/
 
       var $window = $(window);
       var elTop = $stickyEl.offset().top;
@@ -93,12 +85,20 @@
     function setStickyPosition() {
       var windowTop = $window.scrollTop();
 
-      $stickyEl.toggleClass('sticky', windowTop > elTop);
+      if(windowTop > elTop) {
+        $(".floaty-box").show();
+        $(".static-box").hide();
+      } else {
+        $(".static-box").show();
+        $(".floaty-box").hide();
+      }
+    }
 
+    $window.resize(function() {
       var right_pos = $("body").width();
       var left_pos = $("body").offset().left;
-      $stickyEl.css('left',left_pos+right_pos-$stickyEl.outerWidth());
-    }
+      $(".floaty-box").css('left',left_pos+right_pos-$stickyEl.outerWidth());
+    });
 
     if( $stickyEl != null) {
       $(window).scroll(function() {
@@ -106,7 +106,7 @@
       });
       $('body').bind('touchmove', function() {
         setStickyPosition();
-        $("#new-item").html($stickyEl.offset().left);
+        $(".new-item").html($stickyEl.offset().left);
       });
       $('html').bind('touchmoved', function() {
         setStickyPosition();
