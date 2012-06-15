@@ -90,11 +90,10 @@
     if( $stickyEl != null) {
       $(window).scroll(function() {
         setStickyPosition();
+        $("#new-item").html($stickyEl.offset().top);
       });
       $('body').bind('touchmove', function() {
         setStickyPosition();
-        if( windowTop < elTop ) {
-        }
       });
     }
   </script>
