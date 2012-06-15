@@ -43,7 +43,12 @@
     var $stickyEl = $('#item-view');
 
     $(document).ready(function() {
-
+      loadPage();
+    });
+    $( 'html' ).live( 'pageinit', function() {
+      loadPage()
+    });
+    function loadPage() {
       setStickyPosition();
 
       $(".item-info").hide();
@@ -63,7 +68,7 @@
           hidden.hide();
         }
       });
-    });
+    }
 
       $(".item-name").mouseover(function() {
          $(".item-info").hide();
@@ -94,6 +99,9 @@
       $('body').bind('touchmove', function() {
         setStickyPosition();
         $("#new-item").html($stickyEl.offset().left);
+      });
+      $('html').bind('touchmoved', function() {
+        setStickyPosition();
       });
     }
   </script>
