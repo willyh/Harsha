@@ -43,6 +43,10 @@
     $stickyEl = $('#item-view');
 
     $(document).ready(function() {
+      var right_pos = $("body").width();
+      var left_pos = $("body").offset().left;
+      $stickyEl.css('left',left_pos+right_pos-$stickyEl.outerWidth());
+
       setStickyPosition();
 
       $(".item-info").hide();
@@ -73,22 +77,13 @@
         item.show();
       });
 
+      var $window = $(window);
+      var elTop = $stickyEl.offset().top;
 
     function setStickyPosition() {
-      var $window = $(window);
-      var header = $(".header");
-
       var windowTop = $window.scrollTop();
-      var elTop = header.outerHeight() - windowTop;
-      var right_pos = $("body").width();
-      var left_pos = $("body").offset().left;
-      $stickyEl.css('left',left_pos+right_pos-$stickyEl.outerWidth());
 
-      if (elTop < 0) {
-        $stickyEl.css('top', 0);
-      } else {
-        $stickyEl.css('top', elTop);
-      }
+      $stickyEl.toggleClass('sticky', windowTop > elTop);
     }
 
     if( $stickyEl != null) {

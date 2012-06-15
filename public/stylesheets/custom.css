@@ -192,6 +192,7 @@ other:hover {background: #666600;}
 
 .sticky {
   position: fixed;
+  top: 0;
 }
 
 .entry {
