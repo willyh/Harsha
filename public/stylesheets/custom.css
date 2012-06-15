@@ -127,7 +127,6 @@ p {
   top:0;
   left:0;
   width:100%;
-  height: 100%;
   z-index:100;
   background: black;
   opacity: .6;
@@ -192,8 +191,7 @@ other:hover {background: #666600;}
 }
 
 .sticky {
-  position:fixed;
-  top:0;
+  position: fixed;
 }
 
 .entry {

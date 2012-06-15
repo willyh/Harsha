@@ -40,7 +40,7 @@
     <% end %>
   </div>
 
-  <div id="item-view" class="floaty-box" style="float:right;">
+  <div id="item-view" class="floaty-box sticky" style="float:right;">
     <% categories.each do |cat, items| %>
       <% items.each do |item| %>
         <div id="<%= item.id %>_info" class="item-info">
@@ -117,6 +117,7 @@ Use "Clear Orders" before you close shop or before you open so you don't acciden
 <script type="text/javascript">
     $(document).ready(function() {
         hideLarge();
+        $("#fuzz").css('height', $(document).height);
     });
 
     $(".item-info").click(function() {
