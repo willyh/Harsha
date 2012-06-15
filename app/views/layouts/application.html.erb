@@ -43,9 +43,6 @@
     $stickyEl = $('#item-view');
 
     $(document).ready(function() {
-      var right_pos = $("body").width();
-      var left_pos = $("body").offset().left;
-      $stickyEl.css('left',left_pos+right_pos-$stickyEl.outerWidth());
 
       setStickyPosition();
 
@@ -84,6 +81,10 @@
       var windowTop = $window.scrollTop();
 
       $stickyEl.toggleClass('sticky', windowTop > elTop);
+
+      var right_pos = $("body").width();
+      var left_pos = $("body").offset().left;
+      $stickyEl.css('left',left_pos+right_pos-$stickyEl.outerWidth());
     }
 
     if( $stickyEl != null) {
