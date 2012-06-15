@@ -70,7 +70,7 @@
       });
     }
 
-    $(".item-name").live('vmousedown', function() {
+    $(".item-name").bind('vmousedown', function() {
        $(".item-info").hide();
       var name = $(this).attr("id");
       name = name+"_info";
