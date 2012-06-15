@@ -94,7 +94,7 @@
       $('body').bind('touchmove', function() {
         setStickyPosition();
         if( windowTop < elTop ) {
-          $stickyEll.top(elTop);
+          $stickyEll.css('top',(elTop));
         }
       });
     }
