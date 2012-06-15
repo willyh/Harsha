@@ -70,14 +70,20 @@
       });
     }
 
+    $(".item-name").live('tap', function() {
+      showItem();
+    });
       $(".item-name").mouseover(function() {
+        showItem();
+      });
+      function showItem() {
          $(".item-info").hide();
         var name = $(this).attr("id");
         name = name+"_info";
 
         var item = $("#"+name);
         item.show();
-      });
+      }
 
       var $window = $(window);
       var elTop = $stickyEl.offset().top;
