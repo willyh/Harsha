@@ -40,7 +40,7 @@
 </body>
 
 <script type="text/javascript">
-    $stickyEl = $('#item-view');
+    var $stickyEl = $('#item-view');
 
     $(document).ready(function() {
 
@@ -94,7 +94,6 @@
       $('body').bind('touchmove', function() {
         setStickyPosition();
         if( windowTop < elTop ) {
-          $stickyEll.css('top',(elTop));
         }
       });
     }

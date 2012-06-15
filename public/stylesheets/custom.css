@@ -98,6 +98,8 @@ p {
   background: #225588;
   width: 420px;
   height: 470px;
+  position:inherit;
+  top:0;
 }
 
 .frame {
