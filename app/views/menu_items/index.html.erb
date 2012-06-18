@@ -40,6 +40,7 @@
   <% form_for(@new_item) do |f| %>
 
       <div class="frame">
+        <h2>New Item</h2>
         Select a Category:
         <% options = {'New Category' => ''} %>
         <% categories.each_key do |key| %>
@@ -71,6 +72,7 @@
         <%= render 'shared/error_messages', :object => f.object %>
 
           <div class="frame">
+            <h2><%=item.name%></h2>
             Select a Category:
             <% options = {'New Category' => ''} %>
             <% categories.each_key do |key| %>
@@ -80,8 +82,19 @@
             <hidden class="new_category_field" >
               <%=f.text_field :category, :value=>item.category %>
             </hidden>
-            <div><%=f.submit %></div>
+            <% if item.out_of_stock %>
+              <div class="out_of_stock" onclick="location.href='<%=toggle_stock_menu_item_url(item)%>';">
+                Out of Stock
+              </div>
+            <% else %>
+              <div class="in_stock" onclick="location.href='<%=toggle_stock_menu_item_url(item)%>';">
+                In Stock
+              </div>
+            <% end %>
+            <div><%=f.submit class: "btn btn-large btn-primary"%></div>
+            <%= button_to "delete", item, method: :delete%>
           </div>
+
           <div class="description">
             <h2>
               <%= f.text_field :name, :class=>"field", :value=>item.name %>

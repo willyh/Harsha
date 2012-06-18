@@ -13,7 +13,9 @@ class MenuItemsController < ApplicationController
     attrs = params[:menu_item]
     @new_item = MenuItem.new(attrs)
     @new_item.category = @new_item.category.capitalize || "Other"
+    @new_item.out_of_stock = true
     if @new_item.save
+      flash[:success] = "#{@menu_item.name} successfully added to menu!"
       redirect_to menu_path
     else
       @menu_item = @new_item
@@ -26,7 +28,8 @@ class MenuItemsController < ApplicationController
     @new_item = MenuItem.new
     @menu_item = MenuItem.find(params[:id])
     if @menu_item.update_attributes(params[:menu_item])
-      redirect_to menu_path
+      flash[:success] = "Successful change"
+      redirect_to menu_path(id: @menu_item.id)
     else
       @head = "Error"
       render 'index'
@@ -35,19 +38,18 @@ class MenuItemsController < ApplicationController
 
   def show
     @menu_item = MenuItem.find(params[:id])
-    @head = "#{@menu_item.name}"
+    flash[:notice] = "you prolly didn't mean to come here";
+    redirect_to menu_path(@menu_item)
   end
 
   def edit
     redirect_to menu_path
-    @new_item = MenuItem.new
-    @menu_item = MenuItem.find(params[:id])
-    @head = "Check Out Your Menu!"
   end
 
   def destroy
-    category = MenuItem.find(params[:id]).category
-    MenuItem.find(params[:id]).destroy
+    item = MenuItem.find(params[:id])
+    item.destroy
+    flash[:success] = "#{item.name} deleted"
     redirect_to menu_path
   end
 
@@ -55,10 +57,11 @@ class MenuItemsController < ApplicationController
     @head = "Moto Cafe"
   end
 
-  def sold_out
-    @order = MenuItem.find(params[:id])
-    @order.sold_out
-    @order.save
-    redirect_to menu_path
+  def toggle_stock 
+    @menu_item = MenuItem.find(params[:id])
+    @menu_item.toggle_stock
+    @menu_item.save
+    flash[:success] = "Successful change"
+    redirect_to menu_path(id: @menu_item.id)
   end
 end

@@ -103,7 +103,8 @@ p {
 .floaty-box {
   background: #225588;
   width: 420px;
-  height: 470px;
+  min-height: 470px;
+  height: 80%;
 }
 
 .static-box {

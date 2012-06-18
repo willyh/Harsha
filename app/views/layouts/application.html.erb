@@ -57,6 +57,8 @@
       $(".item-info").hide();
         <% if @menu_item && @menu_item.id %>
           <%= "$('.#{@menu_item.id}_info').show()" %>
+        <% elsif params[:id] %>
+          <%= "$('.#{params[:id]}_info').show()" %>
         <% else %>
           <%= "$('.new-item_info').show();" %>
         <% end %>

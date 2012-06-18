@@ -13,7 +13,7 @@ class MenuItem < ActiveRecord::Base
 				:message => "must be a number"
   validates :category, :presence => true
 
-  def sold_out
+  def toggle_stock
     self.out_of_stock = !self.out_of_stock
   end
 
