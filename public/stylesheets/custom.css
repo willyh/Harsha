@@ -68,6 +68,7 @@ ul {
 }
 
 li {
+  font-size: 120%;
   cursor: default;
   list-style: none;
   padding: 10px;
@@ -146,7 +147,7 @@ p {
   text-align:left;
   cursor: pointer;
   position:absolute;
-  display:hidden;
+  display:none;
 }
 
 .large-item-info {
@@ -160,7 +161,11 @@ p {
   margin-left:auto;
   margin-right:auto;
   cursor: pointer;
-  display:hidden;
+  display:none;
+}
+
+p.large-item-info {
+  font-size:140%;
 }
 
 .nav_item {
