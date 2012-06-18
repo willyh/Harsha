@@ -150,10 +150,10 @@ p {
 }
 
 .large-item-info {
-  font-size: 150%;
+  font-size: 200%;
   position:fixed;
-  height: 520px;
-  width: 580px;
+  height: 90%;
+  width: 90%;
   z-index: 200;
   border:5px solid #222;
   background: #77aadd;
