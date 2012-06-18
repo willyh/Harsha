@@ -146,6 +146,7 @@ p {
   text-align:left;
   cursor: pointer;
   position:absolute;
+  display:hidden;
 }
 
 .large-item-info {
@@ -159,6 +160,7 @@ p {
   margin-left:auto;
   margin-right:auto;
   cursor: pointer;
+  display:hidden;
 }
 
 .nav_item {
