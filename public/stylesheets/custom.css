@@ -73,19 +73,16 @@ li {
   list-style: none;
   padding: 10px;
   margin: 15px;
-  border-style: solid;
-  border-width: medium;
-  border-color: #05cd05;
   width: 200px;
   background: #ccc;
-  box-shadow: 1px 1px 3px 3px #4477aa;
+  box-shadow: 1px 1px 1px 1px #4477aa;
 }
 li:hover {
   background: #f5f52a;
-  box-shadow: 1px 1px 1px 1px #4477aa;
 }
 li.item-name.selected {
-  background: #f5f52a;
+  background: #e3c542;
+  box-shadow: 0 0 4px 4px #b7a420;
 }
 .navigation_bar {
   font-weight: bold;
