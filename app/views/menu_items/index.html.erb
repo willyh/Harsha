@@ -92,7 +92,6 @@
               </div>
             <% end %>
             <div><%=f.submit class: "btn btn-large btn-primary"%></div>
-            <%= button_to "delete", item, method: :delete%>
           </div>
 
           <div class="description">
@@ -106,6 +105,7 @@
           </div>
 
       <% end %>
+            <%=button_to "Delete", item, method: :delete %>
       </div>
     <% end %>
   <% end %>

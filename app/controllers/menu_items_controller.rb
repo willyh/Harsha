@@ -15,7 +15,7 @@ class MenuItemsController < ApplicationController
     @new_item.category = @new_item.category.capitalize || "Other"
     @new_item.out_of_stock = true
     if @new_item.save
-      flash[:success] = "#{@menu_item.name} successfully added to menu!"
+      flash[:success] = "#{@new_item.name} successfully added to menu!"
       redirect_to menu_path
     else
       @menu_item = @new_item
@@ -27,6 +27,7 @@ class MenuItemsController < ApplicationController
   def update
     @new_item = MenuItem.new
     @menu_item = MenuItem.find(params[:id])
+    @menu_item.category = @menu_item.category.capitalize || "Other"
     if @menu_item.update_attributes(params[:menu_item])
       flash[:success] = "Successful change"
       redirect_to menu_path(id: @menu_item.id)
