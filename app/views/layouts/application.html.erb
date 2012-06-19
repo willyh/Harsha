@@ -77,11 +77,13 @@
 
     $(".item-name").bind('mouseover tap', function() {
        $(".item-info").hide();
+       $(".item-name").removeClass("selected");
       var name = $(this).attr("id");
       name = name+"_info";
 
       var item = $("."+name);
       item.show();
+      $(this).addClass("selected");
     });
 
       var $stickyEl = $('.static-box');
