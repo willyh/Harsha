@@ -77,15 +77,15 @@ li {
   border-width: medium;
   border-color: #05cd05;
   width: 200px;
-  background: #f5f52a;
+  background: #ccc;
   box-shadow: 1px 1px 3px 3px #4477aa;
 }
 li:hover {
-  background: #ccc;
+  background: #f5f52a;
   box-shadow: 1px 1px 1px 1px #4477aa;
 }
 li.item-name.selected {
-  background: #ccc;
+  background: #f5f52a;
 }
 .navigation_bar {
   font-weight: bold;
