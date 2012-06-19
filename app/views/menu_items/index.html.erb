@@ -82,15 +82,16 @@
             <hidden class="new_category_field" >
               <%=f.text_field :category, :value=>item.category %>
             </hidden>
-            <% if item.out_of_stock %>
-              <div class="out_of_stock" onclick="location.href='<%=toggle_stock_menu_item_url(item)%>';">
-                Out of Stock
-              </div>
-            <% else %>
-              <div class="in_stock" onclick="location.href='<%=toggle_stock_menu_item_url(item)%>';">
+            <div style="margin:10px;">
+              <div class="<%= item.out_of_stock ? "disabled" : "in_stock"%>"
+                onclick="location.href='<%=toggle_stock_menu_item_url(item)%>';">
                 In Stock
               </div>
-            <% end %>
+              <div class="<%= item.out_of_stock ? "out_of_stock" : "disabled"%>"
+                onclick="location.href='<%=toggle_stock_menu_item_url(item)%>';">
+                Out of Stock
+              </div>
+            </div>
             <div><%=f.submit class: "btn btn-large btn-primary"%></div>
           </div>
 
