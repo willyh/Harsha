@@ -92,7 +92,7 @@
                 Out of Stock
               </div>
             </div>
-            <div><%=f.submit class: "btn btn-large btn-primary"%></div>
+            <div><%=f.submit :class => "btn btn-large btn-primary"%></div>
           </div>
 
           <div class="description">
@@ -106,7 +106,7 @@
           </div>
 
       <% end %>
-            <%=button_to "Delete", item, method: :delete %>
+            <%=button_to "Delete", item, :method => :delete %>
       </div>
     <% end %>
   <% end %>

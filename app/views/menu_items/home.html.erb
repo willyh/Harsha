@@ -6,7 +6,7 @@
 </h2>
 <h2>
   <% if session[:password] %>
-    <%= link_to "Reset", logout_path %>
+    <%= link_to "log out", logout_path %>
   <% else %>
     <%= link_to "administrator", login_path %>
   <% end %>
