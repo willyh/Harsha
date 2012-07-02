@@ -27,8 +27,10 @@ class MenuItemsController < ApplicationController
   def update
     @new_item = MenuItem.new
     @menu_item = MenuItem.find(params[:id])
+    attrs = params[:menu_item]
+    attrs[:category] = attrs[:category].capitalize
     @menu_item.category = @menu_item.category.capitalize || "Other"
-    if @menu_item.update_attributes(params[:menu_item])
+    if @menu_item.update_attributes(attrs)
       flash[:success] = "Successful change"
       redirect_to menu_path(id: @menu_item.id)
     else

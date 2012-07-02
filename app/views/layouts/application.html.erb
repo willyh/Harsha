@@ -60,7 +60,8 @@
         <% elsif params[:id] %>
           <%= "$('.#{params[:id]}_info').show()" %>
         <% else %>
-          <%= "$('.new-item_info').show();" %>
+          <%= "$('.static-box').children(':first').show();" %>
+          <%= "$('.floaty-box').children(':first').show();" %>
         <% end %>
 
       $(".category_selector").each(function() {

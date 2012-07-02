@@ -79,7 +79,7 @@ li {
 }
 li.item-name.selected {
   background: #ccc;
-  box-shadow: 1px 1px 2px 2px #4477aa;
+  box-shadow: 3px 3px 2px 2px #4477aa;
 }
 .navigation_bar {
   font-weight: bold;

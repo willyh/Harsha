@@ -15,7 +15,7 @@
         <h2>
           <%=item.name%>
         </h2>
-        <img src="http://oixi.jp/rakuda-gohan/img/25/jsqQXiAwMTSDdYONg0-XcOKZ.jpg"></img>
+        <%= image_tag item.photo.url(:large) if item.photo.exists? %>
         <br />
         <%= format_price item.price %>
         <p>
@@ -48,7 +48,7 @@
       <% items.each do |item| unless item.out_of_stock %>
         <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info">
           <div class="frame">
-            <img src="http://www.matusita-kai.or.jp/eiyou-ka/9-cooking/images/dango-mochi1.gif"></img>
+            <%= image_tag item.photo.url(:medium) if item.photo.exists? %>
           </div>
           <div class="description">
             <h2>
@@ -73,7 +73,7 @@
       <% items.each do |item| unless item.out_of_stock %>
         <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info">
           <div class="frame">
-            <img src="http://www.matusita-kai.or.jp/eiyou-ka/9-cooking/images/dango-mochi1.gif"></img>
+            <%= image_tag item.photo.url(:medium) if item.photo.exists? %>
           </div>
           <div class="description">
             <h2>

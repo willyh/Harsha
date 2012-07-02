@@ -1,7 +1,10 @@
 class MenuItem < ActiveRecord::Base
   attr_accessible :name, :price, :description, :category, :photo
 
-  has_attached_file :photo
+  has_attached_file :photo,
+    :styles => {
+      :medium => "380x",
+      :large => "448x" }
 
   validates :name, :presence => true,
 		:uniqueness => { :case_sensitive => false }

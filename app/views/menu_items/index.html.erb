@@ -37,7 +37,7 @@
 
 <div id="item-view" class="floaty-box" style="float:right;">
   <div class="new-item_info item-info" style="cursor:default;">
-  <% form_for(@new_item) do |f| %>
+    <% form_for(@new_item, :html => {:multipart => true}) do |f| %>
 
       <div class="frame">
         <h2>New Item</h2>
@@ -50,6 +50,12 @@
         <hidden class="new_category_field" >
           <%=f.text_field :category, :value=>@new_item.category %>
         </hidden>
+            <br />
+            <div>
+              <%= f.label "Photo:" %>
+              <%= f.file_field :photo %>
+            </div>
+            <br />
         <div><%=f.submit %></div>
       </div>
       <div class="description">
@@ -68,7 +74,7 @@
   <% categories.each do |cat, items| %>
     <% items.each do |item| %>
       <div class="<%= item.id%>_info item-info" style="cursor:default;">
-      <% form_for(item) do |f| %>
+        <% form_for(item, :html => {:multipart => true}) do |f| %>
         <%= render 'shared/error_messages', :object => f.object %>
 
           <div class="frame">
@@ -92,6 +98,12 @@
                 Out of Stock
               </div>
             </div>
+            <br />
+            <div>
+              <%= f.label "Photo:" %>
+              <%= f.file_field :photo %>
+            </div>
+            <br />
             <div><%=f.submit class: "btn btn-large btn-primary"%></div>
           </div>
 
