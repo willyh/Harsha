@@ -32,7 +32,7 @@ class MenuItemsController < ApplicationController
     @menu_item.category = @menu_item.category.capitalize || "Other"
     if @menu_item.update_attributes(attrs)
       flash[:success] = "Successful change"
-      redirect_to menu_path(id: @menu_item.id)
+      redirect_to menu_path(:id => @menu_item.id)
     else
       @head = "Error"
       render 'index'
@@ -65,6 +65,6 @@ class MenuItemsController < ApplicationController
     @menu_item.toggle_stock
     @menu_item.save
     flash[:success] = "Successful change"
-    redirect_to menu_path(id: @menu_item.id)
+    redirect_to menu_path(:id => @menu_item.id)
   end
 end
