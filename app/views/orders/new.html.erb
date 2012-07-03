@@ -2,14 +2,14 @@
   <%= render 'shared/error_messages', :object => f.object %>
 
   <% categories = {} %>
-  <% MenuItem.all.sort{ |x,y| x.id<=>y.id }.each do |item| %>
+  <% MenuItem.find_all_by_out_of_stock(false).sort{ |x,y| x.id<=>y.id }.each do |item| %>
     <% categories[item.category] ||= [] %>
     <% categories[item.category] << item %>
   <% end %>
 
   <div id="fuzz" onclick="hideLarge();"></div>
   <% categories.each_value do |items| %>
-    <% items.each do |item| unless item.out_of_stock%>
+    <% items.each do |item| %>
       <div id="<%= item.id %>_large-info" class="large-item-info"
         onclick="hideLarge();">
         <h2>
@@ -24,18 +24,16 @@
       </div>
     <% end %>
   <% end %>
-  <% end %>
 
   <div style="float:left;">
     <% categories.each do |cat, items| %>
     <div style="text-align:left;">
       <h1><%=cat%></h1>
       <ul>
-        <% items.each do |item| unless item.out_of_stock%>
+        <% items.each do |item| %>
           <li id="<%= item.id %>" class="item-name">
             <%= item.name %>
           </li>
-        <% end %>
         <% end %>
       </ul>
     </div>
@@ -45,7 +43,7 @@
 <!-- static display -->
 <div id="item-view" class="static-box" style="float:right;">
     <% categories.each do |cat, items| %>
-      <% items.each do |item| unless item.out_of_stock %>
+      <% items.each do |item| %>
         <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info">
           <div class="frame">
             <%= image_tag item.photo.url(:medium) if item.photo.exists? %>
@@ -61,7 +59,6 @@
           </div>
         </div>
         
-      <% end %>
       <% end %>
     <% end %>
 </div>
@@ -70,7 +67,7 @@
 <!-- floaty display -->
   <div id="item-view" class="sticky floaty-box" style="float:right;">
     <% categories.each do |cat, items| %>
-      <% items.each do |item| unless item.out_of_stock %>
+      <% items.each do |item| %>
         <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info">
           <div class="frame">
             <%= image_tag item.photo.url(:medium) if item.photo.exists? %>
@@ -86,7 +83,6 @@
           </div>
         </div>
         
-      <% end %>
       <% end %>
     <% end %>
   </div>
