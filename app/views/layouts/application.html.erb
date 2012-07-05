@@ -46,6 +46,8 @@
     $(document).ready(function() {
       window.scrollTo(0, 0);
       setStickyPosition();
+      if(window.screen.width >= 700)
+        $("body").css('width','700px');
       var right_pos = $("body").width();
       var left_pos = $("body").offset().left;
       $(".floaty-box").css('left',left_pos+right_pos-$(".floaty-box").outerWidth());
@@ -54,6 +56,7 @@
         $(".floaty-box").hide();
         $(".static-box").show();
       }
+      $(".floaty-box").css('width', right_pos*.6+"px");
 
       $(".item-info").hide();
         <% if @menu_item && @menu_item.id %>
