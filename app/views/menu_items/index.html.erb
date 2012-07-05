@@ -9,28 +9,25 @@
   <% form_for(@menu_item) do |f| %>
     <%= render 'shared/error_messages', :object => f.object %>
   <% end %>
-    <h1>
-      New Item
-    </h1>
+  <div id='slider'>
     <ul>
+      <h1>
+        New Item
+      </h1>
       <li id="new-item" class="item-name">
         New Item
       </li>
+    <% categories.each do |cat, items| %>
+      <h1><%=cat%></h1>
+        <% items.each do |item| %>
+          <li id="<%= item.id %>" class="item-name">
+            <%= item.name %>
+          </li>
+        <% end %>
+    <% end %>
     </ul>
   </div>
-
-  <% categories.each do |cat, items| %>
-  <div style="text-align:left;">
-    <h1><%=cat%></h1>
-    <ul>
-      <% items.each do |item| %>
-        <li id="<%= item.id %>" class="item-name">
-          <%= item.name %>
-        </li>
-      <% end %>
-    </ul>
   </div>
-  <% end %>
 </div>
 
 <!-- floaty display -->

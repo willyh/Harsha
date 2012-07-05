@@ -8,9 +8,10 @@
   <%= stylesheet_link_tag 'blueprint/print', :media => 'print' %>
   <%= stylesheet_link_tag 'print', :media => 'print' %>
   <%= stylesheet_link_tag 'custom', :media => 'screen' %>
-  <meta name="viewport" content="width=700; user-scalable=0;"/>
+  <meta name="viewport" content="width=device-width; height=device-height; user-scalable=0;"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script src="/javascripts/swipe.js" type="text/javascript"></script>
 
 <head>
   <link rel="shortcut icon" href="/favicon.ico"/>
@@ -74,7 +75,20 @@
           hidden.hide();
         }
       });
+      window.mySwipe = new Swipe(document.getElementById('slider'), {
+        callback: function(event, index, elem) {
+           $(".item-info").hide();
+           $(".item-name").removeClass("selected");
+          var name = $(elem).attr("id");
+          name = name+"_info";
+
+          var item = $("."+name);
+          item.show();
+          $(elem).addClass("selected");
+          }
+      });
     });
+
 
     $(".item-name").bind('mouseover tap', function() {
        $(".item-info").hide();
