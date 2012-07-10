@@ -8,7 +8,7 @@
   <%= stylesheet_link_tag 'blueprint/print', :media => 'print' %>
   <%= stylesheet_link_tag 'print', :media => 'print' %>
   <%= stylesheet_link_tag 'custom', :media => 'screen' %>
-  <meta name="viewport" content="width=device-width; height=device-height; user-scalable=0;"/>
+  <meta name="viewport" content="minimum-scale=1.0, maximum-scale=1.0"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 <script src="/javascripts/swipe.js" type="text/javascript"></script>
@@ -16,16 +16,16 @@
 <head>
   <link rel="shortcut icon" href="/favicon.ico"/>
   <title><%= "MotoCafe | #{@head}" %></title>
-  <div class="header"> <%= "#{@head}" %> </div>
 </head>
 
+<body> 
+<div class="sticky header"> <%= "#{@head}" %> </div>
 <% flash.each do |key, value| %>
   <br />
   <div class="flash <%= key %>"><%= value %> ヽ(=^エ^=)ノ</div>
 <% end %>
 <%= yield %>
-<body> 
-<div class="navigation_bar">
+<div class="sticky navigation-bar">
 	<div class="nav_item" onclick="location.href='<%=home_url%>';">
     Home
   </div>
@@ -45,26 +45,27 @@
 
     $(document).ready(function() {
       window.scrollTo(0, 0);
-      setStickyPosition();
       if(window.screen.width >= 700)
-        $("body").css('width','700px');
+        $("body").width('700');
       var right_pos = $("body").width();
       var left_pos = $("body").offset().left;
       $(".floaty-box").css('left',left_pos+right_pos-$(".floaty-box").outerWidth());
 
-      if($(".static-box").length != 0) {
-        $(".floaty-box").hide();
-        $(".static-box").show();
-      }
+      var border = parseInt($(".header").css("border-width"));
+      var padding = parseInt($('.header').css('padding'));
+      $(".header").width($('body').width()-border-padding);
+      $(".navigation-bar").width($("body").width());
       $(".floaty-box").css('width', right_pos*.6+"px");
 
       $(".item-info").hide();
         <% if @menu_item && @menu_item.id %>
-          <%= "$('.#{@menu_item.id}_info').show()" %>
+          <%= "$('#new-item').addClass('selected');" %>
+          <%= "$('.#{@menu_item.id}_info').show();" %>
         <% elsif params[:id] %>
-          <%= "$('.#{params[:id]}_info').show()" %>
+          <%= "$('##{params[:id]}).addClass('selected');" %>
+          <%= "$('.#{params[:id]}_info').show();" %>
         <% else %>
-          <%= "$('.static-box').children(':first').show();" %>
+          <%= "$('#slider').find('li:first').addClass('selected');" %>
           <%= "$('.floaty-box').children(':first').show();" %>
         <% end %>
 
@@ -82,12 +83,13 @@
         callback: function(event, index, elem) {
            $(".item-info").hide();
            $(".item-name").removeClass("selected");
-          var name = $(elem).attr("id");
+           var el = $(elem)[0].tagName === "LI" ? $(elem) : $(elem).next();
+           var name = el.attr("id");
           name = name+"_info";
 
           var item = $("."+name);
           item.show();
-          $(elem).addClass("selected");
+          el.addClass("selected");
           }
       });
     });
@@ -98,34 +100,12 @@
        $(".item-name").removeClass("selected");
       var name = $(this).attr("id");
       name = name+"_info";
-
       var item = $("."+name);
       item.show();
       $(this).addClass("selected");
     });
 
-      var $stickyEl = $('.static-box');
-      var $window = $(window);
-      var elTop;
-      if( $stickyEl.length != 0 ) {
-        elTop = $stickyEl.offset().top;
-      } else {
-        elTop = $(".header").outerHeight();
-      }
-
-    function setStickyPosition() {
-      var windowTop = $window.scrollTop();
-
-      if($stickyEl.length != 0) {
-        if(windowTop > elTop) {
-          $(".floaty-box").show();
-        } else {
-          $(".floaty-box").hide();
-        }
-      } else {
-        $(".floaty-box").toggleClass("sticky", windowTop > elTop);
-      }
-    }
+    var $window = $(window);
 
     $window.resize(function() {
       var right_pos = $("body").width();
@@ -133,12 +113,6 @@
       $(".floaty-box").css('left',left_pos+right_pos-$(".floaty-box").outerWidth());
     });
 
-    $(window).scroll(function() {
-      setStickyPosition();
-    });
-    $('body').bind('touchmove', function() {
-      setStickyPosition();
-    });
   </script>
 
 </html>

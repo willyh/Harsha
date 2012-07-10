@@ -4,8 +4,7 @@
   <% categories[item.category] << item %>
 <% end %>
 
-<div style="float:left;width:275px;">
-  <div style="text-align:left;">
+  <div class="item-names">
   <% form_for(@menu_item) do |f| %>
     <%= render 'shared/error_messages', :object => f.object %>
   <% end %>
@@ -27,12 +26,11 @@
     <% end %>
     </ul>
   </div>
-  </div>
 </div>
 
 <!-- floaty display -->
 
-<div id="item-view" class="floaty-box" style="float:right;">
+<div id="item-view" class="sticky floaty-box" style="float:right;">
   <div class="new-item_info item-info" style="cursor:default;">
     <% form_for(@new_item, :html => {:multipart => true}) do |f| %>
 

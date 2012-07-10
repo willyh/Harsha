@@ -14,7 +14,7 @@ body {
 }
 
 .header {
-  font-size: 250%;
+  font-size:200%;
   padding: 10px;
   text-align: center;
   font-weight: bold;
@@ -23,6 +23,8 @@ body {
   border-style: solid;
   border-width: 10px;
   border-color: #336699;
+  float:top;
+  z-index:-1;
 }
 
 h1 {
@@ -69,7 +71,6 @@ ul {
 }
 
 li {
-  font-size: 120%;
   cursor: default;
   list-style: none;
   padding: 10px;
@@ -82,11 +83,10 @@ li.item-name.selected {
   background: #ccc;
   box-shadow: 3px 3px 2px 2px #4477aa;
 }
-.navigation_bar {
+.navigation-bar {
   font-weight: bold;
   display:table;
-  font-size: 200%;
-  width:100%;
+  bottom:0;
 }
 
 p {
@@ -95,21 +95,11 @@ p {
 
 .sticky {
   position: fixed;
-  top: 0;
 }
 
 .floaty-box {
   background: #225588;
-  width: 60%;
   height: 470px;
-}
-
-.static-box {
-  background: #225588;
-  width: 60%;
-  height: 470px;
-  position:inherit;
-  top:0;
 }
 
 .frame {
@@ -126,6 +116,12 @@ p {
   padding: 5px;
   height: 120px;
   box-shadow: 2px 2px 4px 3px #003366;
+}
+
+.item-names {
+  text-align:left;
+  float:left;
+  width: 40%;
 }
 
 .item-info {
@@ -148,7 +144,6 @@ p {
 }
 
 .large-item-info {
-  font-size: 200%;
   position:fixed;
   height: 90%;
   width: 90%;
@@ -162,7 +157,6 @@ p {
 }
 
 p.large-item-info {
-  font-size:140%;
 }
 
 .nav_item {
@@ -183,7 +177,6 @@ p.large-item-info {
 }
 
 proceed, delete, other {
-  font-size: 150%;
   visibility: visible;
   display: block;
   font-weight: bold;
@@ -216,7 +209,6 @@ div.out_of_stock {
   border-style: solid;
   border-width: 10px;
   border-color: #CC0033;
-  font-size: 140%;
   font-weight: bold;
   color: #CC0033;
   margin:auto;
@@ -235,7 +227,6 @@ div.in_stock {
   border-style: solid;
   border-width: 10px;
   border-color: #009966;
-  font-size:140%;
   font-weight: bold;
   color: #009966;
   margin: auto;
@@ -252,7 +243,6 @@ div.disabled {
   border-style: solid;
   border-width: 10px;
   border-color: #999;
-  font-size:140%;
   font-weight: bold;
   color: #555;
   margin:auto;
