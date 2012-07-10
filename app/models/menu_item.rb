@@ -3,8 +3,9 @@ class MenuItem < ActiveRecord::Base
 
   has_attached_file :photo,
     :styles => {
-      :medium => "380x",
-      :large => "448x" }
+      :small => "160x",
+      :medium => "380x300",
+      :large => "640x500" }
 
   validates :name, :presence => true,
 		:uniqueness => { :case_sensitive => false }

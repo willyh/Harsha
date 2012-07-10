@@ -268,7 +268,7 @@ Swipe.prototype = {
           || this.index == this.length - 1 && this.deltaY < 0;    // or if last slide and slide amt is less than 0
 
       var position = -this.deltaY + this.startPosition();
-      var destination = position + (this.yVelocity * this.speed);
+      var destination = position + (Math.abs(this.yVelocity) < .05 ? 0 : this.yVelocity * this.speed*.6);
     // if not scrolling horizontally
     if (!this.isScrolling) {
       var end_index = 0;
@@ -278,7 +278,7 @@ Swipe.prototype = {
         end_index = this.length - 1;
       else {
         for( var i = 0; i < this.length-1; i++ ) {
-          if(destination >= this.slides[i].offsetTop && destination < this.slides[i+1].offsetTop)
+          if( this.slides[i].offsetTop <= destination && destination < this.slides[i+1].offsetTop )
             end_index = i;
         }
       }

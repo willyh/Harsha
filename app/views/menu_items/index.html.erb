@@ -45,12 +45,10 @@
         <hidden class="new_category_field" >
           <%=f.text_field :category, :value=>@new_item.category %>
         </hidden>
-            <br />
             <div>
               <%= f.label "Photo:" %>
               <%= f.file_field :photo %>
             </div>
-            <br />
         <div><%=f.submit %></div>
       </div>
       <div class="description">
@@ -58,9 +56,7 @@
           <%= f.text_field :name, :class=>"field", :value=>@new_item.name %>
         </h2>
         $<%= f.text_field :price, :class=>"field", :value=>@new_item.price %>
-        <p>
-        <%= f.text_area :description, :class=>"field", :style => "height:27px", :value=>@new_item.description %>
-        </p>
+        <%= f.text_area :description, :class=>"field", :style=>"height:27px;", :value=>@new_item.description %>
       </div>
 
   <% end %>
@@ -83,7 +79,7 @@
             <hidden class="new_category_field" >
               <%=f.text_field :category, :value=>item.category %>
             </hidden>
-            <div style="margin:10px;">
+            <div>
               <div class="<%= item.out_of_stock ? "disabled" : "in_stock"%>"
                 onclick="location.href='<%=toggle_stock_menu_item_url(item)%>';">
                 In Stock
@@ -93,12 +89,10 @@
                 Out of Stock
               </div>
             </div>
-            <br />
             <div>
               <%= f.label "Photo:" %>
               <%= f.file_field :photo %>
             </div>
-            <br />
             <div><%=f.submit :class => "btn btn-large btn-primary"%></div>
           </div>
 
@@ -107,9 +101,7 @@
               <%= f.text_field :name, :class=>"field", :value=>item.name %>
             </h2>
             $<%= f.text_field :price, :class=>"field", :value=>item.price %>
-            <p>
-            <%= f.text_area :description, :class=>"field", :style => "height:27px", :value=>item.description %>
-            </p>
+            <%= f.text_area :description, :class=>"field", :style=>"height:27px;", :value=>item.description %>
           </div>
 
       <% end %>

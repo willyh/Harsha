@@ -7,24 +7,6 @@
     <% categories[item.category] << item %>
   <% end %>
 
-  <div id="fuzz" onclick="hideLarge();"></div>
-  <% categories.each_value do |items| %>
-    <% items.each do |item| %>
-      <div id="<%= item.id %>_large-info" class="large-item-info"
-        onclick="hideLarge();">
-        <h2>
-          <%=item.name%>
-        </h2>
-        <%= image_tag item.photo.url(:large) if item.photo.exists? %>
-        <br />
-        <%= format_price item.price %>
-        <p>
-          <%= item.description %>
-        </p>
-      </div>
-    <% end %>
-  <% end %>
-
   <div class="item-names">
     <% categories.each do |cat, items| %>
     <div style="text-align:left;">
@@ -46,7 +28,8 @@
       <% items.each do |item| %>
         <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info">
           <div class="frame">
-            <%= image_tag item.photo.url(:medium) if item.photo.exists? %>
+            <%= image_tag item.photo.url(:small), :class => 'mobile' if item.photo.exists? %>
+            <%= image_tag item.photo.url(:medium), :class => 'regular' if item.photo.exists? %>
           </div>
           <div class="description">
             <h2>
@@ -119,24 +102,3 @@ You don't see that order until they pay<br />
 "Clear Orders" deletes unfinished orders and makes all time slots available<br />
 Use "Clear Orders" before you close shop or before you open so you don't accidentally delete an order while someone is paying </p>
 <% end %>
-<script type="text/javascript">
-    $(document).ready(function() {
-        hideLarge();
-        $("#fuzz").css('height', $(document).height());
-        $(".large-item-info").css('top', $window.outerHeight()/2 - $(".large-item-info").outerHeight()/2);
-        $(".large-item-info").css('left', $window.outerWidth()/2 - $(".large-item-info").outerWidth()/2);
-    });
-
-    $(".item-info").click(function() {
-      var name = $(this).attr("id");
-      name = name.slice(0, name.length - 5);
-      var item = $("#"+name+"_large-info");
-
-      $("#fuzz").show();
-      item.show();
-    });
-    function hideLarge() {
-      $("#fuzz").hide();
-      $(".large-item-info").hide();
-    }
-</script>
