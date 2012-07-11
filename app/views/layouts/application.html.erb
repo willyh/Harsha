@@ -47,6 +47,7 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
+      $('body').addClass('hidden');
       window.scrollTo(0, 0);
       var body = $("body");
       if(window.screen.width >= 700) {
@@ -63,7 +64,6 @@
       $(".navigation-bar").width(body.width());
       $('#content').css('padding-top',$('.header').outerHeight()+"px");
       $('#content').css('padding-bottom',$('.navigation-bar').outerHeight()+"px");
-      $('#content').height($(document).height()-$('.header').height() - $('.navigation-bar').height());
 
       var right_pos = body.outerWidth();
       var left_pos = body.offset().left;
@@ -111,7 +111,10 @@
       window.setTimeout(function(){
         $(".flash").hide('slow');
       },1500);
+
+      $('body').removeClass('hidden');
     });
+
     function stopScrolling(e) {
       e.preventDefault();
     }
