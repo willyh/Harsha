@@ -6,21 +6,20 @@
     <% categories[item.category] ||= [] %>
     <% categories[item.category] << item %>
   <% end %>
-
-  <div class="item-names">
+<div class="item-names">
+  <div id='slider'>
+    <ul>
     <% categories.each do |cat, items| %>
-    <div style="text-align:left;">
       <h1><%=cat%></h1>
-      <ul>
         <% items.each do |item| %>
           <li id="<%= item.id %>" class="item-name">
             <%= item.name %>
           </li>
         <% end %>
-      </ul>
-    </div>
     <% end %>
+    </ul>
   </div>
+</div>
 
 <!-- floaty display -->
   <div id="item-view" class="sticky floaty-box" style="float:right;">
@@ -41,7 +40,6 @@
             </p>
           </div>
         </div>
-        
       <% end %>
     <% end %>
   </div>

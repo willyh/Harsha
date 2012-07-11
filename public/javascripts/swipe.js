@@ -101,8 +101,8 @@ Swipe.prototype = {
     style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration = duration + 'ms';
 
     // translate to given index position
-    style.MozTransform = style.webkitTransform = 'translate3d(0,' + (this.container.offsetTop - this.startPosition()) + 'px,0)';
-    style.msTransform = style.OTransform = 'translateY(' + (this.container.offsetTop - this.startPosition()) + 'px)';
+    style.MozTransform = style.webkitTransform = 'translate3d(0,' + (this.container.offsetTop - this.startPosition(this.index)) + 'px,0)';
+    style.msTransform = style.OTransform = 'translateY(' + (this.container.offsetTop - this.startPosition(this.index)) + 'px)';
 
   },
 
@@ -113,8 +113,8 @@ Swipe.prototype = {
 
   },
 
-  startPosition: function() {
-    return this.index ? this.slides[this.index - 1].offsetTop + this.slides[this.index - 1].offsetHeight : this.container.offsetTop;
+  startPosition: function(i) {
+    return i ? this.slides[i - 1].offsetTop + this.slides[i - 1].offsetHeight : this.container.offsetTop;
   },
 
   prev: function(delay) {
@@ -267,20 +267,19 @@ Swipe.prototype = {
           !this.index && this.deltaY > 0                          // if first slide and slide amt is greater than 0
           || this.index == this.length - 1 && this.deltaY < 0;    // or if last slide and slide amt is less than 0
 
-      var position = -this.deltaY + this.startPosition();
+      var position = -this.deltaY + this.slides[this.index].offsetTop + .5*this.slides[this.index].getBoundingClientRect().height;
       var destination = position + (Math.abs(this.yVelocity) < .05 ? 0 : this.yVelocity * this.speed*.6);
     // if not scrolling horizontally
     if (!this.isScrolling) {
       var end_index = 0;
-      if( destination < this.slides[0].offsetTop ) 
+      if( destination < this.startPosition(0) ) 
         end_index = 0;
-      else if(destination >= this.slides[this.length-1].offsetTop)
+      else if(destination >= this.startPosition(this.length-1))
         end_index = this.length - 1;
       else {
-        for( var i = 0; i < this.length-1; i++ ) {
-          if( this.slides[i].offsetTop <= destination && destination < this.slides[i+1].offsetTop )
+        for( var i = 0; i < this.length-1; i++ )
+          if( this.startPosition(i) <= destination && destination < this.startPosition(i+1) )
             end_index = i;
-        }
       }
 
       // call slide function with slide end value based on isValidSlide and isPastBounds tests

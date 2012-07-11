@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110729181527) do
+ActiveRecord::Schema.define(:version => 20120710205745) do
 
   create_table "menu_items", :force => true do |t|
     t.string   "name"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(:version => 20110729181527) do
     t.integer  "photo_file_size"
     t.datetime "photo_updated_at"
     t.boolean  "out_of_stock"
+    t.integer  "display_order"
   end
 
   add_index "menu_items", ["name"], :name => "index_menu_items_on_name", :unique => true

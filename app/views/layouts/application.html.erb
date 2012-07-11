@@ -20,7 +20,7 @@
 </head>
 
 <body> 
-<div class="sticky header"> <%= "#{@head}" %> </div>
+<div id="debug" class="sticky header"> <%= "#{@head}" %> </div>
 <% flash.each do |key, value| %>
   <br />
   <div class="flash <%= key %>"><%= value %> ヽ(=^エ^=)ノ</div>
