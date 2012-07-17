@@ -48,8 +48,8 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
-      $('body').addClass('hidden');
       window.scrollTo(0, 0);
+      $('body').css('visibility','hidden');
       var body = $("body");
       if(window.screen.width >= 700) {
         body.width('700');
@@ -63,25 +63,26 @@
       var padding = parseInt($('.header').css('padding-left'));
       $(".header").width(body.width()-2*border-2*padding);
       $(".navigation-bar").width(body.width());
-      $('#content').css('padding-top',$('.header').outerHeight()+"px");
-      $('#content').css('padding-bottom',$('.navigation-bar').outerHeight()+"px");
+      var topHeight = $('.header').outerHeight();
+      var bottomHeight = $('.navigation-bar').outerHeight();
+      $('#content').css('padding-top',topHeight+"px");
+      $('#content').css('padding-bottom',bottomHeight+"px");
 
-      var right_pos = body.outerWidth();
-      var left_pos = body.offset().left;
-      $(".floaty-box").css('width', right_pos*.6+"px");
-      $(".floaty-box").css('left',left_pos+right_pos-$(".floaty-box").outerWidth());
-      $('.floaty-box').css('top',$('.header').outerHeight())+"px";
+      $('.scrollable').css('max-height',window.innerHeight-topHeight-bottomHeight+'px');
 
-      $(".item-info").hide();
+      $(".scrollable").each(function() {
+          this.scroll = new Scrollable(this);
+      });
+      $(".item-info").addClass('hidden');
         <% if @menu_item && @menu_item.id %>
           <%= "$('#new-item').addClass('selected');" %>
-          <%= "$('.#{@menu_item.id}_info').show();" %>
+          <%= "$('.#{@menu_item.id}_info').removeClass('hidden');" %>
         <% elsif params[:id] %>
           <%= "$('##{params[:id]}').addClass('selected');" %>
-          <%= "$('.#{params[:id]}_info').show();" %>
+          <%= "$('.#{params[:id]}_info').removeClass('hidden');" %>
         <% else %>
           <%= "$('#slider').find('li:first').addClass('selected');" %>
-          <%= "$('.floaty-box').children(':first').show();" %>
+          <%= "$('.floaty-box').children(':first').removeClass('hidden');" %>
         <% end %>
 
       $(".category_selector").each(function() {
@@ -96,14 +97,14 @@
       });
       window.mySwipe = new Swipe(document.getElementById('slider'), {
         callback: function(event, index, elem) {
-           $(".item-info").hide();
+           $(".item-info").addClass('hidden');
            $(".item-name").removeClass("selected");
            var el = $(elem)[0].tagName === "LI" ? $(elem) : $(elem).next();
            var name = el.attr("id");
           name = name+"_info";
 
           var item = $("."+name);
-          item.show();
+          item.removeClass('hidden');
           el.addClass("selected");
           }
       });
@@ -116,7 +117,13 @@
       $('input').attr('onFocus','window.scrollTo(0, 0);');
       $('select').attr('onFocus','window.scrollTo(0, 0);');
 
-      $('body').removeClass('hidden');
+      var right_pos = body.outerWidth();
+      var left_pos = body.offset().left;
+      $(".floaty-box").css('width', right_pos*.6+"px");
+      $(".floaty-box").css('left',left_pos+right_pos-$(".floaty-box").outerWidth());
+      $('.floaty-box').css('top',$('.header').outerHeight())+"px";
+
+      $('body').css('visibility','visible');
     });
 
     function stopScrolling(e) {
@@ -125,12 +132,12 @@
 
 
     $(".item-name").bind('mouseover tap', function() {
-       $(".item-info").hide();
+       $(".item-info").addClass('hidden');
        $(".item-name").removeClass("selected");
       var name = $(this).attr("id");
       name = name+"_info";
       var item = $("."+name);
-      item.show();
+      item.removeClass('hidden');
       $(this).addClass("selected");
     });
 

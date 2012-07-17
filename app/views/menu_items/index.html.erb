@@ -30,93 +30,92 @@
 
 <!-- floaty display -->
 
-<div id="item-view" class="sticky floaty-box" style="float:right;">
-  <div class="new-item_info item-info" style="cursor:default;">
-    <% form_for(@new_item, :html => {:multipart => true}) do |f| %>
+<div id="item-view" class="sticky floaty-box">
+  <div class="new-item_info item-info scrollable">
+      <% form_for(@new_item, :html => {:multipart => true}) do |f| %>
 
-      <div class="frame">
-        <h2>New Item</h2>
-        Select a Category:
-        <% options = {'New Category' => ''} %>
-        <% categories.each_key do |key| %>
-          <% options[key] = key %>
-        <% end %>
-        <%= select_tag(:category_selector, options_for_select(options), :class => 'category_selector') %>
-        <hidden class="new_category_field" >
-        <%=f.text_field :category,:class => "field", :value=>@new_item.category %>
-        </hidden>
+        <div class="frame">
+          <h2>New Item</h2>
+          Select a Category:
+          <% options = {'New Category' => ''} %>
+          <% categories.each_key do |key| %>
+            <% options[key] = key %>
+          <% end %>
+          <%= select_tag(:category_selector, options_for_select(options), :class => 'category_selector') %>
+          <hidden class="new_category_field" >
+          <%=f.text_field :category,:class => "field", :value=>@new_item.category %>
+          </hidden>
             <div>
               <%= f.label "Photo:" %>
               <%= f.file_field :photo %>
             </div>
-        <div><%=f.submit %></div>
-      </div>
-      <div class="description">
-        <h2>
-          <%= f.text_field :name, :class=>"field", :value=>@new_item.name %>
-        </h2>
-        $<%= f.text_field :price, :class=>"field", :value=>@new_item.price %>
-        <%= f.text_area :description, :class=>"field", :style=>"height:27px;", :value=>@new_item.description %>
-      </div>
-
-  <% end %>
-  </div>
-
-  <% categories.each do |cat, items| %>
-    <% items.each do |item| %>
-      <div class="<%= item.id%>_info item-info" style="cursor:default;">
-        <% form_for(item, :html => {:multipart => true}) do |f| %>
-        <%= render 'shared/error_messages', :object => f.object %>
-
-          <div class="frame">
-            <h2><%=item.name%></h2>
-            Select a Category:
-            <% options = {'New Category' => ''} %>
-            <% categories.each_key do |key| %>
-              <% options[key] = key %>
-            <% end %>
-            <%= select_tag(:category_selector, options_for_select(options,item.category), :class => 'category_selector') %>
-            <hidden class="new_category_field" >
-            <%=f.text_field :category, :class => "field", :value=>item.category %>
-            </hidden>
-            <div>
-              <div class="<%= item.out_of_stock ? "disabled" : "in_stock"%>"
-                onclick="location.href='<%=toggle_stock_menu_item_url(item)%>';">
-                In Stock
-              </div>
-              <div class="<%= item.out_of_stock ? "out_of_stock" : "disabled"%>"
-                onclick="location.href='<%=toggle_stock_menu_item_url(item)%>';">
-                Out of Stock
-              </div>
-            </div>
-            <div>
-              <%= f.label "Photo:" %>
-              <%= f.file_field :photo %>
-            </div>
-            <div><%=f.submit :class => "btn btn-large btn-primary"%></div>
-          </div>
-
-          <div class="description">
-            <h2>
-              <%= f.text_field :name, :class=>"field", :value=>item.name %>
-            </h2>
-            $<%= f.text_field :price, :class=>"field", :value=>item.price %>
-            <%= f.text_area :description, :class=>"field", :style=>"height:27px;", :value=>item.description %>
-          </div>
+          <div><%=f.submit %></div>
+        </div>
+        <div class="description">
+          <h2>
+            <%= f.text_field :name, :class=>"field", :value=>@new_item.name %>
+          </h2>
+          $<%= f.text_field :price, :class=>"field", :value=>@new_item.price %>
+          <%= f.text_area :description, :class=>"field", :style=>"height:27px;", :value=>@new_item.description %>
+        </div>
 
       <% end %>
-            <%=button_to "Delete", item, :method => :delete %>
-      </div>
+  </div>
+    <% categories.each do |cat, items| %>
+      <% items.each do |item| %>
+        <div class="<%= item.id%>_info item-info scrollable" style="cursor:default;">
+          <% form_for(item, :html => {:multipart => true}) do |f| %>
+          <%= render 'shared/error_messages', :object => f.object %>
+
+            <div class="frame">
+              <h2><%=item.name%></h2>
+              Select a Category:
+              <% options = {'New Category' => ''} %>
+              <% categories.each_key do |key| %>
+                <% options[key] = key %>
+              <% end %>
+              <%= select_tag(:category_selector, options_for_select(options,item.category), :class => 'category_selector') %>
+              <hidden class="new_category_field" >
+              <%=f.text_field :category, :class => "field", :value=>item.category %>
+              </hidden>
+              <div>
+                <div class="<%= item.out_of_stock ? "disabled" : "in_stock"%>"
+                  onclick="location.href='<%=toggle_stock_menu_item_url(item)%>';">
+                  In Stock
+                </div>
+                <div class="<%= item.out_of_stock ? "out_of_stock" : "disabled"%>"
+                  onclick="location.href='<%=toggle_stock_menu_item_url(item)%>';">
+                  Out of Stock
+                </div>
+              </div>
+              <div>
+                <%= f.label "Photo:" %>
+                <%= f.file_field :photo %>
+              </div>
+              <div><%=f.submit :class => "btn btn-large btn-primary"%></div>
+            </div>
+
+            <div class="description">
+              <h2>
+                <%= f.text_field :name, :class=>"field", :value=>item.name %>
+              </h2>
+              $<%= f.text_field :price, :class=>"field", :value=>item.price %>
+              <%= f.text_area :description, :class=>"field", :style=>"height:27px;", :value=>item.description %>
+            </div>
+
+        <% end %>
+              <%=button_to "Delete", item, :method => :delete %>
+        </div>
+      <% end %>
     <% end %>
-  <% end %>
 </div>
 
 <!-- /floaty display -->
 
 <script type="text/javascript">
   $("#new-item").mouseover(function() {
-    $(".item-info").hide();
-    $(".new-item_info").show();
+    $(".item-info").addClass('hidden');
+    $(".new-item_info").removeClass('hidden');
   });
 
   $(".category_selector").change(function() {

@@ -108,9 +108,12 @@ p {
   position: fixed;
 }
 
+.scrollable {
+  overflow:hidden;
+}
+
 .floaty-box {
   background: #225588;
-  max-height: 470px;
 }
 
 .frame {
@@ -133,7 +136,6 @@ p {
 }
 
 .item-info {
-  display:none;
 }
 
 p.large-item-info {
@@ -237,6 +239,9 @@ div.disabled:hover {
   border-color:#bbb;
 }
 hidden {
+  display:none;
+}
+.hidden {
   display:none;
 }
 .flash {

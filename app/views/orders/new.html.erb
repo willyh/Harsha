@@ -22,7 +22,7 @@
 </div>
 
 <!-- floaty display -->
-  <div id="item-view" class="sticky floaty-box" style="float:right;">
+  <div id="item-view" class="sticky floaty-box scrollable" style="float:right;">
     <% categories.each do |cat, items| %>
       <% items.each do |item| %>
         <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info">
