@@ -79,12 +79,14 @@
               <%=f.text_field :category, :class => "field", :value=>item.category %>
               </hidden>
               <div>
-                <div class="<%= item.out_of_stock ? "disabled" : "in_stock"%>"
-                  onclick="location.href='<%=toggle_stock_menu_item_url(item)%>';">
+                <div id="in_stock_<%=item.id%>" class="<%= item.out_of_stock ? "disabled" : "in_stock"%>"
+                  onclick="$.ajax({url:'<%=toggle_stock_menu_item_url(item)%>',
+                                    datatype: 'script'});">
                   In Stock
                 </div>
-                <div class="<%= item.out_of_stock ? "out_of_stock" : "disabled"%>"
-                  onclick="location.href='<%=toggle_stock_menu_item_url(item)%>';">
+                <div id="out_of_stock_<%=item.id%>" class="<%= item.out_of_stock ? "out_of_stock" : "disabled"%>"
+                  onclick="$.ajax({url:'<%=toggle_stock_menu_item_url(item)%>',
+                                    datatype: 'script'});">
                   Out of Stock
                 </div>
               </div>

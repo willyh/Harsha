@@ -64,7 +64,9 @@ class MenuItemsController < ApplicationController
     @menu_item = MenuItem.find(params[:id])
     @menu_item.toggle_stock
     @menu_item.save
-    flash[:success] = "Successful change"
-    redirect_to menu_path(:id => @menu_item.id)
+    render(:update) {|page|
+      page << "$('#in_stock_#{params[:id]}').attr('class','#{@menu_item.out_of_stock ? "disabled" : "in_stock"}')"
+      page << "$('#out_of_stock_#{params[:id]}').attr('class','#{@menu_item.out_of_stock ? "out_of_stock" : "disabled"}')"
+    }
   end
 end
