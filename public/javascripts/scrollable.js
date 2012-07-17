@@ -31,9 +31,33 @@ Scrollable.prototype = {
       case 'touchstart': this.onTouchStart(e); break;
       case 'touchmove': this.onTouchMove(e); break;
       case 'touchend': this.onTouchEnd(e); break;
+      case 'webkitTransitionEnd':
+      case 'msTransitionEnd':
+      case 'oTransitionEnd':
+      case 'transitionend': this.transitionEnd(e); break;
     }
   },
-  
+
+  transitionEnd: function(e) {
+    
+    if(this.topPosition < -this.element.offsetHeight - 20 + this.container.offsetHeight)
+    {
+      var destination = -this.element.offsetHeight - 20 + this.container.offsetHeight;
+      this.topPosition = destination;
+      this.element.style.webkitTransitionDuration = this.element.style.MozTransitionDuration = this.element.style.msTransitionDuration = this.element.style.OTransitionDuration = this.element.style.transitionDuration = '300ms';
+      this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + destination + 'px,0)';
+      this.element.style.msTransform = this.element.style.OTransform = 'translateY(' + destination + 'px)';
+    }
+    else if( this.topPosition > 0 )
+    {
+      var destination = 0;
+      this.topPosition = destination;
+      this.element.style.webkitTransitionDuration = this.element.style.MozTransitionDuration = this.element.style.msTransitionDuration = this.element.style.OTransitionDuration = this.element.style.transitionDuration = '300ms';
+      this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + destination + 'px,0)';
+      this.element.style.msTransform = this.element.style.OTransform = 'translateY(' + destination + 'px)';
+    }
+  },
+
   onTouchStart: function(e) {
     this.start = {
       
@@ -41,10 +65,14 @@ Scrollable.prototype = {
       pageY: e.touches[0].pageY -  this.topPosition,
 
       time: (Number (new Date() ))
-
     };
 
     this.deltaY = 0;
+
+    // estimate velocity
+    this.lastTick = Number( new Date() );
+    this.lastY = 0;
+    this.yVelocity = 0;
 
     this.element.style.MozTransitionDuration = this.element.style.webkitTransitionDuration = 0;
   },
@@ -54,20 +82,33 @@ Scrollable.prototype = {
 
     e.preventDefault();
 
-    var temp = this.start.pageY - e.touches[0].pageY;
+    this.deltaY = this.start.pageY - e.touches[0].pageY;
+    this.deltaY = 
+      this.deltaY /
+        ( (this.deltaY > this.element.offsetHeight + 20 - this.container.offsetHeight     // if scrolling past bottom
+          || this.deltaY < 0                                                            // or scrolling past top
+        ) ?
+        ( Math.abs(this.deltaY) / this.container.offsetHeight + 1 )
+        : 1);
 
-    if( temp > this.element.offsetHeight + 20 - this.container.offsetHeight)
-      this.deltaY = this.element.offsetHeight + 20 - this.container.offsetHeight;
-    else if(temp < 0)
-     this.deltaY = 0;
-    else
-      this.deltaY = temp;
+         this.start.pageY - e.touches[0].pageY;
+
+    var now = Number( new Date() );
+    this.yVelocity = (this.lastY - this.deltaY) / (now - this.lastTick);
+    this.lastTick = now;
+    this.lastY = this.deltaY;
 
     this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + -this.deltaY + 'px,0)';
   },
 
   onTouchEnd: function(e) {
-    this.topPosition = -this.deltaY;
+    var destination = -this.deltaY + this.yVelocity * 30;
+
+    document.getElementById('debug').innerHTML = destination;
+    this.topPosition = destination;
+    this.element.style.webkitTransitionDuration = this.element.style.MozTransitionDuration = this.element.style.msTransitionDuration = this.element.style.OTransitionDuration = this.element.style.transitionDuration = '100ms';
+    this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + destination + 'px,0)';
+    this.element.style.msTransform = this.element.style.OTransform = 'translateY(' + destination + 'px)';
   }
 
 }
