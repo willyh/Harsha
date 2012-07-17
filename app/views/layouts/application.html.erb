@@ -112,6 +112,9 @@
         $(".flash").hide('slow');
       },1500);
 
+      $('input').attr('onFocus','window.scrollTo(0, 0);');
+      $('select').attr('onFocus','window.scrollTo(0, 0);');
+
       $('body').removeClass('hidden');
     });
 

@@ -43,7 +43,7 @@
         <% end %>
         <%= select_tag(:category_selector, options_for_select(options), :class => 'category_selector') %>
         <hidden class="new_category_field" >
-          <%=f.text_field :category, :value=>@new_item.category %>
+        <%=f.text_field :category,:class => "field", :value=>@new_item.category %>
         </hidden>
             <div>
               <%= f.label "Photo:" %>
@@ -77,7 +77,7 @@
             <% end %>
             <%= select_tag(:category_selector, options_for_select(options,item.category), :class => 'category_selector') %>
             <hidden class="new_category_field" >
-              <%=f.text_field :category, :value=>item.category %>
+            <%=f.text_field :category, :class => "field", :value=>item.category %>
             </hidden>
             <div>
               <div class="<%= item.out_of_stock ? "disabled" : "in_stock"%>"
@@ -122,7 +122,6 @@
   $(".category_selector").change(function() {
       hidden = $(this).parent().find('.new_category_field');
       hidden.find("#menu_item_category").val($(this).val());
-      cat_field = $("#new_category_field");
     if ($(this).val().length == 0) {
       hidden.show();
     }
