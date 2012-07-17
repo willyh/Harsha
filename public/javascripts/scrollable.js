@@ -104,7 +104,6 @@ Scrollable.prototype = {
   onTouchEnd: function(e) {
     var destination = -this.deltaY + this.yVelocity * 30;
 
-    document.getElementById('debug').innerHTML = destination;
     this.topPosition = destination;
     this.element.style.webkitTransitionDuration = this.element.style.MozTransitionDuration = this.element.style.msTransitionDuration = this.element.style.OTransitionDuration = this.element.style.transitionDuration = '100ms';
     this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + destination + 'px,0)';

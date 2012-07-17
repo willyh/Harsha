@@ -22,10 +22,11 @@
 </div>
 
 <!-- floaty display -->
-  <div id="item-view" class="sticky floaty-box scrollable" style="float:right;">
+  <div id="item-view" class="sticky floaty-box" style="float:right;">
     <% categories.each do |cat, items| %>
       <% items.each do |item| %>
-        <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info">
+        <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info scrollable">
+          <div>
           <div class="frame">
             <%= image_tag item.photo.url(:small), :class => 'mobile' if item.photo.exists? %>
             <%= image_tag item.photo.url(:medium), :class => 'regular' if item.photo.exists? %>
@@ -39,6 +40,7 @@
               <%= item.description %>
             </p>
           </div>
+        </div>
         </div>
       <% end %>
     <% end %>
