@@ -8,7 +8,7 @@ body {
   text-align: center;
   width:100%;
   height: auto;
-  background: #6699cc;
+  background: #d3e3ff;
   margin-left:auto;
   margin-right:auto;
 }
@@ -31,10 +31,12 @@ html {
   z-index:99;
 }
 
-.content {
+#content {
   height:100%;
-  position:absolute;
-  top:0;
+  background:#6699cc;
+  border: solid 5px #336699;
+  padding-left:0;
+  padding-right:0;
 }
 
 h1 {
