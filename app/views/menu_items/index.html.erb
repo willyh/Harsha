@@ -20,6 +20,15 @@
       <h1><%=cat%></h1>
         <% items.each do |item| %>
           <li id="<%= item.id %>" class="item-name">
+            <%= text_field_tag :display_order, nil,
+              {:onkeypress => "if(event.keyCode == 13)
+                              $.ajax({
+                                url:'#{change_order_menu_item_url(item)}',
+                                data: 'display_order='+this.value,
+                                datatype: 'script'
+                              });",
+              :style => "width:20px;"}
+             %>
             <%= item.name %>
           </li>
         <% end %>

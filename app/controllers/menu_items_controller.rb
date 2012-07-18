@@ -69,4 +69,10 @@ class MenuItemsController < ApplicationController
       page << "$('#out_of_stock_#{params[:id]}').attr('class','#{@menu_item.out_of_stock ? "out_of_stock" : "disabled"}')"
     }
   end
+
+  def change_order
+    render(:update) {|page|
+      page << "document.getElementById('debug').innerHTML='#{params[:display_order]}'"
+    }
+  end
 end
