@@ -3,18 +3,32 @@ class MenuItemsController < ApplicationController
   def index
     @new_item = MenuItem.new
     @menu_item = @new_item
+    @category = Category.new
     @head = "Check Out Your Menu"
+    @categories = Category.all
   end
 
   def create
     #@menu_item and @new_item will be the same unless returning from
     #a failed update then new_item will be new and
     #menu_item will be the item that failed to update
-    attrs = params[:menu_item]
-    @new_item = MenuItem.new(attrs)
-    @new_item.category = @new_item.category.capitalize || "Other"
+    
+
+    category = params[:menu_item][:category]
+    if !Category.exists?(:name => category)
+      @category =  Category.new(:name => category, :display_order => Category.count+1)
+      if !@category.save
+        @menu_item = MenuItem.new(params[:menu_item])
+        @head = "Error"
+        return render 'index'
+      end
+    end
+    @category = Category.find_by_name(category)
+    @new_item = MenuItem.new(params[:menu_item])
     @new_item.out_of_stock = true
+    @new_item.display_order = @category.menu_items.count+1
     if @new_item.save
+      @category.menu_items << @new_item
       flash[:success] = "#{@new_item.name} successfully added to menu!"
       redirect_to menu_path
     else
@@ -25,18 +39,17 @@ class MenuItemsController < ApplicationController
   end
 
   def update
-    @new_item = MenuItem.new
-    @menu_item = MenuItem.find(params[:id])
-    attrs = params[:menu_item]
-    attrs[:category] = attrs[:category].capitalize
-    @menu_item.category = @menu_item.category.capitalize || "Other"
-    if @menu_item.update_attributes(attrs)
-      flash[:success] = "Successful change"
-      redirect_to menu_path(:id => @menu_item.id)
-    else
+#   @new_item = MenuItem.new
+#   @menu_item = MenuItem.find(params[:id])
+#   attrs = params[:menu_item]
+#   attrs[:category] = attrs[:category].capitalize
+#   if @menu_item.update_attributes(attrs)
+#     flash[:success] = "Successful change"
+#     redirect_to menu_path(:id => @menu_item.id)
+#   else
       @head = "Error"
       render 'index'
-    end
+#   end
   end
 
   def show
@@ -51,7 +64,10 @@ class MenuItemsController < ApplicationController
 
   def destroy
     item = MenuItem.find(params[:id])
+    category = Category.find(item.category_id)
     item.destroy
+    category.destroy if category.menu_items.count == 0
+    
     flash[:success] = "#{item.name} deleted"
     redirect_to menu_path
   end
@@ -71,8 +87,21 @@ class MenuItemsController < ApplicationController
   end
 
   def change_order
-    render(:update) {|page|
-      page << "document.getElementById('debug').innerHTML='#{params[:display_order]}'"
-    }
+    unless(params[:display_order].nil?)
+      @menu_item = MenuItem.find(params[:id])
+      @swap_item = Category.find(@menu_item.category_id).menu_items.find_by_display_order(params[:display_order])
+      unless(@menu_item.display_order.nil? || @swap_item.nil?)
+        temp = @menu_item.display_order
+        @swap_item.display_order = temp
+        @swap_item.save
+      end
+      @menu_item.display_order = params[:display_order]
+      @menu_item.save
+
+      render(:update) {|page|
+        page << "$('##{@swap_item.id}').find('input').val('#{@swap_item.display_order}')"
+        page << "$('##{@menu_item.id}').swap('##{@swap_item.id}')"
+      }
+    end
   end
 end

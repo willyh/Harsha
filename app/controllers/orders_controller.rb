@@ -4,6 +4,7 @@ class OrdersController < ApplicationController
   def new
     @head = "Check Out Our Menu!"
     @order = Order.new
+    @categories = Category.all
   end
   def index
     redirect_to new_order_path

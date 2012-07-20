@@ -26,7 +26,7 @@
   <br />
   <div class="flash <%= key %>"><%= value %> ヽ(=^エ^=)ノ</div>
 <% end %>
-<div id="content" style="height:auto;">
+<div id="content">
   <%= yield %>
 </div>
 <div class="sticky navigation-bar">
@@ -47,6 +47,9 @@
 
 <script type="text/javascript">
 
+    var topHeight = $('.header').outerHeight();
+    var bottomHeight = $('.navigation-bar').outerHeight();
+
     $(document).ready(function() {
       window.scrollTo(0, 0);
       $('body').css('visibility','hidden');
@@ -63,8 +66,6 @@
       var padding = parseInt($('.header').css('padding-left'));
       $(".header").width(body.width()-2*border-2*padding);
       $(".navigation-bar").width(body.width());
-      var topHeight = $('.header').outerHeight();
-      var bottomHeight = $('.navigation-bar').outerHeight();
       $('#content').css('padding-top',topHeight+"px");
       $('#content').css('padding-bottom',bottomHeight+"px");
 
@@ -139,7 +140,6 @@
       e.preventDefault();
     }
 
-
     $(".item-name").bind('mouseover tap', function() {
        $(".item-info").addClass('hidden');
        $(".item-name").removeClass("selected");
@@ -156,7 +156,17 @@
       var right_pos = $("body").outerWidth();
       var left_pos = $("body").offset().left;
       $(".floaty-box").css('left',left_pos+right_pos-$(".floaty-box").outerWidth());
+      $('.scrollable').css('max-height',window.innerHeight-topHeight-bottomHeight+'px');
     });
+    $.fn.swap = function(b) {
+      b = jQuery(b)[0]; 
+      var a = this[0]; 
+      var t = a.parentNode.insertBefore(document.createTextNode(''), a); 
+      b.parentNode.insertBefore(a, b); 
+      t.parentNode.insertBefore(b, t); 
+      t.parentNode.removeChild(t); 
+      return this; 
+    };
 
   </script>
 

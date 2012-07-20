@@ -1,5 +1,7 @@
 class MenuItem < ActiveRecord::Base
-  attr_accessible :name, :price, :description, :category, :photo
+  attr_accessible :name, :price, :description, :photo, :display_order
+
+  belongs_to :category
 
   has_attached_file :photo,
     :styles => {
@@ -15,7 +17,6 @@ class MenuItem < ActiveRecord::Base
   validates_numericality_of 	:price,
 				:only_float => true,
 				:message => "must be a number"
-  validates :category, :presence => true
 
   def toggle_stock
     self.out_of_stock = !self.out_of_stock
