@@ -1,0 +1,10 @@
+<div class="description" id="<%=item.id%>_order">
+  <h2><%= item.name %></h2>
+  <%="$#{item.price}"%>
+  <a onclick="$.ajax({url:'<%=remove_from_order_menu_item_url(item)%>',
+                        datatype: 'script',
+                        data: 'id=<%=item.id%>'
+  });">
+  remove item
+  </a>
+</div>

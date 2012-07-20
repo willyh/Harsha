@@ -1,0 +1,11 @@
+<%= form_for order do |f| %>
+  <ul id="order_items">
+    <div class="description">
+      <h2>Your Order</h2>
+    </div>
+
+    <% order.menu_items.each do |item|%>
+      <%= render 'orders/order_item', {:item => item, :order => order}%>
+    <% end %>
+  </ul>
+<% end %>

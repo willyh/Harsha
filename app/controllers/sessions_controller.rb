@@ -7,15 +7,13 @@ class SessionsController < ApplicationController
     session[:password] = params[:session][:password]
     if session[:password] == "kittens"
       flash[:success] = "Welcome Back Captain!"
-    else
-      flash[:error] = "Wrong password. Reset to try again"
     end
     redirect_to home_path
   end
 
   def destroy
     reset_session
-    flash[:notice] = "Successfully reset session"
+    flash[:notice] = "Session has been reset"
     redirect_to home_path
   end
 end

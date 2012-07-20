@@ -4,11 +4,21 @@
 <div class="item-names">
   <div id='slider'>
     <ul>
+      <h1>Order</h1>
+      <li id="order" class="item-name">
+        Your Order
+      </li>
     <% @categories.each do |cat| %>
       <h1><%=cat.name%></h1>
         <% cat.menu_items.each do |item| %>
           <li id="<%= item.id %>" class="item-name">
             <%= item.name %>
+            <a onclick="$.ajax({url:'<%=add_to_order_menu_item_url(item)%>',
+                                  datatype: 'script',
+                                  data: 'id=<%=item.id%>'
+            });">
+            add item
+            </a>
           </li>
         <% end %>
     <% end %>
@@ -18,6 +28,9 @@
 
 <!-- floaty display -->
   <div id="item-view" class="sticky floaty-box" style="float:right;">
+    <div id="order_info" class="order_info item-info scrollable">
+      <%=render 'editable_order', {:order => @order} %>
+    </div>
     <% @categories.each do |cat| %>
       <% cat.menu_items.each do |item| %>
         <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info scrollable">

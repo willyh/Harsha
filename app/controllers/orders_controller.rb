@@ -3,7 +3,8 @@ class OrdersController < ApplicationController
   before_filter :completed_yet, :except => [:new, :create, :show, :complete ]
   def new
     @head = "Check Out Our Menu!"
-    @order = Order.new
+    @order = session[:order] || Order.new
+    session[:order] = @order
     @categories = Category.all
   end
   def index
@@ -11,16 +12,12 @@ class OrdersController < ApplicationController
   end
 
    def create
-    @order = Order.new((params[:order] || {}).merge({:items => (params[:items] || []).join("\n")}))
+    @order = Order.create(params[:order])
+    return
     if admin?
-      if @order.items.empty?
-        flash[:notice] = "I don't think you want an empty order"
-        redirect_to new_order_path
-      else
         @order.save(false)
         @order.print
         render new_order_path
-      end
     else
       if waited_too_long @order
         flash[:error] = "Please select a time later than #{@order.pickup_time}. We may need more than #{time_to_prepare @order.pickup_time} minutes to prepare your food"
@@ -91,21 +88,6 @@ protected
     hours + minutes
   end
 
-  def build_tables categories
-    i = 3
-    categories.each do |cat, item|
-      three_category_sets[i/3] ||= []
-      three_category_sets[i/3] << cat
-      i = i+1
-    end
-    i = 1
-    tables[:category_sets] = three_category_sets
-    three_category_sets.each do |category_set|
-      tables[i] = build_table category_set
-      i += 1
-    end
-    tables
-  end
   def completed_yet
     if params[:id].nil?
       redirect_to new_order_path
@@ -120,6 +102,6 @@ protected
       end
     end
   end
-
+  
 
 end

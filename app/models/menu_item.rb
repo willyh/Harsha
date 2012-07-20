@@ -1,4 +1,6 @@
 class MenuItem < ActiveRecord::Base
+  has_and_belongs_to_many :orders
+
   attr_accessible :name, :price, :description, :photo, :display_order
 
   belongs_to :category

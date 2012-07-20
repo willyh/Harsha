@@ -1,5 +1,5 @@
 class MenuItemsController < ApplicationController
-  before_filter :authorize, :except =>  [:show, :home]
+  before_filter :authorize, :except =>  [:home, :add_to_order, :remove_from_order]
   def index
     @new_item = MenuItem.new
     @menu_item = @new_item
@@ -103,5 +103,25 @@ class MenuItemsController < ApplicationController
         page << "$('##{@menu_item.id}').swap('##{@swap_item.id}')"
       }
     end
+  end
+
+  def add_to_order
+    @item = MenuItem.find(params[:id])
+    if !session[:order].menu_items.include? @item
+      session[:order].menu_items << @item
+      render(:update) {|page|
+        page << "$('.item-info').addClass('hidden')"
+        page << "$('#order_info').removeClass('hidden')"
+        page.replace_html 'order_info', :partial => 'orders/editable_order', :locals => {:order => session[:order]}
+      }
+    end
+  end
+
+  def remove_from_order
+    @item = MenuItem.find(params[:id])
+    session[:order].menu_items.delete(@item)
+    render(:update) {|page|
+      page << "$('#order_items').find('##{@item.id}').remove()"
+    }
   end
 end
