@@ -1,9 +1,9 @@
-<div class="description" id="<%=item.id%>_order">
-  <h2><%= item.name %></h2>
-  <%="$#{item.price}"%>
-  <a onclick="$.ajax({url:'<%=remove_from_order_menu_item_url(item)%>',
+<div class="description" id="<%=s.menu_item.id%>_order">
+  <h1><%= s.menu_item.name %></h1>
+  <%="$#{s.menu_item.price}"%>
+  <a onclick="jQuery.ajax({url:'<%=remove_from_order_menu_item_url(s.menu_item)%>',
                         datatype: 'script',
-                        data: 'id=<%=item.id%>'
+                        data: 'selection=<%=order.selections.find_index(s)%>'
   });">
   remove item
   </a>

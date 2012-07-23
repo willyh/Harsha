@@ -3,8 +3,8 @@ class OrdersController < ApplicationController
   before_filter :completed_yet, :except => [:new, :create, :show, :complete ]
   def new
     @head = "Check Out Our Menu!"
-    @order = session[:order] || Order.new
-    session[:order] = @order
+    @order = Order.exists?(session[:order]) ? Order.find(session[:order]) : Order.create
+    session[:order] = @order.id
     @categories = Category.all
   end
   def index
@@ -60,7 +60,7 @@ class OrdersController < ApplicationController
          end
       else
         flash[:error] = "Your order has already been deleted"
-	redirect_to home_path
+        redirect_to home_path
       end
     end
   end

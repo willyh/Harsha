@@ -7,7 +7,14 @@ DinerApp::Application.routes.draw do
   resources :menu_items do
     get 'toggle_stock', :on => :member
     get 'change_order', :on => :member
+    get 'add_to_order', :on => :member
+    get 'remove_from_order', :on => :member
   end
+
+  resources :categories do
+    get 'change_order', :on => :member
+  end
+
   resources :orders do
     put 'complete', :on => :member
     get 'clear', :on => :collection

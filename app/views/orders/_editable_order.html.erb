@@ -2,10 +2,16 @@
   <ul id="order_items">
     <div class="description">
       <h2>Your Order</h2>
-    </div>
+      <%= f.label "Your Name:" %>
+      <%= f.text_field :customer_name, :value=>order.customer_name %>
+      <br />
+      <label>Pickup Time:</label>
+      <%= select_tag(:pickup_time, options_for_select(available_times)) %>
 
-    <% order.menu_items.each do |item|%>
-      <%= render 'orders/order_item', {:item => item, :order => order}%>
+    <% order.selections.each do |s|%>
+      <%= render 'orders/order_item',
+                  {:s => s, :order => order} %>
     <% end %>
+    </div>
   </ul>
 <% end %>

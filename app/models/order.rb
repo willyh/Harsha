@@ -1,9 +1,8 @@
 class Order < ActiveRecord::Base
-  has_and_belongs_to_many :menu_items
+  has_many :selections
+  has_many :menu_items, :through => :selections
 
   attr_accessible :customer_name, :pickup_time, :price
-
-  validates :pickup_time, :uniqueness => true
 
   def paypal_url(return_url, notify_url)
     values = {

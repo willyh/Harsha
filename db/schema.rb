@@ -10,13 +10,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120710205745) do
+ActiveRecord::Schema.define(:version => 20120723153632) do
+
+  create_table "categories", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "display_order"
+  end
 
   create_table "menu_items", :force => true do |t|
     t.string   "name"
     t.float    "price"
     t.string   "description"
-    t.string   "category"
+    t.integer  "category_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "photo_file_name"
@@ -29,12 +36,16 @@ ActiveRecord::Schema.define(:version => 20120710205745) do
 
   add_index "menu_items", ["name"], :name => "index_menu_items_on_name", :unique => true
 
+  create_table "options", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "orders", :force => true do |t|
     t.string   "customer_name"
-    t.string   "pickup_time"
+    t.time     "pickup_time"
     t.float    "price"
-    t.string   "items"
-    t.string   "instructions"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "completed"
@@ -47,6 +58,13 @@ ActiveRecord::Schema.define(:version => 20120710205745) do
     t.integer  "order_id"
     t.string   "status"
     t.string   "transaction_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "selections", :force => true do |t|
+    t.integer  "order_id"
+    t.integer  "menu_item_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

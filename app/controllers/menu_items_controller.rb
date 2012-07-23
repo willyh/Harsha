@@ -39,17 +39,38 @@ class MenuItemsController < ApplicationController
   end
 
   def update
-#   @new_item = MenuItem.new
-#   @menu_item = MenuItem.find(params[:id])
-#   attrs = params[:menu_item]
-#   attrs[:category] = attrs[:category].capitalize
-#   if @menu_item.update_attributes(attrs)
-#     flash[:success] = "Successful change"
-#     redirect_to menu_path(:id => @menu_item.id)
-#   else
+    @new_item = MenuItem.new
+
+    @menu_item = MenuItem.find(params[:id])
+    if @menu_item.update_attributes(params[:menu_item])
+      old_cat = @menu_item.category
+      new_cat = params[:menu_item][:category]
+      if old_cat.name != new_cat
+        @category = Category.find_by_name(new_cat)
+        if @category.nil?
+          @category = Category.create(:name => new_cat, :display_order => Category.count+1)
+        end
+        @category.menu_items << @menu_item
+        order = @menu_item.display_order
+        @menu_item.update_attributes(:display_order => @category.menu_items.count)
+        if old_cat.menu_items.count == 0
+          order = old_cat.display_order
+          old_cat.destroy
+          Category.select{|c|c.display_order > order}.each {|c|
+            c.update_attributes(:display_order => c.display_order - 1)
+          }
+        else
+          old_cat.menu_items.select{|i|i.display_order > order}.each {|i|
+            i.update_attributes(:display_order => i.display_order - 1)
+          }
+        end
+      end
+      flash[:success] = "Successful change"
+      redirect_to menu_path(:id => @menu_item.id)
+    else
       @head = "Error"
-      render 'index'
-#   end
+      redirect_to menu_path(:id => @menu_item.id)
+    end
   end
 
   def show
@@ -81,8 +102,8 @@ class MenuItemsController < ApplicationController
     @menu_item.toggle_stock
     @menu_item.save
     render(:update) {|page|
-      page << "$('#in_stock_#{params[:id]}').attr('class','#{@menu_item.out_of_stock ? "disabled" : "in_stock"}')"
-      page << "$('#out_of_stock_#{params[:id]}').attr('class','#{@menu_item.out_of_stock ? "out_of_stock" : "disabled"}')"
+      page << "jQuery('#in_stock_#{params[:id]}').attr('class','#{@menu_item.out_of_stock ? "disabled" : "in_stock"}')"
+      page << "jQuery('#out_of_stock_#{params[:id]}').attr('class','#{@menu_item.out_of_stock ? "out_of_stock" : "disabled"}')"
     }
   end
 
@@ -99,29 +120,31 @@ class MenuItemsController < ApplicationController
       @menu_item.save
 
       render(:update) {|page|
-        page << "$('##{@swap_item.id}').find('input').val('#{@swap_item.display_order}')"
-        page << "$('##{@menu_item.id}').swap('##{@swap_item.id}')"
+        page << "jQuery('##{@swap_item.id}').find('input').val('#{@swap_item.display_order}')"
+        page << "jQuery('##{@menu_item.id}').swap('##{@swap_item.id}')"
       }
     end
   end
 
   def add_to_order
     @item = MenuItem.find(params[:id])
-    if !session[:order].menu_items.include? @item
-      session[:order].menu_items << @item
-      render(:update) {|page|
-        page << "$('.item-info').addClass('hidden')"
-        page << "$('#order_info').removeClass('hidden')"
-        page.replace_html 'order_info', :partial => 'orders/editable_order', :locals => {:order => session[:order]}
-      }
-    end
+    o = Order.find(session[:order])
+    o.selections << Selection.new(:menu_item => @item)
+    render(:update) {|page|
+      page << "jQuery('.item-info').addClass('hidden')"
+      page << "jQuery('#order_info').removeClass('hidden')"
+      page.replace_html 'order_info', {:partial => "orders/editable_order", :locals => {:order => o}}
+    }
   end
 
   def remove_from_order
-    @item = MenuItem.find(params[:id])
-    session[:order].menu_items.delete(@item)
+    o = Order.find(session[:order])
+    s = o.selections
+    @selection = s[params[:selection].to_i]
+    s.delete(@selection)
+
     render(:update) {|page|
-      page << "$('#order_items').find('##{@item.id}').remove()"
+      page.replace_html 'order_info', {:partial => "orders/editable_order", :locals => {:order => o}}
     }
   end
 end

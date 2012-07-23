@@ -1,3 +1,6 @@
+<script type="text/javascript">
+  jQuery('.item-name').unbind('mouseup tap');
+</script>
 <% form_for(@order) do |f| %>
   <%= render 'shared/error_messages', :object => f.object %>
 
@@ -13,7 +16,7 @@
         <% cat.menu_items.each do |item| %>
           <li id="<%= item.id %>" class="item-name">
             <%= item.name %>
-            <a onclick="$.ajax({url:'<%=add_to_order_menu_item_url(item)%>',
+            <a onclick="jQuery.ajax({url:'<%=add_to_order_menu_item_url(item)%>',
                                   datatype: 'script',
                                   data: 'id=<%=item.id%>'
             });">
@@ -68,7 +71,7 @@
   <% if admin? %>
     <div class="actions">
     <proceed>
-      <%=link_to_function "Place Order", "$(this).up('form').submit()" %>
+      <%=link_to_function "Place Order", "jQuery(this).up('form').submit()" %>
     </proceed>
     <other>
       <%= link_to "Print", "JavaScript:window.print();" %>
@@ -93,7 +96,7 @@
 
   <div class="actions">
     <proceed>
-      <%= link_to_function "Proceed", "$(this).up('form').submit()" %>
+      <%= link_to_function "Proceed", "jQuery(this).up('form').submit()" %>
     </proceed>
 
   </div>

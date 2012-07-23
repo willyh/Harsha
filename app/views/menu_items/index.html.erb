@@ -14,7 +14,7 @@
       <h1 id="c<%=cat.id%>">
         <%= text_field_tag :display_order, cat.display_order,
           {:onkeypress => "if(event.keyCode == 13)
-                          $.ajax({
+                          jQuery.ajax({
                             url:'#{change_order_category_url(cat)}',
                             data: 'display_order='+this.value,
                             datatype: 'script'
@@ -27,7 +27,7 @@
           <li id="<%= item.id %>" class="item-name">
             <%= text_field_tag :display_order, item.display_order,
               {:onkeypress => "if(event.keyCode == 13)
-                              $.ajax({
+                              jQuery.ajax({
                                 url:'#{change_order_menu_item_url(item)}',
                                 data: 'display_order='+this.value,
                                 datatype: 'script'
@@ -94,12 +94,12 @@
               </hidden>
               <div>
                 <div id="in_stock_<%=item.id%>" class="<%= item.out_of_stock ? "disabled" : "in_stock"%>"
-                  onclick="$.ajax({url:'<%=toggle_stock_menu_item_url(item)%>',
+                  onclick="jQuery.ajax({url:'<%=toggle_stock_menu_item_url(item)%>',
                                     datatype: 'script'});">
                   In Stock
                 </div>
                 <div id="out_of_stock_<%=item.id%>" class="<%= item.out_of_stock ? "out_of_stock" : "disabled"%>"
-                  onclick="$.ajax({url:'<%=toggle_stock_menu_item_url(item)%>',
+                  onclick="jQuery.ajax({url:'<%=toggle_stock_menu_item_url(item)%>',
                                     datatype: 'script'});">
                   Out of Stock
                 </div>
@@ -129,15 +129,15 @@
 <!-- /floaty display -->
 
 <script type="text/javascript">
-  $("#new-item").mouseover(function() {
-    $(".item-info").addClass('hidden');
-    $(".new-item_info").removeClass('hidden');
+  jQuery("#new-item").mouseover(function() {
+    jQuery(".item-info").addClass('hidden');
+    jQuery(".new-item_info").removeClass('hidden');
   });
 
-  $(".category_selector").change(function() {
-      hidden = $(this).parent().find('.new_category_field');
-      hidden.find("#menu_item_category").val($(this).val());
-    if ($(this).val().length == 0) {
+  jQuery(".category_selector").change(function() {
+      hidden = jQuery(this).parent().find('.new_category_field');
+      hidden.find("#menu_item_category").val(jQuery(this).val());
+    if (jQuery(this).val().length == 0) {
       hidden.show();
     }
     else {
