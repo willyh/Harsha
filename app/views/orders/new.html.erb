@@ -1,5 +1,9 @@
 <script type="text/javascript">
-  jQuery('.item-name').unbind('mouseup tap');
+  jQuery(document).ready(function() {
+      jQuery('a').bind('mouseup tap', function(event){
+        return false;
+      });
+  });
 </script>
 <% form_for(@order) do |f| %>
   <%= render 'shared/error_messages', :object => f.object %>
@@ -31,7 +35,7 @@
 
 <!-- floaty display -->
   <div id="item-view" class="sticky floaty-box" style="float:right;">
-    <div id="order_info" class="order_info item-info scrollable">
+    <div id="order_info" class="item-info order_info" >
       <%=render 'editable_order', {:order => @order} %>
     </div>
     <% @categories.each do |cat| %>

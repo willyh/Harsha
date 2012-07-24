@@ -1,9 +1,10 @@
+<div class="scrollable">
 <%= form_for order do |f| %>
   <ul id="order_items">
     <div class="description">
       <h2>Your Order</h2>
       <%= f.label "Your Name:" %>
-      <%= f.text_field :customer_name, :value=>order.customer_name %>
+      <%= f.text_field :customer_name, :value=>order.customer_name, :class => 'field' %>
       <br />
       <label>Pickup Time:</label>
       <%= select_tag(:pickup_time, options_for_select(available_times)) %>
@@ -15,3 +16,4 @@
     </div>
   </ul>
 <% end %>
+</div>

@@ -9,11 +9,23 @@
   <%= stylesheet_link_tag 'blueprint/print', :media => 'print' %>
   <%= stylesheet_link_tag 'print', :media => 'print' %>
   <%= stylesheet_link_tag 'custom', :media => 'screen' %>
-  <meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1.0, user-scalable=no"/>
+  <meta name="viewport" content="width=device-width,height=device-height, maximum-scale=1.0, initial-scale=1.0, user-scalable=no"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
 <script src="/javascripts/swipe.js" type="text/javascript"></script>
 <script src="/javascripts/scrollable.js" type="text/javascript"></script>
-
+<script type="text/javascript">
+  jQuery(document).ready(function() {
+    jQuery(".item-name").bind('mouseup tap', function(event) {
+       jQuery(".item-info").addClass('hidden');
+       jQuery(".item-name").removeClass("selected");
+      var name = jQuery(this).attr("id");
+      name = name+"_info";
+      var item = jQuery("."+name);
+      item.removeClass('hidden');
+      jQuery(this).addClass("selected");
+    });
+  });
+</script>
 <head>
   <link rel="shortcut icon" href="/favicon.ico"/>
   <title><%= "MotoCafe | #{@head}" %></title>
@@ -22,7 +34,6 @@
 <body> 
 <div id="debug" class="sticky header"> <%= "#{@head}" %> </div>
 <% flash.each do |key, value| %>
-  <br />
   <div class="flash <%= key %>"><%= value %> ヽ(=^エ^=)ノ</div>
 <% end %>
 <div id="content">
@@ -45,13 +56,47 @@
 </body>
 
 <script type="text/javascript">
+    var $window = jQuery(window);
+
     var topHeight = jQuery('.header').outerHeight();
     var bottomHeight = jQuery('.navigation-bar').outerHeight();
 
+    var currentScrollPosition = 0;
+
+    function stopScrolling(e) {
+      e.preventDefault();
+    }
+
+    function onResize() {
+      var right_pos = jQuery("body").outerWidth();
+      var left_pos = jQuery("body").offset().left;
+      jQuery(".floaty-box").css('left',left_pos+right_pos-jQuery(".floaty-box").outerWidth());
+      jQuery('.scrollable').each(function() {
+        if(jQuery(this).height() >= window.innerHeight - topHeight - bottomHeight)
+          jQuery(this).css('overflow','scroll');
+        else
+          jQuery(this).css('overflow','hidden');
+      });
+      jQuery('.scrollable').css('max-height',window.innerHeight-topHeight-bottomHeight+'px');
+      var headerHeight = jQuery('.header').outerHeight();
+      jQuery('#content').height($window.height()-headerHeight);
+      jQuery('#content').css('padding-top',headerHeight+'px');
+    }
+
+    jQuery.fn.swap = function(b) {
+      b = jQuery(b)[0]; 
+      var a = this[0]; 
+      var t = a.parentNode.insertBefore(document.createTextNode(''), a); 
+      b.parentNode.insertBefore(a, b); 
+      t.parentNode.insertBefore(b, t); 
+      t.parentNode.removeChild(t); 
+      return this; 
+    };
+
     jQuery(document).ready(function() {
       window.scrollTo(0, 0);
-      jQuery('body').css('visibility','hidden');
       var body = jQuery("body");
+      body.css('visibility','hidden');
       if(window.screen.width >= 700) {
         body.width('700');
         jQuery(".mobile").hide();
@@ -59,15 +104,12 @@
       else
         jQuery(".regular").hide();
 
+      onResize();
       
       var border = parseInt(jQuery(".header").css("border-left-width"));
       var padding = parseInt(jQuery('.header').css('padding-left'));
       jQuery(".header").width(body.width()-2*border-2*padding);
       jQuery(".navigation-bar").width(body.width());
-      jQuery('#content').css('padding-top',topHeight+"px");
-      jQuery('#content').css('padding-bottom',bottomHeight+"px");
-
-      onResize();
 
       jQuery(".scrollable").each(function() {
           this.scroll = new Scrollable(this);
@@ -129,50 +171,11 @@
       jQuery(".floaty-box").css('left',left_pos+right_pos-jQuery(".floaty-box").outerWidth());
       jQuery('.floaty-box').css('top',jQuery('.header').outerHeight())+"px";
 
+      $window.resize(function() {
+        onResize();
+      });
+
       jQuery('body').css('visibility','visible');
     });
-
-    var currentScrollPosition = 0;
-
-    function stopScrolling(e) {
-      e.preventDefault();
-    }
-
-    jQuery(".item-name").bind('mouseup tap', function(event) {
-       jQuery(".item-info").addClass('hidden');
-       jQuery(".item-name").removeClass("selected");
-      var name = jQuery(this).attr("id");
-      name = name+"_info";
-      var item = jQuery("."+name);
-      item.removeClass('hidden');
-      jQuery(this).addClass("selected");
-    });
-
-    var $window = jQuery(window);
-
-    function onResize() {
-      var right_pos = jQuery("body").outerWidth();
-      var left_pos = jQuery("body").offset().left;
-      jQuery(".floaty-box").css('left',left_pos+right_pos-jQuery(".floaty-box").outerWidth());
-      jQuery('.scrollable').each(function() {
-        if(jQuery(this).height() >= window.innerHeight - topHeight - bottomHeight)
-          jQuery(this).css('overflow','scroll');
-        else
-          jQuery(this).css('overflow','hidden');
-      });
-      jQuery('.scrollable').css('max-height',window.innerHeight-topHeight-bottomHeight+'px');
-    }
-    $window.resize(function() {
-      onResize();
-    });
-    jQuery.fn.swap = function(b) {
-      b = jQuery(b)[0]; 
-      var a = this[0]; 
-      var t = a.parentNode.insertBefore(document.createTextNode(''), a); 
-      b.parentNode.insertBefore(a, b); 
-      t.parentNode.insertBefore(b, t); 
-      t.parentNode.removeChild(t); 
-      return this; 
-    };
 </script>
 </html>

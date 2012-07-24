@@ -3,7 +3,11 @@ class OrdersController < ApplicationController
   before_filter :completed_yet, :except => [:new, :create, :show, :complete ]
   def new
     @head = "Check Out Our Menu!"
-    @order = Order.exists?(session[:order]) ? Order.find(session[:order]) : Order.create
+    if session[:order] && Order.exists?(session[:order])
+      @order = Order.find(session[:order]) 
+    else
+      @order = Order.create
+    end
     session[:order] = @order.id
     @categories = Category.all
   end

@@ -27,7 +27,6 @@ html {
   border-style: solid;
   border-width: 10px;
   border-color: #336699;
-  float:top;
   z-index:99;
 }
 
@@ -102,6 +101,8 @@ li.item-name.selected {
   box-shadow: 3px 3px 2px 2px #4477aa;
 }
 .navigation-bar {
+  position:fixed;
+  width: 100%;
   font-weight: bold;
   display:table;
   bottom:0;

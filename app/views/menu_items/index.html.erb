@@ -77,7 +77,7 @@
   </div>
     <% @categories.each do |cat| %>
       <% cat.menu_items.each do |item| %>
-        <div class="<%= item.id%>_info item-info scrollable" style="cursor:default;">
+        <div class="<%= item.id%>_info item-info scrollable">
           <% form_for(item, :html => {:multipart => true}) do |f| %>
           <%= render 'shared/error_messages', :object => f.object %>
 
