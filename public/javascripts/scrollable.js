@@ -108,6 +108,8 @@ Scrollable.prototype = {
     this.element.style.webkitTransitionDuration = this.element.style.MozTransitionDuration = this.element.style.msTransitionDuration = this.element.style.OTransitionDuration = this.element.style.transitionDuration = '100ms';
     this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + destination + 'px,0)';
     this.element.style.msTransform = this.element.style.OTransform = 'translateY(' + destination + 'px)';
+    if(this.yVelocity == 0)
+      this.transitionEnd(e);
   }
 
 }

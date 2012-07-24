@@ -35,8 +35,10 @@
 
 <!-- floaty display -->
   <div id="item-view" class="sticky floaty-box" style="float:right;">
-    <div id="order_info" class="item-info order_info" >
+    <div id="order_info" class="item-info order_info scrollable" >
+      <div>
       <%=render 'editable_order', {:order => @order} %>
+      </div>
     </div>
     <% @categories.each do |cat| %>
       <% cat.menu_items.each do |item| %>
