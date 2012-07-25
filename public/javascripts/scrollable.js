@@ -6,8 +6,15 @@ window.Scrollable = function(element) {
 
   this.topPosition = 0;
 
-  this.container = element;
-  this.element = this.container.children[0];
+  var dv = document.createElement('div');
+  element.parentNode.insertBefore(dv, element);
+  dv.setAttribute('class', 'scrollable');
+  var reg = new RegExp('(\\s|^)'+'scrollable'+'(\\s|$)');
+  element.className=element.className.replace(reg,' ');
+  dv.appendChild(element);
+
+  this.container = element.parentNode;
+  this.element = element;
 
   //this.container.style.overflow = 'hidden';
   this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,0,0)';
@@ -38,31 +45,12 @@ Scrollable.prototype = {
     }
   },
 
-  transitionEnd: function(e) {
-    
-    if(this.topPosition < -this.element.offsetHeight - 20 + this.container.offsetHeight)
-    {
-      var destination = -this.element.offsetHeight - 20 + this.container.offsetHeight;
-      this.topPosition = destination;
-      this.element.style.webkitTransitionDuration = this.element.style.MozTransitionDuration = this.element.style.msTransitionDuration = this.element.style.OTransitionDuration = this.element.style.transitionDuration = '300ms';
-      this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + destination + 'px,0)';
-      this.element.style.msTransform = this.element.style.OTransform = 'translateY(' + destination + 'px)';
-    }
-    else if( this.topPosition > 0 )
-    {
-      var destination = 0;
-      this.topPosition = destination;
-      this.element.style.webkitTransitionDuration = this.element.style.MozTransitionDuration = this.element.style.msTransitionDuration = this.element.style.OTransitionDuration = this.element.style.transitionDuration = '300ms';
-      this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + destination + 'px,0)';
-      this.element.style.msTransform = this.element.style.OTransform = 'translateY(' + destination + 'px)';
-    }
-  },
 
   onTouchStart: function(e) {
     this.start = {
       
       pageX: e.touches[0].pageX,
-      pageY: e.touches[0].pageY -  this.topPosition,
+      pageY: e.touches[0].pageY + this.topPosition,
 
       time: (Number (new Date() ))
     };
@@ -83,18 +71,15 @@ Scrollable.prototype = {
     e.preventDefault();
 
     this.deltaY = this.start.pageY - e.touches[0].pageY;
-    this.deltaY = 
-      this.deltaY /
-        ( (this.deltaY > this.element.offsetHeight + 20 - this.container.offsetHeight     // if scrolling past bottom
-          || this.deltaY < 0                                                            // or scrolling past top
-        ) ?
-        ( Math.abs(this.deltaY) / this.container.offsetHeight + 1 )
-        : 1);
-
-         this.start.pageY - e.touches[0].pageY;
+    if(this.deltaY > this.element.offsetHeight - this.container.offsetHeight) {
+      var dif = this.deltaY - this.element.offsetHeight + this.container.offsetHeight;
+      this.deltaY = (this.element.offsetHeight - this.container.offsetHeight) + dif / 2;
+    }
+    if(this.deltaY < 0)
+      this.deltaY = this.deltaY / 2;
 
     var now = Number( new Date() );
-    this.yVelocity = (this.lastY - this.deltaY) / (now - this.lastTick);
+    this.yVelocity = (this.lastY - this.deltaY) / (this.lastTick - now );
     this.lastTick = now;
     this.lastY = this.deltaY;
 
@@ -102,14 +87,49 @@ Scrollable.prototype = {
   },
 
   onTouchEnd: function(e) {
-    var destination = -this.deltaY + this.yVelocity * 30;
+    var speed = 300;
+    var destination = this.deltaY;
+    if(0 < this.deltaY && this.deltaY < this.element.offsetHeight - this.container.offsetHeight)
+    {
+      destination = this.deltaY + this.yVelocity * speed;
+      if(destination > this.element.offsetHeight - this.container.offsetHeight
+          && Math.abs(this.yVelocity > 1)) {
+        var dif = destination - (this.element.offsetHeight - this.container.offsetHeight);
+        destination = (this.element.offsetHeight - this.container.offsetHeight) + dif / Math.abs(this.yVelocity);
+      }
+      if(destination < 0
+          && Math.abs(this.yVelocity) > 1)
+        destination = destination / Math.abs(this.yVelocity);
+      if(this.yVelocity != 0)
+        speed = (destination - this.deltaY) / this.yVelocity;
+    }
+
 
     this.topPosition = destination;
-    this.element.style.webkitTransitionDuration = this.element.style.MozTransitionDuration = this.element.style.msTransitionDuration = this.element.style.OTransitionDuration = this.element.style.transitionDuration = '100ms';
-    this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + destination + 'px,0)';
-    this.element.style.msTransform = this.element.style.OTransform = 'translateY(' + destination + 'px)';
-    if(this.yVelocity == 0)
+    this.element.style.webkitTransitionDuration = this.element.style.MozTransitionDuration = this.element.style.msTransitionDuration = this.element.style.OTransitionDuration = this.element.style.transitionDuration = speed+'ms';
+    this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + -destination + 'px,0)';
+    this.element.style.msTransform = this.element.style.OTransform = 'translateY(' + -destination + 'px)';
+    if(destination == this.deltaY)
       this.transitionEnd(e);
-  }
+  },
 
+  transitionEnd: function(e) {
+    var destination = this.topPosition;
+    if(destination > this.element.offsetHeight - this.container.offsetHeight)
+    {
+      destination = this.element.offsetHeight - this.container.offsetHeight;
+      this.topPosition = destination;
+      this.element.style.webkitTransitionDuration = this.element.style.MozTransitionDuration = this.element.style.msTransitionDuration = this.element.style.OTransitionDuration = this.element.style.transitionDuration = '300ms';
+      this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + -destination + 'px,0)';
+      this.element.style.msTransform = this.element.style.OTransform = 'translateY(' + -destination + 'px)';
+    }
+    else if(destination < 0)
+    {
+      destination = 0;
+      this.topPosition = destination;
+      this.element.style.webkitTransitionDuration = this.element.style.MozTransitionDuration = this.element.style.msTransitionDuration = this.element.style.OTransitionDuration = this.element.style.transitionDuration = '300ms';
+      this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + -destination + 'px,0)';
+      this.element.style.msTransform = this.element.style.OTransform = 'translateY(' + -destination + 'px)';
+    }
+  }
 }

@@ -58,9 +58,6 @@
 <script type="text/javascript">
     var $window = jQuery(window);
 
-    var topHeight = jQuery('.header').outerHeight();
-    var bottomHeight = jQuery('.navigation-bar').outerHeight();
-
     var currentScrollPosition = 0;
 
     function stopScrolling(e) {
@@ -68,19 +65,18 @@
     }
 
     function onResize() {
+      var headerHeight = jQuery('.header').outerHeight();
+      var bottomHeight = jQuery('.navigation-bar').outerHeight();
       var right_pos = jQuery("body").outerWidth();
       var left_pos = jQuery("body").offset().left;
       jQuery(".floaty-box").css('left',left_pos+right_pos-jQuery(".floaty-box").outerWidth());
+      jQuery('.floaty-box').css('max-height',window.innerHeight-headerHeight-bottomHeight+'px');
       jQuery('.scrollable').each(function() {
-        if(jQuery(this).height() >= window.innerHeight - topHeight - bottomHeight)
-          jQuery(this).css('overflow','scroll');
-        else
-          jQuery(this).css('overflow','hidden');
+          jQuery(this).css('overflow-y','auto');
       });
-      jQuery('.scrollable').css('max-height',window.innerHeight-topHeight-bottomHeight+'px');
-      var headerHeight = jQuery('.header').outerHeight();
-      jQuery('#content').height($window.height()-headerHeight);
+      jQuery('#content').css('min-height',$window.height()-headerHeight - bottomHeight+'px');
       jQuery('#content').css('padding-top',headerHeight+'px');
+      jQuery('#content').css('padding-bottom',bottomHeight+'px');
     }
 
     jQuery.fn.swap = function(b) {
@@ -111,9 +107,6 @@
       jQuery(".header").width(body.width()-2*border-2*padding);
       jQuery(".navigation-bar").width(body.width());
 
-      jQuery(".scrollable").each(function() {
-          this.scroll = new Scrollable(this);
-      });
       jQuery(".item-info").addClass('hidden');
         <% if @menu_item && @menu_item.id %>
           <%= "jQuery('#new-item').addClass('selected');" %>
@@ -149,6 +142,9 @@
           el.addClass("selected");
           }
       });
+      jQuery(".scrollable").each(function() {
+          this.scroll = new Scrollable(this);
+      });
 
       document.addEventListener('touchmove', stopScrolling, false);
       window.setTimeout(function(){
@@ -156,13 +152,29 @@
       },1500);
 
       jQuery('input').bind('blur', function(){
-          jQuery(document).scrollTop(0);
+          jQuery(document).scrollTop(currentScrollPosition);
+          currentScrollPosition = 0;
       });
       jQuery('select').bind('blur', function(){
-          jQuery(document).scrollTop(0);
+          jQuery(document).scrollTop(currentScrollPosition);
+          currentScrollPosition = 0;
       });
       jQuery('textarea').bind('blur', function(){
-          jQuery(document).scrollTop(0);
+          jQuery(document).scrollTop(currentScrollPosition);
+          currentScrollPosition = 0;
+      });
+
+      jQuery('input').bind('focus', function(){
+        if(currentScrollPosition == 0)
+          currentScrollPosition = $window.scrollTop();
+      });
+      jQuery('select').bind('click tap', function(){
+        if(currentScrollPosition == 0)
+          currentScrollPosition = $window.scrollTop();
+      });
+      jQuery('textarea').bind('click tap', function(){
+        if(currentScrollPosition == 0)
+          currentScrollPosition = $window.scrollTop();
       });
 
       var right_pos = body.outerWidth();

@@ -5,8 +5,6 @@
       });
   });
 </script>
-<% form_for(@order) do |f| %>
-  <%= render 'shared/error_messages', :object => f.object %>
 
 <div class="item-names">
   <div id='slider'>
@@ -36,14 +34,11 @@
 <!-- floaty display -->
   <div id="item-view" class="sticky floaty-box" style="float:right;">
     <div id="order_info" class="item-info order_info scrollable" >
-      <div>
       <%=render 'editable_order', {:order => @order} %>
-      </div>
     </div>
     <% @categories.each do |cat| %>
       <% cat.menu_items.each do |item| %>
         <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info scrollable">
-          <div>
           <div class="frame">
             <%= image_tag item.photo.url(:small), :class => 'mobile' if item.photo.exists? %>
             <%= image_tag item.photo.url(:medium), :class => 'regular' if item.photo.exists? %>
@@ -58,64 +53,7 @@
             </p>
           </div>
         </div>
-        </div>
       <% end %>
     <% end %>
   </div>
 <!-- floaty display -->
-
-
-
-
-
-
-
-
-
-<% if false # remove this line to enable ordering %>
-    <hidden><%= f.submit %></hidden>
-  <% if admin? %>
-    <div class="actions">
-    <proceed>
-      <%=link_to_function "Place Order", "jQuery(this).up('form').submit()" %>
-    </proceed>
-    <other>
-      <%= link_to "Print", "JavaScript:window.print();" %>
-    </other>
-    </div>
-    <%= render 'shared/list_orders', { :@orders => Order.find(:all, :conditions => 'completed IS NOT NULL')} %>
-  <% else %>
-    <div class="field">
-      <%= f.label "Your name:" %>
-      <%= f.text_field :customer_name, :class => "name_text_field" %>
-    </div>
-    <div class="field">
-      <%= f.label "Any special instructions?" %><br />
-      <%= f.text_field :instructions, :class => "instructions_text_field" %>
-    </div>
-    <div class="field">
-      <%= f.label "Pickup Time:" %>
-      <select class="time_select" id="order_pickup_time" name="order[pickup_time]">
-      <%= options_for_select(available_times) %>
-      </select>
-    </div>
-
-  <div class="actions">
-    <proceed>
-      <%= link_to_function "Proceed", "jQuery(this).up('form').submit()" %>
-    </proceed>
-
-  </div>
-  <% end %>
-<% end # remove this line to enable ordering %>
-<% end %>
-<%if admin? and false%>
-<delete>
-  <%= link_to "Clear Orders", clear_orders_path, { :confirm => "Clear the database?", :method => :delete } %>
-</delete>
-Note about Clear Orders*<br />
-<p>If someone starts an order they reserve a time slot<br />
-You don't see that order until they pay<br />
-"Clear Orders" deletes unfinished orders and makes all time slots available<br />
-Use "Clear Orders" before you close shop or before you open so you don't accidentally delete an order while someone is paying </p>
-<% end %>

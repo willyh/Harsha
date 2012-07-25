@@ -31,9 +31,10 @@ html {
 }
 
 #content {
-  height:100%;
   background:#6699cc;
   border: solid 5px #336699;
+  border-top:none;
+  border-bottom:none;
   padding-left:0;
   padding-right:0;
 }
@@ -118,11 +119,13 @@ p {
 }
 
 .scrollable {
-  overflow-y:auto;
+  overflow-x:hidden;
+  max-height:inherit;
 }
 
 .floaty-box {
   background: #225588;
+  overflow:hidden;
 }
 
 .frame {
