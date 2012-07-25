@@ -89,26 +89,29 @@ Scrollable.prototype = {
   onTouchEnd: function(e) {
     var speed = 300;
     var destination = this.deltaY;
-    if(0 < this.deltaY && this.deltaY < this.element.offsetHeight - this.container.offsetHeight)
+    this.topPosition = destination;
+    if(-this.container.offsetHeight/3 < this.deltaY &&
+        this.deltaY < this.element.offsetHeight - 2/3*this.container.offsetHeight)
     {
       destination = this.deltaY + this.yVelocity * speed;
-      if(destination > this.element.offsetHeight - this.container.offsetHeight
-          && Math.abs(this.yVelocity > 1)) {
+      if(destination > this.element.offsetHeight - this.container.offsetHeight)
+      {
         var dif = destination - (this.element.offsetHeight - this.container.offsetHeight);
-        destination = (this.element.offsetHeight - this.container.offsetHeight) + dif / Math.abs(this.yVelocity);
+        destination = (this.element.offsetHeight - this.container.offsetHeight)
+          + Math.min(dif / (Math.abs(this.yVelocity)+1), this.container.offsetHeight/3);
       }
-      if(destination < 0
-          && Math.abs(this.yVelocity) > 1)
-        destination = destination / Math.abs(this.yVelocity);
+      if(destination < 0)
+        destination = Math.max(destination / (Math.abs(this.yVelocity)+1), -this.container.offsetHeight/3);
+
       if(this.yVelocity != 0)
         speed = (destination - this.deltaY) / this.yVelocity;
+
+
+      this.topPosition = destination;
+      this.element.style.webkitTransitionDuration = this.element.style.MozTransitionDuration = this.element.style.msTransitionDuration = this.element.style.OTransitionDuration = this.element.style.transitionDuration = speed+'ms';
+      this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + -destination + 'px,0)';
+      this.element.style.msTransform = this.element.style.OTransform = 'translateY(' + -destination + 'px)';
     }
-
-
-    this.topPosition = destination;
-    this.element.style.webkitTransitionDuration = this.element.style.MozTransitionDuration = this.element.style.msTransitionDuration = this.element.style.OTransitionDuration = this.element.style.transitionDuration = speed+'ms';
-    this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + -destination + 'px,0)';
-    this.element.style.msTransform = this.element.style.OTransform = 'translateY(' + -destination + 'px)';
     if(destination == this.deltaY)
       this.transitionEnd(e);
   },

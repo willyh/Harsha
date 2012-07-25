@@ -89,6 +89,27 @@
       return this; 
     };
 
+    function fixFocusForMobile() {
+      var hasTapped = false;
+      var locked = false;
+      jQuery('input, select, textarea').bind('blur', function(){
+          if(hasTapped)
+            window.scrollTo(0,currentScrollPosition);
+          hasTapped = false;
+          locked = false;
+      });
+
+      jQuery('input, select, textarea').bind('touchstart', function(){
+        hasTapped = true;
+        if(!locked)
+          currentScrollPosition = $window.scrollTop();
+      });
+
+      jQuery('input, select, textarea').bind('focus', function() {
+          locked = true;
+      });
+    }
+
     jQuery(document).ready(function() {
       window.scrollTo(0, 0);
       var body = jQuery("body");
@@ -151,31 +172,7 @@
         jQuery(".flash").hide('slow');
       },1500);
 
-      jQuery('input').bind('blur', function(){
-          jQuery(document).scrollTop(currentScrollPosition);
-          currentScrollPosition = 0;
-      });
-      jQuery('select').bind('blur', function(){
-          jQuery(document).scrollTop(currentScrollPosition);
-          currentScrollPosition = 0;
-      });
-      jQuery('textarea').bind('blur', function(){
-          jQuery(document).scrollTop(currentScrollPosition);
-          currentScrollPosition = 0;
-      });
-
-      jQuery('input').bind('focus', function(){
-        if(currentScrollPosition == 0)
-          currentScrollPosition = $window.scrollTop();
-      });
-      jQuery('select').bind('click tap', function(){
-        if(currentScrollPosition == 0)
-          currentScrollPosition = $window.scrollTop();
-      });
-      jQuery('textarea').bind('click tap', function(){
-        if(currentScrollPosition == 0)
-          currentScrollPosition = $window.scrollTop();
-      });
+      fixFocusForMobile();
 
       var right_pos = body.outerWidth();
       var left_pos = body.offset().left;
