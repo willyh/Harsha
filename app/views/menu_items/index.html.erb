@@ -3,48 +3,14 @@
     <%= render 'shared/error_messages', :object => f.object %>
   <% end %>
   <div id='slider'>
-    <ul>
-      <h1>
-        New Item
-      </h1>
-      <li id="new-item" class="item-name">
-        New Item
-      </li>
-    <% @categories.each do |cat| %>
-      <h1 id="c<%=cat.id%>">
-        <%= text_field_tag :display_order, cat.display_order,
-          {:onkeypress => "if(event.keyCode == 13)
-                          jQuery.ajax({
-                            url:'#{change_order_category_url(cat)}',
-                            data: 'display_order='+this.value,
-                            datatype: 'script'
-                          });",
-          :style => "width:20px;"}
-         %>
-         <%=cat.name%>
-       </h1>
-        <% cat.menu_items.each do |item| %>
-          <li id="<%= item.id %>" class="item-name">
-            <%= text_field_tag :display_order, item.display_order,
-              {:onkeypress => "if(event.keyCode == 13)
-                              jQuery.ajax({
-                                url:'#{change_order_menu_item_url(item)}',
-                                data: 'display_order='+this.value,
-                                datatype: 'script'
-                              });",
-              :style => "width:20px;"}
-             %>
-            <%= item.name %>
-          </li>
-        <% end %>
-    <% end %>
-    </ul>
+    <%= render 'item_list', :@categories => @categories %>
   </div>
 </div>
 
 <!-- floaty display -->
 
 <div id="item-view" class="sticky floaty-box">
+  <div class="scrollable">
   <div class="new-item_info item-info scrollable">
       <% form_for(@new_item, :html => {:multipart => true}) do |f| %>
 
@@ -77,7 +43,8 @@
   </div>
     <% @categories.each do |cat| %>
       <% cat.menu_items.each do |item| %>
-        <div class="<%= item.id%>_info item-info scrollable">
+        <div class='scrollable'>
+        <div class="<%= item.id%>_info item-info">
           <% form_for(item, :html => {:multipart => true}) do |f| %>
           <%= render 'shared/error_messages', :object => f.object %>
 
@@ -124,6 +91,8 @@
           </div>
       <% end %>
     <% end %>
+  </div>
+  </div>
 </div>
 
 <!-- /floaty display -->

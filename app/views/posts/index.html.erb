@@ -1,0 +1,14 @@
+<div class="scrollable">
+<h1>Questions We've Been Asked</h1>
+
+<% @posts.each do |post| %>
+  <div class="post">
+    <div class="question">
+          <%= post.question %>
+    </div>
+    <div class="response">
+          <%= post.response %>
+    </div>
+  </div>
+<% end %>
+</div>

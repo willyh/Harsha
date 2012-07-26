@@ -12,7 +12,11 @@ class CategoriesController < ApplicationController
       @category.save
 
       render(:update) {|page|
-        page << "$('#c#{@swap_item.id}').find('input').val('#{@swap_item.display_order}')"
+        page.replace_html 'slider', :partial => 'menu_items/item_list', :locals => {:@categories => Category.all}
+        page << 'window.scrollTo(0,0)'
+        page << 'fixFocusForMobile()'
+        page << 'addSlider()'
+        page << 'bindListElements()'
       }
     end
   end

@@ -60,6 +60,7 @@ a {
 
 a:hover {
   color: #fff;
+  background-color:transparent;
 }
 
 a:active {
@@ -123,6 +124,10 @@ p {
   max-height:inherit;
 }
 
+.max-height {
+  height: 100%;
+}
+
 .floaty-box {
   background: #225588;
   overflow:hidden;
@@ -170,18 +175,10 @@ p.large-item-info {
   font-weight: bold;
 }
 
-proceed, delete, other {
-  visibility: visible;
-  display: block;
-  font-weight: bold;
+.delete {
   background: #cc0000;
-  border-style: solid;
-  border-width: 10px;
-  border-color: #993333;
-  margin: 30px 25%;
 }
 proceed a:hover {color: #ccc;}
-delete a:hover {color: #ccc;}
 other a:hover {color: #ccc;}
 proceed {background:#33CC33;border-color:#009900}
 other {background:#CCCC00;border-color:#999933;}
@@ -260,4 +257,32 @@ hidden {
   position:absolute;
   top:0;
   z-index:1000;
+}
+
+.post {
+  border-radius:10px;
+  -moz-border-radius:10px;
+  margin-left:5%;
+  margin-right:5%;
+  margin-bottom: 30px;
+  box-shadow: 1px 2px 1px 1px #4477aa;
+}
+
+.question {
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+  -moz-border-top-left-radius:5px;
+  -moz-border-top-right-radius:5px;
+  border-bottom: solid 1px #a3b3bd;
+  background:#fff;
+  padding: 10px;
+}
+
+.response {
+  border-bottom-left-radius:5px;
+  border-bottom-right-radius:5px;
+  -moz-border-bottom-left-radius:5px;
+  -moz-border-bottom-right-radius:5px;
+  background: #d3e3ff;
+  padding:10px;
 }

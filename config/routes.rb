@@ -1,5 +1,7 @@
 DinerApp::Application.routes.draw do
 
+  resources :posts
+
   get "payment_notification/create"
 
   get "sessions/new"

@@ -10,8 +10,12 @@ window.Scrollable = function(element) {
   element.parentNode.insertBefore(dv, element);
   dv.setAttribute('class', 'scrollable');
   var reg = new RegExp('(\\s|^)'+'scrollable'+'(\\s|$)');
-  element.className=element.className.replace(reg,' ');
+  element.className=element.className.replace(reg,' max-height ');
   dv.appendChild(element);
+  var injection = document.createElement('div');
+  injection.style.margin = '0';
+  injection.style.height = '1px';
+  element.insertBefore(injection,element.childNodes[0]);
 
   this.container = element.parentNode;
   this.element = element;

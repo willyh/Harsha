@@ -14,16 +14,19 @@
 <script src="/javascripts/swipe.js" type="text/javascript"></script>
 <script src="/javascripts/scrollable.js" type="text/javascript"></script>
 <script type="text/javascript">
+  function bindListElements() {
+      jQuery(".item-name").bind('mouseup tap', function(event) {
+         jQuery(".item-info").addClass('hidden');
+         jQuery(".item-name").removeClass("selected");
+        var name = jQuery(this).attr("id");
+        name = name+"_info";
+        var item = jQuery("."+name);
+        item.removeClass('hidden');
+        jQuery(this).addClass("selected");
+      });
+    }
   jQuery(document).ready(function() {
-    jQuery(".item-name").bind('mouseup tap', function(event) {
-       jQuery(".item-info").addClass('hidden');
-       jQuery(".item-name").removeClass("selected");
-      var name = jQuery(this).attr("id");
-      name = name+"_info";
-      var item = jQuery("."+name);
-      item.removeClass('hidden');
-      jQuery(this).addClass("selected");
-    });
+      bindListElements();
   });
 </script>
 <head>
@@ -52,6 +55,9 @@
      Edit Menu
   </div>
 <% end %>
+<div class="nav_item" onclick="location.href='<%= (admin?) ? new_post_url : posts_url%>';">
+    FAQ
+  </div>
 </div>
 </body>
 
@@ -70,9 +76,10 @@
       var right_pos = jQuery("body").outerWidth();
       var left_pos = jQuery("body").offset().left;
       jQuery(".floaty-box").css('left',left_pos+right_pos-jQuery(".floaty-box").outerWidth());
-      jQuery('.floaty-box').css('max-height',window.innerHeight-headerHeight-bottomHeight+'px');
       jQuery('.scrollable').each(function() {
-          jQuery(this).css('overflow-y','auto');
+          $this = jQuery(this);
+          $this.css('max-height',window.innerHeight-headerHeight-bottomHeight+'px');
+          $this.css('overflow-y','auto');
       });
       jQuery('#content').css('min-height',$window.height()-headerHeight - bottomHeight+'px');
       jQuery('#content').css('padding-top',headerHeight+'px');
@@ -110,10 +117,27 @@
       });
     }
 
+    function addSlider() {
+      window.mySwipe = new Swipe(document.getElementById('slider'), {
+        callback: function(event, index, elem) {
+           jQuery(".item-info").addClass('hidden');
+           jQuery(".item-name").removeClass("selected");
+           var el = jQuery(elem)[0].tagName === "LI" ? jQuery(elem) : jQuery(elem).next();
+           var name = el.attr("id");
+          name = name+"_info";
+
+          var item = jQuery("."+name);
+          item.removeClass('hidden');
+          el.addClass("selected");
+          }
+      });
+    }
+
     jQuery(document).ready(function() {
+      document.addEventListener('touchmove', stopScrolling, false);
       window.scrollTo(0, 0);
       var body = jQuery("body");
-      body.css('visibility','hidden');
+      jQuery('html').css('visibility','hidden');
       if(window.screen.width >= 700) {
         body.width('700');
         jQuery(".mobile").hide();
@@ -121,8 +145,6 @@
       else
         jQuery(".regular").hide();
 
-      onResize();
-      
       var border = parseInt(jQuery(".header").css("border-left-width"));
       var padding = parseInt(jQuery('.header').css('padding-left'));
       jQuery(".header").width(body.width()-2*border-2*padding);
@@ -150,24 +172,15 @@
           hidden.hide();
         }
       });
-      window.mySwipe = new Swipe(document.getElementById('slider'), {
-        callback: function(event, index, elem) {
-           jQuery(".item-info").addClass('hidden');
-           jQuery(".item-name").removeClass("selected");
-           var el = jQuery(elem)[0].tagName === "LI" ? jQuery(elem) : jQuery(elem).next();
-           var name = el.attr("id");
-          name = name+"_info";
 
-          var item = jQuery("."+name);
-          item.removeClass('hidden');
-          el.addClass("selected");
-          }
-      });
+      addSlider();
+
       jQuery(".scrollable").each(function() {
           this.scroll = new Scrollable(this);
       });
 
-      document.addEventListener('touchmove', stopScrolling, false);
+      onResize();
+      
       window.setTimeout(function(){
         jQuery(".flash").hide('slow');
       },1500);
@@ -184,7 +197,7 @@
         onResize();
       });
 
-      jQuery('body').css('visibility','visible');
+      jQuery('html').css('visibility','visible');
     });
 </script>
 </html>
