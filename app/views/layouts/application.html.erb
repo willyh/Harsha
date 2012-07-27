@@ -35,6 +35,20 @@
 </head>
 
 <body> 
+<!--[if IE]>
+  <div class='navigation-bar' style='height:100%; z-index:9000;'>
+    <div class='nav_item'
+      style='font-size:500%;'
+      onclick="location.href='https://www.google.com/intl/en/chrome/browser/'">
+      Download Chrome
+    </div>
+    <div class='nav_item'
+      style='font-size:500%;'
+      onclick="location.href='http://www.mozilla.org/en-US/firefox/new/'">
+      Download Firefox
+    </div>
+  </div>
+<![endif]-->
 <div id="debug" class="sticky header"> <%= "#{@head}" %> </div>
 <% flash.each do |key, value| %>
   <div class="flash <%= key %>"><%= value %> ヽ(=^エ^=)ノ</div>
