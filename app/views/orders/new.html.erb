@@ -2,7 +2,14 @@
   function hideItems(list, index) {
     for(i = index+1; jQuery(list.get(i)).is('li') && i < list.length; i++)
     {
-      jQuery(list.get(i)).addClass('hidden');
+      var item = jQuery(list.get(i));
+      if(item.attr('id') != 'order')
+        item.addClass('hidden');
+      else
+      {
+        item.hide();
+        item.show();
+      }
     }
   }
   function toggleItems(list, index) {
@@ -21,7 +28,7 @@
     }
   }
   jQuery(document).ready(function() {
-      jQuery('a').bind('mouseup tap', function(event){
+      jQuery('.item-names').find('img').bind('mouseup tap', function(event){
         return false;
       });
       var slider = jQuery('.item-names').children().get(0);
@@ -47,12 +54,11 @@
         <% cat.menu_items.each do |item| %>
           <li id="<%= item.id %>" class="item-name">
             <%= item.name %>
-            <a onclick="jQuery.ajax({url:'<%=add_to_order_menu_item_url(item)%>',
+            <%=image_tag('plus_sign.jpg',
+                :onclick => "jQuery.ajax({url:'#{add_to_order_menu_item_url(item)}',
                                   datatype: 'script',
-                                  data: 'id=<%=item.id%>'
-            });">
-            add item
-            </a>
+                                  data: 'id=#{item.id}'
+            });")%>
           </li>
         <% end %>
     <% end %>
@@ -62,9 +68,11 @@
 
 <!-- floaty display -->
   <div id="item-view" class="sticky floaty-box" style="float:right;">
-    <div id="order_info" class="item-info order_info scrollable" >
+    <div class='scrollable'>
+    <div id="order_info" class="item-info order_info" >
       <%=render 'editable_order', {:order => @order} %>
     </div>
+  </div>
     <% @categories.each do |cat| %>
       <% cat.menu_items.each do |item| %>
         <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info scrollable">

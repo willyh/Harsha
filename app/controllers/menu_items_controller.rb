@@ -130,6 +130,12 @@ class MenuItemsController < ApplicationController
     @item = MenuItem.find(params[:id])
     o = Order.find(session[:order])
     o.selections << Selection.new(:menu_item => @item)
+    o.price = 0
+    o.selections.each{|s|
+      o.price += s.menu_item.price
+    }
+    o.save
+
     render(:update) {|page|
       page << "jQuery('.item-info').addClass('hidden')"
       page << "jQuery('#order_info').removeClass('hidden')"
@@ -144,6 +150,12 @@ class MenuItemsController < ApplicationController
     s = o.selections
     @selection = s[params[:selection].to_i]
     s.delete(@selection)
+
+    o.price = 0
+    o.selections.each{|s|
+      o.price += s.menu_item.price
+    }
+    o.save
 
     render(:update) {|page|
       page.replace_html 'order_info', {:partial => "orders/editable_order", :locals => {:order => o}}

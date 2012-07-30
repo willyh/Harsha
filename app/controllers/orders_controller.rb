@@ -6,7 +6,7 @@ class OrdersController < ApplicationController
     if session[:order] && Order.exists?(session[:order])
       @order = Order.find(session[:order]) 
     else
-      @order = Order.create
+      @order = Order.create(:price => 0)
     end
     session[:order] = @order.id
     @categories = Category.all

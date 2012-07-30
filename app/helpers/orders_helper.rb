@@ -1,4 +1,11 @@
 module OrdersHelper
+  def format_price price
+    if price.to_s =~ /\d*[.]\d{2,}/
+      "$#{price}"
+    else
+      "$#{price}0"
+    end
+  end
   def available_times
     times = []
     now = round_up Time.now.utc - 4.hours

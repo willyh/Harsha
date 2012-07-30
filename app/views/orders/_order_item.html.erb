@@ -1,6 +1,6 @@
 <div class="description" id="<%=s.menu_item.id%>_order">
   <h1 style="color:black"><%= s.menu_item.name %></h1>
-  <%="$#{s.menu_item.price}"%>
+  <%=format_price s.menu_item.price%>
   <a onclick="jQuery.ajax({url:'<%=remove_from_order_menu_item_url(s.menu_item)%>',
                         datatype: 'script',
                         data: 'selection=<%=order.selections.find_index(s)%>'

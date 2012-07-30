@@ -91,7 +91,7 @@ Scrollable.prototype = {
   },
 
   onTouchEnd: function(e) {
-    var speed = 300;
+    var speed = 200;
     var destination = this.deltaY;
     this.topPosition = destination;
     if(-this.container.offsetHeight/3 < this.deltaY &&
