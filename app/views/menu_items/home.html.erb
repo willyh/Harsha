@@ -1,9 +1,1 @@
-<%= link_to("Log Out", logout_path) if admin? %>
-<p>This weeks special is the Spanish bistro sub! Inside of a warm baguette we have layered sweet ham, spicy capacola ham and a rich salami on top of a smear of goat cheese and then crowned it with caramelized onions  and spinach. Cool off with a tasty float! The Moto Cafe has Orange Cream, Cream Soda, Black Cherry and Root beer floats. We also carry a wide variety of cold drinks. 
-</p>
-<p>The Moto Cafe is expanding its hours! Starting August 6th we be serving lunch from 11:00am - 2:00pm to better accommodate our guests.
-      </p>
-
-
-      <p>We hope to see you at the Moto Cafe!</p>
-
+      <%= @settings.home_page_text.html_safe %>

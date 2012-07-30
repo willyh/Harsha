@@ -23,6 +23,8 @@ DinerApp::Application.routes.draw do
   end
   resources :sessions, :only => [:new, :create, :destroy]
 
+  resources :settings
+
   match '/payment_notifications',	:to => 'payment_notification#create'
   match '/home',	:to => 'menu_items#home'
   match '/menu', 	:to => 'menu_items#index'

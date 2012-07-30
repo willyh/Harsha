@@ -95,6 +95,7 @@ class MenuItemsController < ApplicationController
 
   def home
     @head = "Moto Cafe"
+    @settings = Setting.first
   end
 
   def toggle_stock 

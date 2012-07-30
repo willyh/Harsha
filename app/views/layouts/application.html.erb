@@ -57,7 +57,7 @@
   <%= yield %>
 </div>
 <div class="sticky navigation-bar">
-	<div class="nav_item" onclick="location.href='<%=home_url%>';">
+  <div class="nav_item" onclick="location.href='<%=admin? ? edit_setting_url(1) : home_url%>';">
     Home
   </div>
 <% unless admin? %>
