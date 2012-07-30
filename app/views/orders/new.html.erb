@@ -1,20 +1,49 @@
 <script type="text/javascript">
+  function hideItems(list, index) {
+    for(i = index+1; jQuery(list.get(i)).is('li') && i < list.length; i++)
+    {
+      jQuery(list.get(i)).addClass('hidden');
+    }
+  }
+  function toggleItems(list, index) {
+    for(i = index+1; jQuery(list.get(i)).is('li') && i < list.length; i++)
+    {
+      var item = jQuery(list.get(i));
+      if(item.hasClass('hidden')){
+        item.show(500);
+        item.removeClass('hidden');
+      }
+      else
+      {
+        item.hide(500);
+        item.addClass('hidden');
+      }
+    }
+  }
   jQuery(document).ready(function() {
       jQuery('a').bind('mouseup tap', function(event){
         return false;
+      });
+      var slider = jQuery('.item-names').children().get(0);
+      var sliderList = jQuery(jQuery(slider).children().get(0)).children();
+      jQuery(sliderList.parent()).find('h1').each(function(){
+        hideItems(sliderList, sliderList.index(this));
+        jQuery(this).bind('click', function() {
+          toggleItems(sliderList, sliderList.index(this));
+          });
       });
   });
 </script>
 
 <div class="item-names">
-  <div id='slider'>
+  <div class='scrollable'>
     <ul>
-      <h1>Order</h1>
+      <h1>Order<%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
       <li id="order" class="item-name">
         Your Order
       </li>
     <% @categories.each do |cat| %>
-      <h1><%=cat.name%></h1>
+      <h1><%=cat.name%><%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
         <% cat.menu_items.each do |item| %>
           <li id="<%= item.id %>" class="item-name">
             <%= item.name %>

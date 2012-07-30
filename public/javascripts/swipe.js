@@ -246,7 +246,8 @@ Swipe.prototype = {
       this.lastTick = now;
       this.lastY = this.deltaY;
 
-      var top_dist = this.container.offsetTop - this.slides[this.index].offsetTop;
+      var top_dist =
+        this.container.offsetTop - this.startPosition(this.index);
 
       // translate immediately 1-to-1
       this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(0,' + (this.deltaY + top_dist) + 'px,0)';

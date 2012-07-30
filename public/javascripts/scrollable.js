@@ -59,7 +59,7 @@ Scrollable.prototype = {
       time: (Number (new Date() ))
     };
 
-    this.deltaY = 0;
+    this.deltaY = this.start.pageY - e.touches[0].pageY;
 
     // estimate velocity
     this.lastTick = Number( new Date() );

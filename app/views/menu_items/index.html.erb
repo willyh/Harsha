@@ -11,7 +11,7 @@
 
 <div id="item-view" class="sticky floaty-box">
   <div class="scrollable">
-  <div class="new-item_info item-info scrollable">
+  <div class="new-item_info item-info">
       <% form_for(@new_item, :html => {:multipart => true}) do |f| %>
 
         <div class="frame">
@@ -89,6 +89,7 @@
         <% end %>
               <%=button_to "Delete", item, :method => :delete %>
           </div>
+        </div>
       <% end %>
     <% end %>
   </div>
