@@ -1,31 +1,42 @@
 class Order < ActiveRecord::Base
   has_many :selections
   has_many :menu_items, :through => :selections
+  has_one :payment_notification
+
+  before_create :on_init
 
   attr_accessible :customer_name, :pickup_time, :price
 
-  def paypal_url(return_url, notify_url)
+  def paypal_encrypted(return_url, notify_url)
     values = {
-      :business => 'willyh_1311952951_per@gmail.com',
+      :business => APP_CONFIG['paypal_email'],
       :cmd => '_cart',
       :upload => 1,
       :return => return_url,
       :invoice => id,
       :no_shipping => 1,
       :no_note => 1,
-      :notify_url => notify_url
+      :notify_url => notify_url,
+      :cert_id => APP_CONFIG['paypal_cert_id']
     }
-    arr = items.split("\n")
-    arr.each_with_index do |item_name, index|
-        item = MenuItem.find_by_name(item_name)
+    menu_items.each do |item|
       values.merge!({
-        "amount_#{index+1}" => item.price,
-        "item_name_#{index+1}"=> item.name,
-        "item_number_#{index+1}" => item.id,
-        "quantity_#{index+1}" => 1
+        "amount_#{item.id}" => item.price,
+        "item_name_#{item.id}"=> item.name,
+        "item_number_#{item.id}" => item.id,
+        "quantity_#{item.id}" => 1
       })
     end
-    "https://www.sandbox.paypal.com/cgi-bin/webscr?"+values.map {|k,v|"#{k}=#{v}" }.join("&")
+    encrypt_for_paypal(values)
+  end
+
+  PAYPAL_CERT_PEM = File.read("#{Rails.root}/certs/paypal_cert.pem")
+  APP_CERT_PEM = File.read("#{Rails.root}/certs/app_cert.pem")
+  APP_KEY_PEM = File.read("#{Rails.root}/certs/app_key.pem")
+
+  def encrypt_for_paypal(values)
+    signed = OpenSSL::PKCS7::sign(OpenSSL::X509::Certificate.new(APP_CERT_PEM), OpenSSL::PKey::RSA.new(APP_KEY_PEM, ''), values.map { |k, v| "#{k}=#{v}" }.join("\n"), [], OpenSSL::PKCS7::BINARY)
+    OpenSSL::PKCS7::encrypt([OpenSSL::X509::Certificate.new(PAYPAL_CERT_PEM)], signed.to_der, OpenSSL::Cipher::Cipher::new("DES3"), OpenSSL::PKCS7::BINARY).to_s.gsub("\n", "")
   end
 
   def format_price price
@@ -64,6 +75,13 @@ class Order < ActiveRecord::Base
   def print
     self.completed = true
     self.save(false)
+  end
+
+  private
+
+  def on_init
+    self.price = 0
+    self.secret = rand(36**8).to_s(36)
   end
 
 end

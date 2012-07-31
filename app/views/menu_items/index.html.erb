@@ -11,7 +11,7 @@
 
 <div id="item-view" class="sticky floaty-box">
   <div class="scrollable">
-  <div class="new-item_info item-info">
+    <div class="new-item_info item-info">
       <% form_for(@new_item, :html => {:multipart => true}) do |f| %>
 
         <div class="frame">
@@ -28,6 +28,7 @@
             <div>
               <%= f.label "Photo:" %>
               <%= f.file_field :photo %>
+              <span></span>
             </div>
           <div><%=f.submit %></div>
         </div>
@@ -40,6 +41,7 @@
         </div>
 
       <% end %>
+    </div>
   </div>
     <% @categories.each do |cat| %>
       <% cat.menu_items.each do |item| %>
@@ -74,6 +76,7 @@
               <div>
                 <%= f.label "Photo:" %>
                 <%= f.file_field :photo %>
+                <span><%= item.photo.path %></span>
               </div>
               <div><%=f.submit%></div>
             </div>

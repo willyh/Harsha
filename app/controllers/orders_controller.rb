@@ -6,7 +6,7 @@ class OrdersController < ApplicationController
     if session[:order] && Order.exists?(session[:order])
       @order = Order.find(session[:order]) 
     else
-      @order = Order.create(:price => 0)
+      @order = Order.create()
     end
     session[:order] = @order.id
     @categories = Category.all
@@ -15,36 +15,26 @@ class OrdersController < ApplicationController
     redirect_to new_order_path
   end
 
-   def create
-    @order = Order.create(params[:order])
-    return
-    if admin?
-        @order.save(false)
-        @order.print
-        render new_order_path
+  def create
+    if Order.exists?(params[:id]) && Order.find(params[:id]).completed
+      sessions[:order] = nil
+      redirect_to new_order_path
+    end
+  end
+
+  def update
+    if Order.exists?(params[:id])
+     @order = Order.find(params[:id])
+     @order.update_attributes(params[:order])
+     redirect_to @order
     else
-      if waited_too_long @order
-        flash[:error] = "Please select a time later than #{@order.pickup_time}. We may need more than #{time_to_prepare @order.pickup_time} minutes to prepare your food"
-        @head = "Check Out Our Menu!"
-        render 'new'
-      elsif @order.save()
-        redirect_to @order
-      else
-        @head = 'Check Out Our Menu!"'
-        render 'new'
-      end
+     redirect_to new_order_path
     end
   end
 
   def show
-    redirect_to new_order_path if !params[:id]
-    if !Order.exists?(params[:id])
-      flash[:error] = "404:error order not found "
-      redirect_to home_path
-    else
-      @order = Order.find params[:id]
-      @head = !@order.customer_name.blank? ? "#{@order.customer_name}'s Order" : "Order"
-    end
+    @order = Order.find params[:id]
+    @head = "#{@order.customer_name}'s Order"
   end
 
   def destroy
@@ -77,9 +67,19 @@ class OrdersController < ApplicationController
   end
 
 protected
+  def authorize_order
+    if Order.find(params[:id]).completed
+      unless session[:order] == params[:id] || admin?
+        flash[:error] = "Order already complete"
+        redirect_to new_order_path
+      end
+    end
+  end
+
   def time_to_prepare pickup_time
     return (time_from_string(pickup_time) - (Time.now.utc.hour.hours-4.hours) - Time.now.utc.min.minutes)/60
   end
+
   def waited_too_long order
     time_from_string(@order.pickup_time) <= (Time.now.utc.hour.hours - 4.hours) + Time.now.utc.min.minutes + 3.minutes
   end
@@ -100,7 +100,7 @@ protected
       redirect_to home_path
     else
       unless  admin? || !Order.find(params[:id]).completed
-        flash[:error] = "Cannot delete an order once it has been placed"
+        flash[:error] = "Cannot change an order once it has been placed"
         redirect_to home_path
         false
       end

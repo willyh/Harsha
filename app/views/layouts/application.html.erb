@@ -187,6 +187,11 @@
         }
       });
 
+      jQuery('input[type=file]').change(function(e){
+        $in = jQuery(this);
+        $in.next().html($in.val());
+      });
+
       addSlider();
 
       jQuery(".scrollable").each(function() {

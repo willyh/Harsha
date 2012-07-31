@@ -28,13 +28,14 @@
     }
   }
   jQuery(document).ready(function() {
-      jQuery('.item-names').find('img').bind('mouseup tap', function(event){
+      jQuery('.item-names').find('a').bind('mouseup tap', function(event){
         return false;
       });
       var slider = jQuery('.item-names').children().get(0);
       var sliderList = jQuery(jQuery(slider).children().get(0)).children();
       jQuery(sliderList.parent()).find('h1').each(function(){
         hideItems(sliderList, sliderList.index(this));
+        jQuery(this).css('cursor','default');
         jQuery(this).bind('click', function() {
           toggleItems(sliderList, sliderList.index(this));
           });
@@ -52,14 +53,15 @@
     <% @categories.each do |cat| %>
       <h1><%=cat.name%><%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
         <% cat.menu_items.each do |item| %>
-          <li id="<%= item.id %>" class="item-name">
+          <li id="<%= item.id %>" class="item-name" style='overflow:auto'>
             <%= item.name %>
-            <%=image_tag('plus_sign.jpg',
-                :style => 'float:right',
+            <%= link_to('+','#',{
+                :class => 'link',
+                :style => 'float:right;height:20px;line-height:20px;',
                 :onclick => "jQuery.ajax({url:'#{add_to_order_menu_item_url(item)}',
                                   datatype: 'script',
                                   data: 'id=#{item.id}'
-            });")%>
+            });"})%>
           </li>
         <% end %>
     <% end %>

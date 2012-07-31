@@ -7,13 +7,13 @@ module OrdersHelper
     end
   end
   def available_times
-    times = []
+    times = {}
     now = round_up Time.now.utc - 4.hours
     (1..24).each do |n|
-      prospective_time = format_time((now + (n*time_interval).minutes ).strftime("%I:%M%p"))
-      times << prospective_time unless has_pickup_time? Order.all, prospective_time
+      prospective_time = (now + (n*time_interval).minutes)
+      times[format_time prospective_time] = prospective_time unless has_pickup_time? Order.all, prospective_time
     end 
-    times << "Sorry We're Too Busy at the Moment" if times.empty?
+    times["Sorry We're Too Busy at the Moment"] = "-1" if times.empty?
     times
   end
   def round_up time
@@ -43,47 +43,14 @@ module OrdersHelper
   end
 
   def format_time time
-    return time.slice(1,6) if time.first == "0"
-    time
+    return "" unless time
+    time_s = time.strftime("%I:%M%p")
+    return time_s.slice(1,6) if time_s.first == "0"
+    time_s
   end
 
   def time_interval
     5
   end
 
-  def build_tables(categories)
-    i = 3
-    three_category_sets = {}
-    categories.each do |cat, item|
-      three_category_sets[i/3] ||= []
-      three_category_sets[i/3] << cat
-      i = i+1
-    end
-    tables = {}
-    tables[:category_sets] = three_category_sets
-    three_category_sets.each do |index, category_set|
-      tables[index] = build_table(category_set)
-    end
-    tables
-  end
-
-  def build_table categories
-    table = {}
-    table[1] = {}
-    MenuItem.all.each do |item|
-      check 1, table, item, categories unless item.out_of_stock
-    end
-    table
-  end
-
-  def check index, table, item, categories
-    if categories.include? item.category
-      table[index] ||= {} 
-      if table[index][item.category]
-        check index + 1, table, item, categories
-      else
-        table[index][item.category] = item
-      end
-    end
-  end
 end

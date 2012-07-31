@@ -9,6 +9,7 @@ class MenuItem < ActiveRecord::Base
 
   has_attached_file :photo,
     :styles => {
+      :icon => "50x50!",
       :small => "160x",
       :medium => "380x300",
       :large => "640x500" }

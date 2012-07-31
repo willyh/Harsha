@@ -6,10 +6,6 @@
       <%= f.text_field :customer_name, :value=>order.customer_name, :class => 'field' %>
       <br />
 
-      <label>Pickup Time:</label>
-      <%= select_tag(:pickup_time, options_for_select(available_times)) %>
-      <br />
-
       <%= f.label "Total:" %>
       <%= format_price order.price %>
 
@@ -17,6 +13,8 @@
       <%= render 'orders/order_item',
                   {:s => s, :order => order} %>
     <% end %>
+    <%= link_to_function "Proceed", "$(this).up('form').submit()", :class => 'link' if order.menu_items.count > 0 && !order.completed%>
+    <%= link_to "View Order", order, :class => 'link' if order.completed %>
     </div>
   </ul>
 <% end %>

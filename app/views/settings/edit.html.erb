@@ -1,12 +1,14 @@
-<%= link_to("Log Out", logout_path) if admin? %>
-<% form_for @settings do |f| %>
-  <%= f.text_area :home_page_text, :value => @settings.home_page_text %>
-  <br />
-  <%= f.label 'Opening Time:' %>
-  <%= f.text_field :opens_at, :value => @settings.opens_at %>
-  <br />
-  <%= f.label 'Closing Time:' %>
-  <%= f.text_field :closes_at, :value => @settings.closes_at %>
-  <br />
-  <%= f.submit 'Save' %>
-<% end %>
+<div class="scrollable">
+  <%= link_to("Log Out", logout_path), :class => 'link' if admin? %>
+  <% form_for @settings do |f| %>
+    <%= f.text_area :home_page_text, :value => @settings.home_page_text %>
+    <br />
+    <%= f.label 'Opening Time:' %>
+    <%= f.text_field :opens_at, :value => @settings.opens_at %>
+    <br />
+    <%= f.label 'Closing Time:' %>
+    <%= f.text_field :closes_at, :value => @settings.closes_at %>
+    <br />
+    <%= f.submit 'Save' %>
+  <% end %>
+</div>

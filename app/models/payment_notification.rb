@@ -6,7 +6,7 @@ class PaymentNotification < ActiveRecord::Base
   private
 
   def mark_order_as_completed
-    if status == "Completed"
+    if status == "Completed"#&& params[:secret] == APP_CONFIG[:paypal_secret]
       order.complete
     end
   end
