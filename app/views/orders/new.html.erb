@@ -55,6 +55,7 @@
           <li id="<%= item.id %>" class="item-name">
             <%= item.name %>
             <%=image_tag('plus_sign.jpg',
+                :style => 'float:right',
                 :onclick => "jQuery.ajax({url:'#{add_to_order_menu_item_url(item)}',
                                   datatype: 'script',
                                   data: 'id=#{item.id}'
