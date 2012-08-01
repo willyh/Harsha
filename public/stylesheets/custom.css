@@ -12,6 +12,9 @@ body {
   margin-left:auto;
   margin-right:auto;
 }
+body[orient="landscape"] {
+  width:100%;
+}
 html {
   height: 100%;
 }
@@ -189,7 +192,8 @@ proceed:hover {background: #006600;}
 other:hover {background: #666600;}
 
 .field {
-  width: 80%;
+  width: 100%;
+  padding:0;
 }
 
 .entry {
@@ -322,4 +326,12 @@ hidden {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
+  background-color:#CCC;
+}
+
+.page-divider {
+  display:table-cell;
+  vertical-align:top;
+  overflow:hidden;
+  word-wrap:break-word;
 }

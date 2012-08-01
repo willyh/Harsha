@@ -1,15 +1,17 @@
-  <div class="item-names">
+<div style="display:table;width:100%;table-layout:fixed;">
+<div class="item-names page-divider" style="width:40%;">
   <% form_for(@menu_item) do |f| %>
     <%= render 'shared/error_messages', :object => f.object %>
   <% end %>
-  <div id='slider'>
+  <div class='scrollable'>
     <%= render 'item_list', :@categories => @categories %>
   </div>
 </div>
 
 <!-- floaty display -->
 
-<div id="item-view" class="sticky floaty-box">
+  <div class="page-divider">
+  <div id="item-view" class="floaty-box">
   <div class="scrollable">
     <div class="new-item_info item-info">
       <% form_for(@new_item, :html => {:multipart => true}) do |f| %>
@@ -64,12 +66,14 @@
               <div>
                 <div id="in_stock_<%=item.id%>" class="<%= item.out_of_stock ? "disabled" : "in_stock"%>"
                   onclick="jQuery.ajax({url:'<%=toggle_stock_menu_item_url(item)%>',
-                                    datatype: 'script'});">
+                                    datatype: 'script',
+                                    type: 'PUT'});">
                   In Stock
                 </div>
                 <div id="out_of_stock_<%=item.id%>" class="<%= item.out_of_stock ? "out_of_stock" : "disabled"%>"
                   onclick="jQuery.ajax({url:'<%=toggle_stock_menu_item_url(item)%>',
-                                    datatype: 'script'});">
+                        datatype: 'script',
+                        type: 'PUT'});">
                   Out of Stock
                 </div>
               </div>
@@ -97,6 +101,8 @@
     <% end %>
   </div>
   </div>
+  </div>
+</div>
 </div>
 
 <!-- /floaty display -->

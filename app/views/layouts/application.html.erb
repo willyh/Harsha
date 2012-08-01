@@ -5,6 +5,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript">$.noConflict();</script>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
+  <%= javascript_include_tag 'protect_from_forgery' %>
   <%= stylesheet_link_tag 'blueprint/screen', :media => 'screen' %>
   <%= stylesheet_link_tag 'blueprint/print', :media => 'print' %>
   <%= stylesheet_link_tag 'print', :media => 'print' %>
@@ -87,9 +88,6 @@
     function onResize() {
       var headerHeight = jQuery('.header').outerHeight();
       var bottomHeight = jQuery('.navigation-bar').outerHeight();
-      var right_pos = jQuery("body").outerWidth();
-      var left_pos = jQuery("body").offset().left;
-      jQuery(".floaty-box").css('left',left_pos+right_pos-jQuery(".floaty-box").outerWidth());
       jQuery('.scrollable').each(function() {
           $this = jQuery(this);
           $this.css('max-height',window.innerHeight-headerHeight-bottomHeight+'px');
@@ -199,18 +197,36 @@
       });
 
       onResize();
+
+      window.onorientationchange = function() {
+        switch(window.orientation)
+        {
+          case -90:
+          case 90:
+            if(window.screen.height >= 700)
+              body.width('700');
+            else
+              body.width(window.screen.height);
+            break;
+          default:
+            if(window.screen.width >= 700)
+              body.width('700');
+            else
+              body.width(window.screen.width);
+            break;
+        }
+        var border = parseInt(jQuery(".header").css("border-left-width"));
+        var padding = parseInt(jQuery('.header').css('padding-left'));
+        jQuery(".header").width(body.width()-2*border-2*padding);
+        jQuery(".navigation-bar").width(body.width());
+        onResize();
+      };
       
       window.setTimeout(function(){
         jQuery(".flash").hide('slow');
       },1500);
 
       fixFocusForMobile();
-
-      var right_pos = body.outerWidth();
-      var left_pos = body.offset().left;
-      jQuery(".floaty-box").css('width', right_pos*.6+"px");
-      jQuery(".floaty-box").css('left',left_pos+right_pos-jQuery(".floaty-box").outerWidth());
-      jQuery('.floaty-box').css('top',jQuery('.header').outerHeight())+"px";
 
       $window.resize(function() {
         onResize();

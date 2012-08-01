@@ -3,9 +3,9 @@ class Order < ActiveRecord::Base
   has_many :menu_items, :through => :selections
   has_one :payment_notification
 
-  before_create :on_init
+  after_initialize :init
 
-  attr_accessible :customer_name, :pickup_time, :price
+  attr_accessible :customer_name, :pickup_time, :price, :completed
 
   def paypal_encrypted(return_url, notify_url)
     values = {
@@ -79,9 +79,10 @@ class Order < ActiveRecord::Base
 
   private
 
-  def on_init
-    self.price = 0
-    self.secret = rand(36**8).to_s(36)
+  def init
+    self.price ||= 0
+    self.secret ||= rand(36**8).to_s(36)
+    self.completed ||= false
   end
 
 end

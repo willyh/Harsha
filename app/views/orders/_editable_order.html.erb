@@ -1,20 +1,31 @@
-<%= form_for order do |f| %>
   <ul id="order_items">
     <div class="description">
       <h2>Your Order</h2>
       <label>Your Name:</label>
-      <%= f.text_field :customer_name, :value=>order.customer_name, :class => 'field' %>
+      <input class="field" id="order_customer_name" name="order[customer_name]"
+      size="30" type="text" value="<%=@order.customer_name%>"
+      onblur="jQuery.ajax({url:'<%= update_name_order_url(@order) %>',
+        datatype: 'script',
+        type: 'PUT',
+        data: 'order[customer_name]='+jQuery(this).val()})">
       <br />
 
-      <%= f.label "Total:" %>
-      <%= format_price order.price %>
+      <%= label_tag "Total:" %>
+      <%= format_price @order.price %>
 
-    <% order.selections.each do |s|%>
+    <% @order.selections.each do |s|%>
       <%= render 'orders/order_item',
-                  {:s => s, :order => order} %>
+                  {:s => s, :order => @order} %>
     <% end %>
-    <%= link_to_function "Proceed", "$(this).up('form').submit()", :class => 'link' if order.menu_items.count > 0 && !order.completed%>
-    <%= link_to "View Order", order, :class => 'link' if order.completed %>
+    <% unless @order.completed || @order.price <= 0 %>
+      <% form_tag APP_CONFIG['paypal_url'] do %>
+        <%= hidden_field_tag :cmd, "_s-xclick" %>
+        <%= hidden_field_tag :first_name %>
+        <%= hidden_field_tag :last_name %>
+        <%= hidden_field_tag :encrypted, @order.paypal_encrypted(payment_notifications_url+"?id=#{@order.id}&key=#{@order.secret}", payment_notifications_url(:secret => APP_CONFIG['paypal_secret'])) %>
+        <%= link_to_function "Pay Now", "$(this).up('form').submit()", :class => 'link'%>
+      <% end %>
+    <% end %>
+    <%= link_to "View Order", @order, :class => 'link' if @order.completed %>
     </div>
   </ul>
-<% end %>

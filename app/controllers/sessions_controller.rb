@@ -7,8 +7,10 @@ class SessionsController < ApplicationController
     session[:password] = params[:session][:password]
     if session[:password] == "kittens"
       flash[:success] = "Welcome Back Captain!"
+      redirect_to edit_setting_path(1)
+    else
+      redirect_to home_path
     end
-    redirect_to home_path
   end
 
   def destroy

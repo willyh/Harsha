@@ -3,7 +3,8 @@
   <%=format_price s.menu_item.price%>
   <a class="link" onclick="jQuery.ajax({url:'<%=remove_from_order_menu_item_url(s.menu_item)%>',
                         datatype: 'script',
-                        data: 'selection=<%=order.selections.find_index(s)%>'
+                        data: 'selection=<%=order.selections.find_index(s)%>',
+                        type: 'PUT'
   });">
   remove item
   </a>

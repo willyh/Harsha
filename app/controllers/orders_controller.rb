@@ -2,14 +2,18 @@ class OrdersController < ApplicationController
   helper_method :build_menu
   before_filter :completed_yet, :except => [:new, :create, :show, :complete ]
   def new
-    @head = "Check Out Our Menu!"
     if session[:order] && Order.exists?(session[:order])
       @order = Order.find(session[:order]) 
     else
       @order = Order.create()
     end
     session[:order] = @order.id
-    @categories = Category.all
+    @categories = Category.all.select{|c|
+      c.menu_items.select{|m|
+        m.out_of_stock == false
+      }.empty? == false
+    }
+    @head = "Check Out Our Menu!"
   end
   def index
     redirect_to new_order_path
@@ -17,24 +21,29 @@ class OrdersController < ApplicationController
 
   def create
     if Order.exists?(params[:id]) && Order.find(params[:id]).completed
-      sessions[:order] = nil
       redirect_to new_order_path
     end
   end
 
-  def update
+  def update_name
+      se = session[:order]
     if Order.exists?(params[:id])
-     @order = Order.find(params[:id])
-     @order.update_attributes(params[:order])
-     redirect_to @order
+      @order = Order.find(params[:id])
+      id = @order.id
+      @order.update_attributes(params[:order])
+      names = @order.customer_name.split(" ")
+      render(:update) {|page|
+        page << "jQuery('#first_name').val('#{names[0]}')" if names.count > 0
+        page << "jQuery('#last_name').val('#{names[-1]}')" if names.count > 1
+      }
     else
-     redirect_to new_order_path
+      render :nothing => true
     end
   end
 
   def show
     @order = Order.find params[:id]
-    @head = "#{@order.customer_name}'s Order"
+    @head = params[:id] == session[:order].to_s ? "#{@order.customer_name}'s Order" : "Order #{params[:id]}"
   end
 
   def destroy

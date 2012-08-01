@@ -11,7 +11,8 @@
           {:onBlur => "jQuery.ajax({
                           url:'#{change_order_category_url(cat)}',
                           data: 'display_order='+this.value,
-                          datatype: 'script'
+                          datatype: 'script',
+                          type: 'PUT'
                         });",
           :style => "width:20px;"}
          %>
@@ -23,7 +24,8 @@
               {:onBlur => "jQuery.ajax({
                               url:'#{change_order_menu_item_url(item)}',
                               data: 'display_order='+this.value,
-                              datatype: 'script'
+                              datatype: 'script',
+                              type: 'PUT'
                             });",
               :style => "width:20px;"}
              %>

@@ -140,7 +140,7 @@ class MenuItemsController < ApplicationController
     render(:update) {|page|
       page << "jQuery('.item-info').addClass('hidden')"
       page << "jQuery('#order_info').removeClass('hidden')"
-      page.replace_html 'order_info', {:partial => "orders/editable_order", :locals => {:order => o}}
+      page.replace_html 'order_info', {:partial => "orders/editable_order", :locals => {:@order => o}}
       page << "onResize()"
       page << "fixFocusForMobile()"
     }
@@ -159,7 +159,7 @@ class MenuItemsController < ApplicationController
     o.save
 
     render(:update) {|page|
-      page.replace_html 'order_info', {:partial => "orders/editable_order", :locals => {:order => o}}
+      page.replace_html 'order_info', {:partial => "orders/editable_order", :locals => {:@order => o}}
       page << "onResize()"
       page << "fixFocusForMobile()"
     }

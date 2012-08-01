@@ -11,18 +11,6 @@
       <div style="height:20px;"></div>
 
       <%= "<h2 style='font-size:15px;text-align:center'>Payment Accepted</h2>".html_safe if @order.completed%>
-      <% unless @order.completed %>
-        <% form_tag APP_CONFIG['paypal_url'] do %>
-          <%= hidden_field_tag :cmd, "_s-xclick" %>
-          <% if @order.customer_name %>
-            <% names = @order.customer_name.split(" ") %>
-            <%= hidden_field_tag :first_name, names.first if names.count > 0%>
-            <%= hidden_field_tag :last_name, names[1] if names.count > 1 %>
-          <% end %>
-          <%= hidden_field_tag :encrypted, @order.paypal_encrypted(payment_notifications_url+"?id=#{@order.id}&key=#{@order.secret}", payment_notifications_url(:secret => APP_CONFIG['paypal_secret'])) %>
-          <%= link_to_function "Pay Now", "$(this).up('form').submit()", :class => 'link'%>
-        <% end %>
-      <% end %>
     </div>
   </div>
 </div>

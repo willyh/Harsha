@@ -10,9 +10,7 @@
     <%= f.password_field :password, :class => "name_text_field" %><br />
   </div>
   <div class"actions">
-    <proceed>
-      <%= link_to_function "Submit", "$(this).up('form').submit()" %>
-    </proceed>
+    <%= link_to_function "Submit", "$(this).up('form').submit()", :class=>'link' %>
     <hidden><%= f.submit %></hidden>
   </div>
 <% end %>

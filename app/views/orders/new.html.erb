@@ -43,41 +43,44 @@
   });
 </script>
 
-<div class="item-names">
-  <div class='scrollable'>
-    <ul>
-      <h1>Order<%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
-      <li id="order" class="item-name">
-        Your Order
-      </li>
-    <% @categories.each do |cat| %>
-      <h1><%=cat.name%><%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
-        <% cat.menu_items.each do |item| %>
-          <li id="<%= item.id %>" class="item-name" style='overflow:auto'>
-            <%= item.name %>
-            <%= link_to('+','#',{
-                :class => 'link',
-                :style => 'float:right;height:20px;line-height:20px;',
-                :onclick => "jQuery.ajax({url:'#{add_to_order_menu_item_url(item)}',
-                                  datatype: 'script',
-                                  data: 'id=#{item.id}'
-            });"})%>
-          </li>
-        <% end %>
-    <% end %>
-    </ul>
+<div style="display:table;width:100%;table-layout:fixed;">
+  <div class="item-names page-divider" style="width:40%;">
+    <div class='scrollable'>
+      <ul>
+        <h1>Order<%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
+        <li id="order" class="item-name">
+          Your Order
+        </li>
+      <% @categories.each do |cat| %>
+        <h1><%=cat.name%><%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
+          <% cat.menu_items.select{|m|m.out_of_stock == false}.each do |item| %>
+            <li id="<%= item.id %>" class="item-name" style='overflow:auto'>
+              <%= item.name %>
+              <%= link_to('+','#',{
+                  :class => 'link',
+                  :style => 'float:right;height:20px;line-height:20px;',
+                  :onclick => "jQuery.ajax({url:'#{add_to_order_menu_item_url(item)}',
+                                    datatype: 'script',
+                                    data: 'id=#{item.id}',
+                                    type: 'PUT'
+              });"})%>
+            </li>
+          <% end %>
+      <% end %>
+      </ul>
+    </div>
   </div>
-</div>
 
 <!-- floaty display -->
-  <div id="item-view" class="sticky floaty-box" style="float:right;">
+  <div class="page-divider">
+    <div id="item-view" class="floaty-box">
     <div class='scrollable'>
     <div id="order_info" class="item-info order_info" >
-      <%=render 'editable_order', {:order => @order} %>
+      <%=render 'editable_order', {:@order => @order} %>
     </div>
   </div>
     <% @categories.each do |cat| %>
-      <% cat.menu_items.each do |item| %>
+      <% cat.menu_items.select{|m|m.out_of_stock == false}.each do |item| %>
         <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info scrollable">
           <div class="frame">
             <%= image_tag item.photo.url(:small), :class => 'mobile' if item.photo.exists? %>
@@ -96,4 +99,6 @@
       <% end %>
     <% end %>
   </div>
+  </div>
+</div>
 <!-- floaty display -->
