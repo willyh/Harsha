@@ -3,7 +3,7 @@
   <% form_for(@menu_item) do |f| %>
     <%= render 'shared/error_messages', :object => f.object %>
   <% end %>
-  <div class='scrollable'>
+  <div id="item_list" class='scrollable'>
     <%= render 'item_list', :@categories => @categories %>
   </div>
 </div>
