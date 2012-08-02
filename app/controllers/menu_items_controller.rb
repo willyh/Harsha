@@ -188,7 +188,6 @@ class MenuItemsController < ApplicationController
     end
     render(:update) {|page|
       page.replace_html "#{@menu_item.id}_options", {:partial => "editable_options", :locals => {:item => @menu_item}}
-      page << "initAddOptions()"
       page << "fixFocusForMobile()"
     }
   end
@@ -201,7 +200,6 @@ class MenuItemsController < ApplicationController
     end
     render(:update) {|page|
       page.replace_html "#{@menu_item.id}_options", {:partial => "editable_options", :locals => {:item => @menu_item}}
-      page << "initAddOptions()"
       page << "fixFocusForMobile()"
     }
   end

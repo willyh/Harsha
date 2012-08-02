@@ -190,14 +190,6 @@
 
 
 <script type="text/javascript">
-  function initAddOptions() {
-    jQuery('#options_select').each(function() {
-      jQuery(this).next().html('Add '+jQuery(this).find(":selected").text()+' as an option');
-    });
-  }
-  jQuery(document).ready(function() {
-      initAddOptions();
-  });
   jQuery("#new-item").mouseup(function() {
     jQuery(".item-info").addClass('hidden');
     jQuery(".new-item_info").removeClass('hidden');
