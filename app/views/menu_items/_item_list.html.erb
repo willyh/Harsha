@@ -1,36 +1,38 @@
-    <ul>
-      <h1>
-        New Item
-      </h1>
-      <li id="new-item" class="item-name">
-        New Item
-      </li>
-    <% @categories.each do |cat| %>
-      <h1 id="c<%=cat.id%>">
-        <%= text_field_tag :display_order, cat.display_order,
+<ul>
+  <h1>
+    New Item
+  </h1>
+  <li id="new-item" class="item-name">
+    New Item
+  </li>
+<% @categories.each do |cat| %>
+  <h1 id="c<%=cat.id%>">
+    <%= text_field_tag :display_order, cat.display_order,
+      {:onBlur => "jQuery.ajax({
+                      url:'#{change_order_category_url(cat)}',
+                      data: 'display_order='+this.value,
+                      datatype: 'script',
+                      type: 'PUT'
+                    });",
+                    :style => "width:20px;",
+                    :class => 'category-order'}
+     %>
+     <%=cat.name%>
+   </h1>
+    <% cat.menu_items.each do |item| %>
+      <li id="<%= item.id %>" class="item-name <%= 'dim' if item.out_of_stock %>">
+        <%= text_field_tag :display_order, item.display_order,
           {:onBlur => "jQuery.ajax({
-                          url:'#{change_order_category_url(cat)}',
+                          url:'#{change_order_menu_item_url(item)}',
                           data: 'display_order='+this.value,
                           datatype: 'script',
                           type: 'PUT'
                         });",
-          :style => "width:20px;"}
+                        :style => "width:20px;",
+                        :class => 'item-order'}
          %>
-         <%=cat.name%>
-       </h1>
-        <% cat.menu_items.each do |item| %>
-          <li id="<%= item.id %>" class="item-name">
-            <%= text_field_tag :display_order, item.display_order,
-              {:onBlur => "jQuery.ajax({
-                              url:'#{change_order_menu_item_url(item)}',
-                              data: 'display_order='+this.value,
-                              datatype: 'script',
-                              type: 'PUT'
-                            });",
-              :style => "width:20px;"}
-             %>
-            <%= item.name %>
-          </li>
-        <% end %>
+        <%= item.name %>
+      </li>
     <% end %>
-    </ul>
+<% end %>
+</ul>

@@ -16,6 +16,7 @@ class CategoriesController < ApplicationController
         page << 'window.scrollTo(0,0)'
         page << 'fixFocusForMobile()'
         page << 'bindListElements()'
+        page << 'addDisplayOrderListeners()'
       }
     end
   end

@@ -157,9 +157,6 @@ p {
   width: 40%;
 }
 
-.item-info {
-}
-
 p.large-item-info {
 }
 
@@ -200,7 +197,13 @@ other:hover {background: #666600;}
   width: 25%;
 }
 
+.dim {
+  background-color: #AAA !important;
+  box-shadow:none;
+}
+
 div.out_of_stock {
+  cursor:default;
   display: inline-block;
   background: #fff;
   border-style: solid;
@@ -211,14 +214,12 @@ div.out_of_stock {
   margin:auto;
 }
 
-div.out_of_stock a{
-  color: #CC0033;
-}
 div.out_of_stock:hover {
   background: #aaa;
   border-color: #aa0011;
 }
 div.in_stock {
+  cursor:default;
   display: inline-block;
   background: #fff;
   border-style: solid;
@@ -228,13 +229,12 @@ div.in_stock {
   color: #009966;
   margin: auto;
 }
-div.in_stock a {
-}
 div.in_stock:hover {
   background: #aaa;
   border-color: #007744;
 }
 div.disabled {
+  cursor:default;
   display: inline-block;
   background: #aaa;
   border-style: solid;

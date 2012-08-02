@@ -1,0 +1,16 @@
+<ul>
+  <h1>
+    New Option
+  </h1>
+  <li id="new-option" class="item-name">
+    New Option
+  </li>
+  <h1>
+    Options
+  </h1>
+  <% @options.each do |item| %>
+    <li id="o<%= item.id %>" class="item-name <%= 'dim' if item.out_of_stock %>">
+      <%= item.name %>
+    </li>
+  <% end %>
+</ul>

@@ -6,33 +6,41 @@ class MenuItemsController < ApplicationController
     @category = Category.new
     @head = "Check Out Your Menu"
     @categories = Category.all
+    @options = Option.all
   end
 
   def create
     #@menu_item and @new_item will be the same unless returning from
     #a failed update then new_item will be new and
     #menu_item will be the item that failed to update
-    
+
+    @categories = Category.all
+    @options = Option.all
+    @new_item = MenuItem.new(params[:menu_item])
+    @menu_item = @new_item
 
     category = params[:menu_item][:category]
+    if category.empty?
+      @new_item.save
+      @head = "Error"
+      return render 'index' 
+    end
     if !Category.exists?(:name => category)
       @category =  Category.new(:name => category, :display_order => Category.count+1)
       if !@category.save
-        @menu_item = MenuItem.new(params[:menu_item])
         @head = "Error"
         return render 'index'
       end
     end
     @category = Category.find_by_name(category)
-    @new_item = MenuItem.new(params[:menu_item])
     @new_item.out_of_stock = true
     @new_item.display_order = @category.menu_items.count+1
+    @new_item.category = @category
     if @new_item.save
       @category.menu_items << @new_item
       flash[:success] = "#{@new_item.name} successfully added to menu!"
       redirect_to menu_path
     else
-      @menu_item = @new_item
       @head = "Error"
       render 'index'
     end
@@ -105,6 +113,11 @@ class MenuItemsController < ApplicationController
     render(:update) {|page|
       page << "jQuery('#in_stock_#{params[:id]}').attr('class','#{@menu_item.out_of_stock ? "disabled" : "in_stock"}')"
       page << "jQuery('#out_of_stock_#{params[:id]}').attr('class','#{@menu_item.out_of_stock ? "out_of_stock" : "disabled"}')"
+      if !@menu_item.out_of_stock
+        page << "jQuery('##{params[:id]}').removeClass('dim')"
+      else
+        page << "jQuery('##{params[:id]}').addClass('dim')"
+      end
     }
   end
 
@@ -163,5 +176,11 @@ class MenuItemsController < ApplicationController
       page << "onResize()"
       page << "fixFocusForMobile()"
     }
+  end
+  
+  def add_option
+  end
+
+  def remove_option
   end
 end

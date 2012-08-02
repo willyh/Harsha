@@ -14,6 +14,7 @@ class MenuItem < ActiveRecord::Base
       :medium => "380x300",
       :large => "640x500" }
 
+  validates :category_id, :presence => true
   validates :name, :presence => true,
 		:uniqueness => { :case_sensitive => false }
 

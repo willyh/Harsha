@@ -1,10 +1,11 @@
 <div style="display:table;width:100%;table-layout:fixed;">
 <div class="item-names page-divider" style="width:40%;">
+  <div id="item_list" class='scrollable'>
   <% form_for(@menu_item) do |f| %>
     <%= render 'shared/error_messages', :object => f.object %>
   <% end %>
-  <div id="item_list" class='scrollable'>
     <%= render 'item_list', :@categories => @categories %>
+    <%= render 'options/option_list', :@options => @options %>
   </div>
 </div>
 
@@ -12,8 +13,7 @@
 
   <div class="page-divider">
   <div id="item-view" class="floaty-box">
-  <div class="scrollable">
-    <div class="new-item_info item-info">
+    <div class="new-item_info scrollable item-info">
       <% form_for(@new_item, :html => {:multipart => true}) do |f| %>
 
         <div class="frame">
@@ -25,7 +25,7 @@
           <% end %>
           <%= select_tag(:category_selector, options_for_select(options), :class => 'category_selector') %>
           <hidden class="new_category_field" >
-          <%=f.text_field :category,:class => "field", :value=>@category.name %>
+          <%=f.text_field :category %>
           </hidden>
             <div>
               <%= f.label "Photo:" %>
@@ -38,17 +38,20 @@
           <h2>
             <%= f.text_field :name, :class=>"field", :value=>@new_item.name %>
           </h2>
-          $<%= f.text_field :price, :class=>"field", :value=>@new_item.price %>
+          <div style="display:table;width:100%;">
+            <div class="page-divider">$</div>
+            <div class="page-divider">
+              <%= f.text_field :price, :class=>"field", :style=>"margin:0", :value=>@new_item.price %>
+            </div>
+          </div>
           <%= f.text_area :description, :class=>"field", :style=>"height:27px;", :value=>@new_item.description %>
         </div>
 
       <% end %>
     </div>
-  </div>
     <% @categories.each do |cat| %>
       <% cat.menu_items.each do |item| %>
-        <div class='scrollable'>
-        <div class="<%= item.id%>_info item-info">
+        <div class="<%= item.id%>_info item-info scrollable">
           <% form_for(item, :html => {:multipart => true}) do |f| %>
           <%= render 'shared/error_messages', :object => f.object %>
 
@@ -89,13 +92,17 @@
               <h2>
                 <%= f.text_field :name, :class=>"field", :value=>item.name %>
               </h2>
-              $<%= f.text_field :price, :class=>"field", :value=>item.price %>
+          <div style="display:table;width:100%;">
+            <div class="page-divider">$</div>
+            <div class="page-divider">
+              <%= f.text_field :price, :class=>"field", :style=>"margin:0", :value=>item.price %>
+            </div>
+          </div>
               <%= f.text_area :description, :class=>"field", :style=>"height:27px;", :value=>item.description %>
             </div>
 
         <% end %>
-              <%=button_to "Delete", item, :method => :delete %>
-          </div>
+        <%=button_to "Delete", item, :method => :delete, :confirm => "Are you sure?" %>
         </div>
       <% end %>
     <% end %>
@@ -123,4 +130,30 @@
       hidden.hide();
     }
   });
+
+  function addDisplayOrderListeners() {
+    jQuery(".category-order").bind('keydown', function(e) {
+        if(e.keyCode == 13) {
+          var pId = jQuery(this).parent().attr('id').substring(1);
+            jQuery.ajax({
+                  url:'<%=categories_url%>\/'+pId+'\/change_order',
+                  data: 'display_order='+this.value,
+                  datatype: 'script',
+                  type: 'PUT'
+            });
+        }
+      });
+
+    jQuery(".item-order").bind('keydown', function(e) {
+        if(e.keyCode == 13) {
+            jQuery.ajax({
+                  url:'<%=menu_items_url%>\/'+jQuery(this).parent().attr('id')+'\/change_order',
+                  data: 'display_order='+this.value,
+                  datatype: 'script',
+                  type: 'PUT'
+            });
+        }
+      });
+    }
+  addDisplayOrderListeners();
 </script>
