@@ -4,8 +4,35 @@
   <a class="link" onclick="jQuery.ajax({url:'<%=remove_from_order_menu_item_url(s.menu_item)%>',
                         datatype: 'script',
                         data: 'selection=<%=order.selections.find_index(s)%>',
+                        data: 'order=<%=order.id%>',
                         type: 'PUT'
   });">
   remove item
   </a>
+  <div>
+    With:<br />
+    <% s.menu_item.free_options.each do |o| %>
+      <div style="margin:5px;display:inline-table;">
+        <div style="display:table-cell">
+          <%= check_box_tag :option, o.id, true %>
+        </div>
+        <div style="display:table-cell">
+          <%= o.name %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div>
+    Additional:<br />
+    <%s.menu_item.non_free_options.each do |o| %>
+      <div style="margin:5px;display:inline-table">
+        <div style="display:table-cell">
+          <%= check_box_tag :option, o.id, false %>
+        </div>
+        <div style="display:table-cell">
+          <%= "#{o.name} #{format_price o.price}" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>

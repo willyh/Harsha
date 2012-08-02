@@ -8,10 +8,11 @@ class SettingsController < ApplicationController
     @settings = Setting.find(params[:id])
 
     if @settings.update_attributes(params[:setting])
-        flash[:success] = "Save successful"
-        redirect_to edit_setting_url(@settings)
+      flash[:success] = "Save successful"
+      redirect_to edit_setting_url(@settings)
     else
-        redirect_to edit_setting_url(@settings)
+      flash[:error] = "Something went wrong"
+      redirect_to edit_setting_url(@settings)
     end
   end
 end

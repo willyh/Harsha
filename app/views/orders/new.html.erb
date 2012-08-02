@@ -61,7 +61,7 @@
                   :style => 'float:right;height:20px;line-height:20px;',
                   :onclick => "jQuery.ajax({url:'#{add_to_order_menu_item_url(item)}',
                                     datatype: 'script',
-                                    data: 'id=#{item.id}',
+                                    data: 'order=#{@order.id}',
                                     type: 'PUT'
               });"})%>
             </li>

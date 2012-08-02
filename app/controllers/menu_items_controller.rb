@@ -144,14 +144,13 @@ class MenuItemsController < ApplicationController
 
   def add_to_order
     @item = MenuItem.find(params[:id])
-    o = Order.find(session[:order])
+    o = Order.find(params[:order])
     o.selections << Selection.new(:menu_item => @item)
     o.price = 0
     o.selections.each{|s|
       o.price += s.menu_item.price
     }
     o.save
-
     render(:update) {|page|
       page << "jQuery('.item-info').addClass('hidden')"
       page << "jQuery('#order_info').removeClass('hidden')"
@@ -162,7 +161,7 @@ class MenuItemsController < ApplicationController
   end
 
   def remove_from_order
-    o = Order.find(session[:order])
+    o = Order.find(params[:order])
     s = o.selections
     @selection = s[params[:selection].to_i]
     s.delete(@selection)

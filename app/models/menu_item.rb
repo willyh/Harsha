@@ -36,4 +36,16 @@ class MenuItem < ActiveRecord::Base
     return ops
   end
 
+  def free_options
+    return self.options.select{|o|
+      o.price <= 0
+    }
+  end
+
+  def non_free_options
+    return self.options.select{|o|
+      o.price > 0
+    }
+  end
+
 end

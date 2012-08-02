@@ -1,4 +1,4 @@
-<div style="margin:5px">
+<div class="option">
   <div class="link"
     onclick="jQuery.ajax({url:'<%=add_option_menu_item_url(item)%>',
                       data: 'option='+jQuery(this).next().val(),
@@ -9,7 +9,7 @@
   <%= select_tag :options_select, options_for_select(item.available_options)%>
 </div>
 <% item.options.each do |option| %>
-  <div id="<%=option.id%>" style="display:inline-block;margin: 5px;">
+  <div id="<%=option.id%>" class="option">
     <%= "#{option.name} #{format_price option.price if option.price > 0}" %>
     <%= link_to 'remove', '#',
     {:onclick => "jQuery.ajax({

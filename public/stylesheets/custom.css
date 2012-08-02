@@ -4,7 +4,6 @@ head{
 
 body {
   visibility: visible;
-  background: #fff;
   text-align: center;
   width:100%;
   height: 100%;
@@ -310,13 +309,13 @@ hidden {
   text-wrap:unrestricted;
 
   border: 1px solid rgba(0,0,0,.1);
-  background-color: #F6F6F6;
+  background-color: #F2F2F2;
   color: #444;
   font-size: 11px;
 }
 
 .link:hover {
-  background-color: #FFFFFF;
+  background-color: #F6F6F6;
   border-color: #C6C6C6;
   -webkit-box-shadow: 0 2px 2px rgba(0,0,0,.1);
   -moz-box-shadow: 0 2px 2px rgba(0,0,0,.1);
@@ -329,6 +328,24 @@ hidden {
   -moz-box-shadow: none;
   box-shadow: none;
   background-color:#CCC;
+}
+
+.option {
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  border-radius: 1px;
+  display: inline-block;
+  line-height: 29px;
+  padding: 6px;
+  text-align: center;
+  text-decoration: none !important;
+  -webkit-user-select: none;
+  text-wrap:unrestricted;
+  margin:4px;
+  border: 1px solid rgba(0,0,0,.1);
+  background-color: #FFFFFF;
+  color: #444;
+  font-size: 11px;
 }
 
 .page-divider {
