@@ -82,10 +82,12 @@
     <% @categories.each do |cat| %>
       <% cat.menu_items.select{|m|m.out_of_stock == false}.each do |item| %>
         <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info scrollable">
-          <div class="frame">
-            <%= image_tag item.photo.url(:small), :class => 'mobile' if item.photo.exists? %>
-            <%= image_tag item.photo.url(:medium), :class => 'regular' if item.photo.exists? %>
-          </div>
+          <% if item.photo.exists? %>
+            <div class="frame">
+              <%= image_tag item.photo.url(:small), :class => 'mobile' %>
+              <%= image_tag item.photo.url(:medium), :class => 'regular' %>
+            </div>
+          <% end %>
           <div class="description">
             <h2>
               <%= item.name %>

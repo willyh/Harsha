@@ -3,6 +3,7 @@ class MenuItemsController < ApplicationController
   def index
     @new_item = MenuItem.new
     @menu_item = @new_item
+    @new_option = Option.new
     @category = Category.new
     @head = "Check Out Your Menu"
     @categories = Category.all
@@ -16,6 +17,7 @@ class MenuItemsController < ApplicationController
 
     @categories = Category.all
     @options = Option.all
+    @new_option = Option.new
     @new_item = MenuItem.new(params[:menu_item])
     @menu_item = @new_item
 
@@ -179,8 +181,28 @@ class MenuItemsController < ApplicationController
   end
   
   def add_option
+    if Option.exists?(params[:option]) && MenuItem.exists?(params[:id])
+      @option = Option.find(params[:option])
+      @menu_item = MenuItem.find(params[:id])
+      @menu_item.options << @option
+    end
+    render(:update) {|page|
+      page.replace_html "#{@menu_item.id}_options", {:partial => "editable_options", :locals => {:item => @menu_item}}
+      page << "initAddOptions()"
+      page << "fixFocusForMobile()"
+    }
   end
 
   def remove_option
+    if Option.exists?(params[:option]) && MenuItem.exists?(params[:id])
+      @option = Option.find(params[:option])
+      @menu_item = MenuItem.find(params[:id])
+      @menu_item.options.delete @option
+    end
+    render(:update) {|page|
+      page.replace_html "#{@menu_item.id}_options", {:partial => "editable_options", :locals => {:item => @menu_item}}
+      page << "initAddOptions()"
+      page << "fixFocusForMobile()"
+    }
   end
 end

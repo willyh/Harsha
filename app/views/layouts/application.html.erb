@@ -109,23 +109,8 @@
     };
 
     function fixFocusForMobile() {
-      var hasTapped = false;
-      var locked = false;
       jQuery('input, select, textarea').bind('blur', function(){
-          if(hasTapped)
-            window.scrollTo(0,currentScrollPosition);
-          hasTapped = false;
-          locked = false;
-      });
-
-      jQuery('input, select, textarea').bind('touchstart', function(){
-        hasTapped = true;
-        if(!locked)
-          currentScrollPosition = $window.scrollTop();
-      });
-
-      jQuery('input, select, textarea').bind('focus', function() {
-          locked = true;
+        window.scrollTo(0,0);
       });
     }
 

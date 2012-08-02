@@ -27,5 +27,13 @@ class MenuItem < ActiveRecord::Base
   def toggle_stock
     self.out_of_stock = !self.out_of_stock
   end
+  
+  def available_options
+    ops = {}
+    Option.all.select{|o| !self.options.include?(o)}.each {|o|
+      ops[o.name] = o.id
+    }
+    return ops
+  end
 
 end

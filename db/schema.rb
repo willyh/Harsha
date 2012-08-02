@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120802151145) do
+ActiveRecord::Schema.define(:version => 20120731180153) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
@@ -36,8 +36,14 @@ ActiveRecord::Schema.define(:version => 20120802151145) do
 
   add_index "menu_items", ["name"], :name => "index_menu_items_on_name", :unique => true
 
-# Could not dump table "options" because of following StandardError
-#   Unknown type 'bool' for column 'out_of_stock'
+  create_table "options", :force => true do |t|
+    t.string   "name"
+    t.float    "price"
+    t.boolean  "out_of_stock"
+    t.integer  "menu_item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "orders", :force => true do |t|
     t.string   "customer_name"

@@ -1,5 +1,6 @@
 class SettingsController < ApplicationController
   def edit
+    Setting.create if(Setting.all.empty?)
     @settings = Setting.first
     @head = 'Edit Settings'
   end

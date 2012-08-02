@@ -4,7 +4,11 @@ class Option < ActiveRecord::Base
   after_initialize :init
 
   def init
-    self.price = 0 if self.price.nil?
-    self.out_of_stock = false
+    self.price ||= 0
+    self.out_of_stock ||= false
+  end
+
+  def toggle_stock
+    self.out_of_stock = ! self.out_of_stock
   end
 end

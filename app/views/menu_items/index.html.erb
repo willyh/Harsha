@@ -1,120 +1,203 @@
 <div style="display:table;width:100%;table-layout:fixed;">
-<div class="item-names page-divider" style="width:40%;">
-  <div id="item_list" class='scrollable'>
-  <% form_for(@menu_item) do |f| %>
-    <%= render 'shared/error_messages', :object => f.object %>
-  <% end %>
-    <%= render 'item_list', :@categories => @categories %>
-    <%= render 'options/option_list', :@options => @options %>
+  <div class="item-names page-divider" style="width:40%;">
+    <div id="item_list" class='scrollable'>
+    <% form_for(@menu_item) do |f| %>
+      <%= render 'shared/error_messages', :object => f.object %>
+    <% end %>
+      <%= render 'item_list', :@categories => @categories %>
+      <%= render 'options/option_list', :@options => @options %>
+    </div>
   </div>
-</div>
-
-<!-- floaty display -->
 
   <div class="page-divider">
-  <div id="item-view" class="floaty-box">
-    <div class="new-item_info scrollable item-info">
-      <% form_for(@new_item, :html => {:multipart => true}) do |f| %>
+    <div id="item-view" class="floaty-box">
+      
+      <div class="new-item_info scrollable item-info">
+        <% form_for(@new_item, :html => {:multipart => true}) do |f| %>
 
-        <div class="frame">
-          <h2>New Item</h2>
-          Select a Category:
-          <% options = {'New Category' => ''} %>
-          <% @categories.each do |key| %>
-            <% options[key.name] = key.name %>
-          <% end %>
-          <%= select_tag(:category_selector, options_for_select(options), :class => 'category_selector') %>
-          <hidden class="new_category_field" >
-          <%=f.text_field :category %>
-          </hidden>
-            <div>
-              <%= f.label "Photo:" %>
-              <%= f.file_field :photo %>
-              <span></span>
-            </div>
-          <div><%=f.submit %></div>
-        </div>
-        <div class="description">
-          <h2>
-            <%= f.text_field :name, :class=>"field", :value=>@new_item.name %>
-          </h2>
-          <div style="display:table;width:100%;">
-            <div class="page-divider">$</div>
-            <div class="page-divider">
-              <%= f.text_field :price, :class=>"field", :style=>"margin:0", :value=>@new_item.price %>
-            </div>
-          </div>
-          <%= f.text_area :description, :class=>"field", :style=>"height:27px;", :value=>@new_item.description %>
-        </div>
-
-      <% end %>
-    </div>
-    <% @categories.each do |cat| %>
-      <% cat.menu_items.each do |item| %>
-        <div class="<%= item.id%>_info item-info scrollable">
-          <% form_for(item, :html => {:multipart => true}) do |f| %>
-          <%= render 'shared/error_messages', :object => f.object %>
-
-            <div class="frame">
-              <h2><%=item.name%></h2>
-              Select a Category:
-              <% options = {'New Category' => ''} %>
-              <% @categories.each do |key| %>
-                <% options[key.name] = key.name %>
-              <% end %>
-              <%= select_tag(:category_selector, options_for_select(options,cat.name), :class => 'category_selector') %>
-              <hidden class="new_category_field" >
-              <%=f.text_field :category, :class => "field", :value=>cat.name %>
-              </hidden>
-              <div>
-                <div id="in_stock_<%=item.id%>" class="<%= item.out_of_stock ? "disabled" : "in_stock"%>"
-                  onclick="jQuery.ajax({url:'<%=toggle_stock_menu_item_url(item)%>',
-                                    datatype: 'script',
-                                    type: 'PUT'});">
-                  In Stock
-                </div>
-                <div id="out_of_stock_<%=item.id%>" class="<%= item.out_of_stock ? "out_of_stock" : "disabled"%>"
-                  onclick="jQuery.ajax({url:'<%=toggle_stock_menu_item_url(item)%>',
-                        datatype: 'script',
-                        type: 'PUT'});">
-                  Out of Stock
-                </div>
-              </div>
+          <div class="description">
+            <h2>New Item</h2>
+            Select a Category:
+            <% options = {'New Category' => ''} %>
+            <% @categories.each do |key| %>
+              <% options[key.name] = key.name %>
+            <% end %>
+            <%= select_tag(:category_selector, options_for_select(options), :class => 'category_selector') %>
+            <hidden class="new_category_field" >
+            <%=f.text_field :category %>
+            </hidden>
               <div>
                 <%= f.label "Photo:" %>
                 <%= f.file_field :photo %>
-                <span><%= item.photo.path %></span>
+                <span></span>
               </div>
-              <div><%=f.submit%></div>
-            </div>
-
-            <div class="description">
-              <h2>
-                <%= f.text_field :name, :class=>"field", :value=>item.name %>
-              </h2>
-          <div style="display:table;width:100%;">
-            <div class="page-divider">$</div>
-            <div class="page-divider">
-              <%= f.text_field :price, :class=>"field", :style=>"margin:0", :value=>item.price %>
-            </div>
+            <div><%=f.submit %></div>
           </div>
-              <%= f.text_area :description, :class=>"field", :style=>"height:27px;", :value=>item.description %>
+          <div class="description">
+            <h2>
+              <%= f.text_field :name, :class=>"field", :value=>@new_item.name %>
+            </h2>
+            <div style="display:table;width:100%;">
+              <div class="page-divider">$</div>
+              <div class="page-divider">
+                <%= f.text_field :price, :class=>"field", :style=>"margin:0", :value=>@new_item.price %>
+              </div>
             </div>
+            <%= f.text_area :description, :class=>"field", :style=>"height:27px;", :value=>@new_item.description %>
+          </div>
 
         <% end %>
-        <%=button_to "Delete", item, :method => :delete, :confirm => "Are you sure?" %>
-        </div>
+      </div>
+
+      <% @categories.each do |cat| %>
+        <% cat.menu_items.each do |item| %>
+          <div class="<%= item.id%>_info item-info scrollable">
+            <% form_for(item, :html => {:multipart => true}) do |f| %>
+            <%= render 'shared/error_messages', :object => f.object %>
+
+              <div class="description">
+                <h2><%=item.name%></h2>
+                Select a Category:
+                <% options = {'New Category' => ''} %>
+                <% @categories.each do |key| %>
+                  <% options[key.name] = key.name %>
+                <% end %>
+                <%= select_tag(:category_selector, options_for_select(options,cat.name), :class => 'category_selector') %>
+                <hidden class="new_category_field" >
+                <%=f.text_field :category, :class => "field", :value=>cat.name %>
+                </hidden>
+                <div>
+                  <div id="in_stock_<%=item.id%>" class="<%= item.out_of_stock ? "disabled" : "in_stock"%>"
+                    onclick="jQuery.ajax({url:'<%=toggle_stock_menu_item_url(item)%>',
+                                      datatype: 'script',
+                                      type: 'PUT'});">
+                    In Stock
+                  </div>
+                  <div id="out_of_stock_<%=item.id%>" class="<%= item.out_of_stock ? "out_of_stock" : "disabled"%>"
+                    onclick="jQuery.ajax({url:'<%=toggle_stock_menu_item_url(item)%>',
+                          datatype: 'script',
+                          type: 'PUT'});">
+                    Out of Stock
+                  </div>
+                </div>
+                <div>
+                  <%= f.label "Photo:" %>
+                  <%= f.file_field :photo %>
+                  <span><%= item.photo.path %></span>
+                </div>
+              </div>
+              <% if item.photo.exists? %>
+                <div class="frame">
+                  <%= image_tag item.photo.url(:small), :class => 'mobile' %>
+                  <%= image_tag item.photo.url(:medium), :class => 'regular' %>
+                </div>
+              <% end %>
+
+              <div class="description">
+                <h2>
+                  <%= f.text_field :name, :class=>"field", :value=>item.name %>
+                </h2>
+                <div style="display:table;width:100%;">
+                  <div class="page-divider">$</div>
+                  <div class="page-divider">
+                    <%= f.text_field :price, :class=>"field", :style=>"margin:0", :value=>item.price %>
+                  </div>
+                </div>
+                <%= f.text_area :description, :class=>"field", :style=>"height:27px;", :value=>item.description %>
+                <div><%=f.submit%></div>
+              </div>
+
+              <div class="description">
+                <ul id="<%= item.id %>_options">
+                  <%= render 'editable_options', :item => item %>
+                </ul>
+              </div>
+
+            <% end %>
+            <%=button_to "Delete", item, :method => :delete, :confirm => "Are you sure?" %>
+          </div>
+
+        <% end %>
       <% end %>
-    <% end %>
+
+      <div class="new-option_info scrollable item-info">
+        <% form_for(@new_option, :html => {:multipart => true}) do |f| %>
+
+          <div class="description">
+            <h2>New option</h2>
+          </div>
+          <div class="description">
+            <h2>
+              <%= f.text_field :name, :class=>"field" %>
+            </h2>
+            <div style="display:table;width:100%;">
+              <div class="page-divider">$</div>
+              <div class="page-divider">
+                <%= f.text_field :price, :class=>"field", :style=>"margin:0" %>
+              </div>
+            </div>
+            <div><%=f.submit %></div>
+          </div>
+
+        <% end %>
+      </div>
+
+      <% @options.each do |option| %>
+        
+          <div class="o<%= option.id%>_info item-info scrollable">
+            <% form_for(option, :html => {:multipart => true}) do |f| %>
+            <%= render 'shared/error_messages', :object => f.object %>
+
+              <div class="description">
+                <h2><%=option.name%></h2>
+                <div>
+                  <div id="in_stock_o<%=option.id%>" class="<%= option.out_of_stock ? "disabled" : "in_stock"%>"
+                    onclick="jQuery.ajax({url:'<%=toggle_stock_option_url(option)%>',
+                                      datatype: 'script',
+                                      type: 'PUT'});">
+                    In Stock
+                  </div>
+                  <div id="out_of_stock_o<%=option.id%>" class="<%= option.out_of_stock ? "out_of_stock" : "disabled"%>"
+                    onclick="jQuery.ajax({url:'<%=toggle_stock_option_url(option)%>',
+                          datatype: 'script',
+                          type: 'PUT'});">
+                    Out of Stock
+                  </div>
+                </div>
+              </div>
+
+              <div class="description">
+                <h2>
+                  <%= f.text_field :name, :class=>"field", :value=>option.name %>
+                </h2>
+                <div style="display:table;width:100%;">
+                  <div class="page-divider">$</div>
+                  <div class="page-divider">
+                    <%= f.text_field :price, :class=>"field", :style=>"margin:0", :value=>option.price %>
+                  </div>
+                </div>
+                <div><%=f.submit%></div>
+              </div>
+
+            <% end %>
+            <%=button_to "Delete", option, :method => :delete, :confirm => "Are you sure?" %>
+          </div>
+      <% end %>
+    </div>
   </div>
-  </div>
-  </div>
-</div>
+
 </div>
 
-<!-- /floaty display -->
 
 <script type="text/javascript">
+  function initAddOptions() {
+    jQuery('#options_select').each(function() {
+      jQuery(this).next().html('Add '+jQuery(this).find(":selected").text()+' as an option');
+    });
+  }
+  jQuery(document).ready(function() {
+      initAddOptions();
+  });
   jQuery("#new-item").mouseup(function() {
     jQuery(".item-info").addClass('hidden');
     jQuery(".new-item_info").removeClass('hidden');

@@ -140,7 +140,9 @@ p {
 
 .frame {
   background: #99bbff;
-  margin: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom:10px;
   padding: 5px;
 }
 
@@ -300,15 +302,16 @@ hidden {
   cursor: default;
   display: inline-block;
   font-weight: bold;
-  height: 29px;
+  min-height: 29px;
   line-height: 29px;
   padding: 0 8px;
   text-align: center;
   text-decoration: none !important;
   -webkit-user-select: none;
+  text-wrap:unrestricted;
 
   border: 1px solid rgba(0,0,0,.1);
-  background-color: #F0F0F0;
+  background-color: #F6F6F6;
   color: #444;
   font-size: 11px;
 }
