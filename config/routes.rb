@@ -9,8 +9,6 @@ DinerApp::Application.routes.draw do
   resources :menu_items do
     put 'toggle_stock', :on => :member
     put 'change_order', :on => :member
-    put 'add_to_order', :on => :member
-    put 'remove_from_order', :on => :member
     put 'add_option', :on => :member
     put 'remove_option', :on => :member
   end
@@ -22,7 +20,9 @@ DinerApp::Application.routes.draw do
   resources :orders do
     put 'update_name', :on => :member
     put 'complete', :on => :member
-    get 'clear', :on => :collection
+    put 'add_item_to', :on => :member
+    put 'remove_item_from', :on => :member
+    put 'alter_option', :on => :member
   end
 
   resources :options do

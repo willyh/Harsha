@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120731180153) do
+ActiveRecord::Schema.define(:version => 20120803161903) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
@@ -36,13 +36,22 @@ ActiveRecord::Schema.define(:version => 20120731180153) do
 
   add_index "menu_items", ["name"], :name => "index_menu_items_on_name", :unique => true
 
+  create_table "menu_items_options", :id => false, :force => true do |t|
+    t.integer "menu_item_id"
+    t.integer "option_id"
+  end
+
   create_table "options", :force => true do |t|
     t.string   "name"
     t.float    "price"
     t.boolean  "out_of_stock"
-    t.integer  "menu_item_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "options_selections", :id => false, :force => true do |t|
+    t.integer "option_id"
+    t.integer "selection_id"
   end
 
   create_table "orders", :force => true do |t|

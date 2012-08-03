@@ -93,7 +93,7 @@ li {
   padding: 10px;
   margin: 15px;
   background: #e3c542;
-  box-shadow: 0 0 4px 4px #b7a420;
+  box-shadow: 0 0 2px 2px #b7a420;
 }
 li.item-name:hover {
   background: #d3b532;
@@ -103,7 +103,7 @@ li.item-name:active {
 }
 li.item-name.selected {
   background: #ccc;
-  box-shadow: 3px 3px 2px 2px #4477aa;
+  box-shadow: 2px 2px 3px 1px #4477aa;
 }
 .navigation-bar {
   position:fixed;

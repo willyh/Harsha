@@ -1,36 +1,26 @@
 <script type="text/javascript">
   function hideItems(list, index) {
-    for(i = index+1; jQuery(list.get(i)).is('li') && i < list.length; i++)
+    for(i = index+1; jQuery(list.get(i)).is('div') && i < list.length; i++)
     {
       var item = jQuery(list.get(i));
-      if(item.attr('id') != 'order')
-        item.addClass('hidden');
-      else
-      {
+      if(item.attr('id') != 'dont_touch_me')
         item.hide();
-        item.show();
-      }
     }
   }
   function toggleItems(list, index) {
-    for(i = index+1; jQuery(list.get(i)).is('li') && i < list.length; i++)
+    for(i = index+1; jQuery(list.get(i)).is('div') && i < list.length; i++)
     {
       var item = jQuery(list.get(i));
-      if(item.hasClass('hidden')){
-        item.show(500);
-        item.removeClass('hidden');
+      if(item.is(':visible')){
+        item.slideUp();
       }
       else
       {
-        item.hide(500);
-        item.addClass('hidden');
+        item.slideDown();
       }
     }
   }
   jQuery(document).ready(function() {
-      jQuery('.item-names').find('a').bind('mouseup tap', function(event){
-        return false;
-      });
       var slider = jQuery('.item-names').children().get(0);
       var sliderList = jQuery(jQuery(slider).children().get(0)).children();
       jQuery(sliderList.parent()).find('h1').each(function(){
@@ -48,24 +38,32 @@
     <div class='scrollable'>
       <ul>
         <h1>Order<%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
-        <li id="order" class="item-name">
-          Your Order
-        </li>
+        <div id="dont_touch_me">
+          <li id="order" class="item-name">
+            Your Order
+          </li>
+        </div>
       <% @categories.each do |cat| %>
         <h1><%=cat.name%><%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
-          <% cat.menu_items.select{|m|m.out_of_stock == false}.each do |item| %>
-            <li id="<%= item.id %>" class="item-name" style='overflow:auto'>
-              <%= item.name %>
-              <%= link_to('+','#',{
-                  :class => 'link',
-                  :style => 'float:right;height:20px;line-height:20px;',
-                  :onclick => "jQuery.ajax({url:'#{add_to_order_menu_item_url(item)}',
-                                    datatype: 'script',
-                                    data: 'order=#{@order.id}',
-                                    type: 'PUT'
-              });"})%>
-            </li>
-          <% end %>
+        <% cat.menu_items.select{|m|m.out_of_stock == false}.each do |item| %>
+          <div name="Make the Animation Smoother">
+            <div style="display:table;overflow:auto;width:100%;padding:5px;">
+              <li id="<%= item.id %>" class="item-name" style='width:100%;display:table-cell;'>
+                <%= item.name %>
+              </li>
+              <div style="display:table-cell;padding-left:9px;">
+                <%= link_to('+','#',{
+                    :class => 'link',
+                    :style => 'height:20px;line-height:20px;',
+                    :onclick => "jQuery.ajax({url:'#{add_item_to_order_url(@order)}',
+                                      datatype: 'script',
+                                      data: 'item=#{item.id}',
+                                      type: 'PUT'
+                });"})%>
+              </div>
+            </div>
+          </div>
+        <% end %>
       <% end %>
       </ul>
     </div>
@@ -74,33 +72,53 @@
 <!-- floaty display -->
   <div class="page-divider">
     <div id="item-view" class="floaty-box">
-    <div class='scrollable'>
-    <div id="order_info" class="item-info order_info" >
-      <%=render 'editable_order', {:@order => @order} %>
+      <div id="order_info" class="item-info order_info scrollable" >
+        <%=render 'editable_order', {:@order => @order} %>
+      </div>
+      <% @categories.each do |cat| %>
+        <% cat.menu_items.select{|m|m.out_of_stock == false}.each do |item| %>
+          <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info scrollable hidden">
+            <% if item.photo.exists? %>
+              <div class="frame">
+                <%= image_tag item.photo.url(:small), :class => 'mobile' %>
+                <%= image_tag item.photo.url(:medium), :class => 'regular' %>
+              </div>
+            <% end %>
+
+            <div class="description">
+              <h2>
+                <%= item.name %>
+              </h2>
+              <%= format_price item.price %>
+              <p>
+                <%= item.description %>
+              </p>
+              <% unless item.free_options.empty? %>
+                <div style="margin:5px;">
+                  <strong>Comes With:</strong>
+                  <% item.free_options.each do |o| %>
+                    <div style="font-style:italic">
+                      <%= "- #{o.name}" %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+              <% unless item.non_free_options.empty? %>
+                <div style="margin:5px;">
+                  <strong>Additional Options:</strong>
+                  <% item.non_free_options.each do |o| %>
+                    <div style="font-style: italic">
+                        <%= "- #{o.name} #{format_price o.price}" %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+
+          </div>
+        <% end %>
+      <% end %>
     </div>
   </div>
-    <% @categories.each do |cat| %>
-      <% cat.menu_items.select{|m|m.out_of_stock == false}.each do |item| %>
-        <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info scrollable">
-          <% if item.photo.exists? %>
-            <div class="frame">
-              <%= image_tag item.photo.url(:small), :class => 'mobile' %>
-              <%= image_tag item.photo.url(:medium), :class => 'regular' %>
-            </div>
-          <% end %>
-          <div class="description">
-            <h2>
-              <%= item.name %>
-            </h2>
-            <%= format_price item.price %>
-            <p>
-              <%= item.description %>
-            </p>
-          </div>
-        </div>
-      <% end %>
-    <% end %>
-  </div>
-  </div>
-</div>
 <!-- floaty display -->
+</div>

@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   helper_method :build_menu
   before_filter :completed_yet, :except => [:new, :create, :show, :complete ]
   def new
-    if session[:order] && Order.exists?(session[:order])
+    if session[:order] && Order.exists?(session[:order]) && !Order.find(session[:order]).completed
       @order = Order.find(session[:order]) 
     else
       @order = Order.create()
@@ -43,7 +43,7 @@ class OrdersController < ApplicationController
 
   def show
     @order = Order.find params[:id]
-    @head = params[:id] == session[:order].to_s ? "#{@order.customer_name}'s Order" : "Order #{params[:id]}"
+    @head = "#{@order.customer_name}'s Order"
   end
 
   def destroy
@@ -73,6 +73,82 @@ class OrdersController < ApplicationController
     @order.complete
     flash[:success] = "Thank You"
     redirect_to @order
+  end
+
+  def add_item_to
+    @item = MenuItem.find(params[:item])
+    o = Order.find(params[:id])
+    o.selections << Selection.new(:menu_item => @item)
+    if check_stock o
+      o.update_price!
+      o.save
+      render(:update) {|page|
+        page.redirect_to new_order_path
+      }
+    else
+      o.update_price!
+      o.save
+      render(:update) {|page|
+        page << "jQuery('.item-info').addClass('hidden')"
+        page << "jQuery('#order_info').removeClass('hidden')"
+        page.replace_html 'order_info', {:partial => "orders/editable_order", :locals => {:@order => o}}
+        page << "onResize()"
+        page << "fixFocusForMobile()"
+      }
+    end
+  end
+
+  def remove_item_from
+    o = Order.find(params[:id])
+    s = o.selections
+    @selection = s[params[:selection].to_i]
+    s.delete(@selection)
+
+    if check_stock o
+      o.update_price!
+      o.save
+      render(:update) {|page|
+        page.redirect_to new_order_path
+      }
+    else
+      check_stock o
+      o.update_price!
+      o.save
+
+      render(:update) {|page|
+        page.replace_html 'order_info', {:partial => "orders/editable_order", :locals => {:@order => o}}
+        page << "onResize()"
+        page << "fixFocusForMobile()"
+      }
+    end
+  end
+  
+  def alter_option
+    @order = Order.find(params[:id])
+    @selection = @order.selections[params[:selection].to_i]
+    @option = @selection.menu_item.options.find(params[:option])
+    checkd = params[:checked] == "true"
+    checkd = ! checkd if @option.price <= 0
+    if checkd
+      @selection.options << @option
+    else
+      @selection.options.delete(@option)
+    end
+    if check_stock @order
+      @order.update_price!
+      @order.save
+      render(:update) {|page|
+        page.redirect_to new_order_path
+      }
+    else
+      @order.update_price!
+      @order.save
+      render(:update) {|page|
+        page.replace_html 'order_info', {:partial => "orders/editable_order", :locals => {:@order => @order}}
+        page << "onResize()"
+        page << "fixFocusForMobile()"
+      }
+    end
   end
 
 protected
@@ -115,6 +191,25 @@ protected
       end
     end
   end
-  
 
+  def check_stock order
+    missing = []
+    order.selections.each {|s|
+      if s.menu_item.out_of_stock
+        missing << s.menu_item.name
+      else
+        s.menu_item.options.each{|o|
+          if o.out_of_stock
+            missing << o.name
+          end
+        }
+        s.options = s.options.reject {|o| o.out_of_stock}
+      end
+    }
+    order.selections = order.selections.reject {|s| s.menu_item.out_of_stock}
+    missing = missing.uniq
+    flash[:error] = "Sorry! We just ran out of the following: #{missing.uniq.join(", ")}" if missing.count > 0
+    return missing.count > 0
+  end
+  
 end

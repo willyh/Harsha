@@ -19,14 +19,27 @@ class Order < ActiveRecord::Base
       :notify_url => notify_url,
       :cert_id => APP_CONFIG['paypal_cert_id']
     }
-    menu_items.each do |item|
-      values.merge!({
-        "amount_#{item.id}" => item.price,
-        "item_name_#{item.id}"=> item.name,
-        "item_number_#{item.id}" => item.id,
-        "quantity_#{item.id}" => 1
-      })
+    items = {}
+    index = 1
+    selections.each do |s|
+      item = s.menu_item
+      items["amount_#{index}"] = item.price
+      items["item_name_#{index}"] = item.name
+      items["item_number_#{index}"] = item.id
+      items["quantity_#{index}"] = 1
+      index += 1
+
+      s.options.select{|o| o.price > 0}.each {|o|
+        items["amount_#{index}"] = o.price
+        items["item_name_#{index}"] = (o.price <= 0) ? "No #{o.name}" : o.name
+        items["item_number_#{index}"] = o.id
+        items["quantity_#{index}"] = 1
+        index += 1
+      }
+      
     end
+    values.merge!(items)
+
     encrypt_for_paypal(values)
   end
 
@@ -47,11 +60,13 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def update_price
+  def update_price!
     p = 0
-    arr = self.items.split("\n")
-    arr.each do |item|
-      p += MenuItem.find_by_name(item).price
+    self.selections.each do |s|
+      p += s.menu_item.price
+      s.options.each do |o|
+        p += o.price
+      end
     end
     self.price = p
   end

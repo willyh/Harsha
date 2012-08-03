@@ -142,43 +142,6 @@ class MenuItemsController < ApplicationController
     end
   end
 
-  def add_to_order
-    @item = MenuItem.find(params[:id])
-    o = Order.find(params[:order])
-    o.selections << Selection.new(:menu_item => @item)
-    o.price = 0
-    o.selections.each{|s|
-      o.price += s.menu_item.price
-    }
-    o.save
-    render(:update) {|page|
-      page << "jQuery('.item-info').addClass('hidden')"
-      page << "jQuery('#order_info').removeClass('hidden')"
-      page.replace_html 'order_info', {:partial => "orders/editable_order", :locals => {:@order => o}}
-      page << "onResize()"
-      page << "fixFocusForMobile()"
-    }
-  end
-
-  def remove_from_order
-    o = Order.find(params[:order])
-    s = o.selections
-    @selection = s[params[:selection].to_i]
-    s.delete(@selection)
-
-    o.price = 0
-    o.selections.each{|s|
-      o.price += s.menu_item.price
-    }
-    o.save
-
-    render(:update) {|page|
-      page.replace_html 'order_info', {:partial => "orders/editable_order", :locals => {:@order => o}}
-      page << "onResize()"
-      page << "fixFocusForMobile()"
-    }
-  end
-  
   def add_option
     if Option.exists?(params[:option]) && MenuItem.exists?(params[:id])
       @option = Option.find(params[:option])

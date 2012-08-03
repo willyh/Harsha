@@ -3,7 +3,7 @@
       <h2>Your Order</h2>
       <label>Your Name:</label>
       <input class="field" id="order_customer_name" name="order[customer_name]"
-      size="30" type="text" value="<%=@order.customer_name%>"
+      size="30" style="width:160px"type="text" value="<%=@order.customer_name%>"
       onblur="jQuery.ajax({url:'<%= update_name_order_url(@order) %>',
         datatype: 'script',
         type: 'PUT',

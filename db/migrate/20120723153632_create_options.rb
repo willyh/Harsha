@@ -4,7 +4,6 @@ class CreateOptions < ActiveRecord::Migration
       t.string :name
       t.float :price
       t.boolean :out_of_stock
-      t.integer :menu_item_id
 
       t.timestamps
     end

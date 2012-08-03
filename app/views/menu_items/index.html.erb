@@ -24,7 +24,7 @@
             <% end %>
             <%= select_tag(:category_selector, options_for_select(options), :class => 'category_selector') %>
             <hidden class="new_category_field" >
-            <%=f.text_field :category %>
+            <%=f.text_field :category, :class => 'field' %>
             </hidden>
               <div>
                 <%= f.label "Photo:" %>
@@ -209,18 +209,20 @@
   function addDisplayOrderListeners() {
     jQuery(".category-order").bind('keydown', function(e) {
         if(e.keyCode == 13) {
+          window.scrollTo(0,0);
           var pId = jQuery(this).parent().attr('id').substring(1);
-            jQuery.ajax({
-                  url:'<%=categories_url%>\/'+pId+'\/change_order',
-                  data: 'display_order='+this.value,
-                  datatype: 'script',
-                  type: 'PUT'
-            });
+          jQuery.ajax({
+                url:'<%=categories_url%>\/'+pId+'\/change_order',
+                data: 'display_order='+this.value,
+                datatype: 'script',
+                type: 'PUT'
+          });
         }
       });
 
     jQuery(".item-order").bind('keydown', function(e) {
         if(e.keyCode == 13) {
+          window.scrollTo(0,0);
             jQuery.ajax({
                   url:'<%=menu_items_url%>\/'+jQuery(this).parent().attr('id')+'\/change_order',
                   data: 'display_order='+this.value,

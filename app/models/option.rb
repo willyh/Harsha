@@ -1,5 +1,6 @@
 class Option < ActiveRecord::Base
-  belongs_to :menu_item
+  has_and_belongs_to_many :menu_items
+  has_and_belongs_to_many :selections
 
   after_initialize :init
 

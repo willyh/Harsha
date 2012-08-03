@@ -1,7 +1,7 @@
 class MenuItem < ActiveRecord::Base
   has_many :selections
   has_many :orders, :through => :selections
-  has_many :options
+  has_and_belongs_to_many :options
 
   attr_accessible :name, :price, :description, :photo, :display_order
 
@@ -38,13 +38,13 @@ class MenuItem < ActiveRecord::Base
 
   def free_options
     return self.options.select{|o|
-      o.price <= 0
+      o.price <= 0 && ! o.out_of_stock
     }
   end
 
   def non_free_options
     return self.options.select{|o|
-      o.price > 0
+      o.price > 0 && ! o.out_of_stock
     }
   end
 

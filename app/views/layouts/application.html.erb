@@ -16,7 +16,7 @@
 <script src="/javascripts/scrollable.js" type="text/javascript"></script>
 <script type="text/javascript">
   function bindListElements() {
-      jQuery(".item-name").bind('mouseup tap', function(event) {
+      jQuery(".item-name").bind('hover tap', function(event) {
          jQuery(".item-info").addClass('hidden');
          jQuery(".item-name").removeClass("selected");
         var name = jQuery(this).attr("id");
