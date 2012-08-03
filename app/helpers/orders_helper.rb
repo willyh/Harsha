@@ -14,7 +14,7 @@ module OrdersHelper
       times[format_time prospective_time] = prospective_time unless has_pickup_time? Order.all, prospective_time
     end 
     times["Sorry We're Too Busy at the Moment"] = "-1" if times.empty?
-    times
+    times.sort
   end
   def round_up time
     dif = time.min - time.min / time_interval * time_interval

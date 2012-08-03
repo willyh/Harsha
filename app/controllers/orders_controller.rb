@@ -25,16 +25,25 @@ class OrdersController < ApplicationController
     end
   end
 
+  def update
+    @option = Option.find(params[:id])
+    if @option.update_attributes(params[:order])
+      flash[:success] = "Your pickup time is #{format_time @option.pickup_time}. See you soon!"
+    else
+      flash[:error] = "That pickup time is either full or invalid. Please choose another"
+    end
+    redirect_to @order
+  end
+
   def update_name
-      se = session[:order]
     if Order.exists?(params[:id])
       @order = Order.find(params[:id])
       id = @order.id
       @order.update_attributes(params[:order])
-      names = @order.customer_name.split(" ")
       render(:update) {|page|
-        page << "jQuery('#first_name').val('#{names[0]}')" if names.count > 0
-        page << "jQuery('#last_name').val('#{names[-1]}')" if names.count > 1
+        page.replace_html 'order_info', {:partial => "orders/editable_order", :locals => {:@order => @order}}
+        page << "onResize()"
+        page << "fixFocusForMobile()"
       }
     else
       render :nothing => true
