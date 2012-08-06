@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120803161903) do
+ActiveRecord::Schema.define(:version => 20120806195633) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
@@ -95,6 +95,10 @@ ActiveRecord::Schema.define(:version => 20120803161903) do
     t.string   "home_page_text"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "paypal_email"
+    t.integer  "interval"
+    t.integer  "max_per_slot"
+    t.datetime "last_activation_date"
   end
 
 end

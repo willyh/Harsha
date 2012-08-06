@@ -3,6 +3,7 @@ class Order < ActiveRecord::Base
   has_many :menu_items, :through => :selections
   has_one :payment_notification
 
+  before_save :validate_pickup_time
   after_initialize :init
 
   attr_accessible :customer_name, :pickup_time, :price, :completed
@@ -100,5 +101,7 @@ class Order < ActiveRecord::Base
     self.completed ||= false
   end
 
+  def validate_pickup_time
+    self.pickup_time = nil unless self.completed
+  end
 end
-

@@ -1,14 +1,32 @@
 <div class="scrollable">
+  <h1>Current website status: <%= active? ? "Active" : "Inactive" %>
+    <% unless active? %>
+      <%= link_to "Activate", activate_setting_path(1),:method => :PUT, :class => 'link' %>
+    <% else %>
+      <%= link_to "Turn Off", turn_off_setting_path(1), :method => :PUT, :class=> 'link' %>
+    <% end %>
+  </h1>
   <%= link_to("Log Out", logout_path, :class => 'link') if admin? %>
   <% form_for @settings do |f| %>
     <%= f.text_area :home_page_text, :value => @settings.home_page_text %>
     <br />
     <%= f.label 'Opening Time:' %>
-    <%= f.text_field :opens_at, :value => @settings.opens_at %>
+    <%= select_tag :opens_at_hour, options_for_select(1..12, :selected => (@settings.opens_at.localtime.hour-1) % 12 + 1) %>:
+    <%= select_tag :opens_at_min, options_for_select(minutes, :selected => @settings.opens_at.localtime.min) %>
+    <%= select_tag :opens_at_ampm, options_for_select(["AM","PM"], :selected => ((@settings.opens_at.localtime.hour < 12) ? "AM" : "PM")) %>
     <br />
     <%= f.label 'Closing Time:' %>
-    <%= f.text_field :closes_at, :value => @settings.closes_at %>
+    <%= select_tag :closes_at_hour, options_for_select(1..12, :selected => (@settings.closes_at.localtime.hour-1) % 12 + 1)%>:
+    <%= select_tag :closes_at_min, options_for_select(minutes, :selected => @settings.closes_at.localtime.min) %>
+    <%= select_tag :closes_at_ampm, options_for_select(["AM","PM"], :selected => ((@settings.closes_at.localtime.hour < 12) ? "AM" : "PM")) %>
     <br />
+    <%= f.label 'Time interval between pick-up times' %>
+    <%= f.text_field :interval, :value => @settings.interval, :style => 'width:15px' %> minutes
+    <br />
+    <%= f.label 'Number of orders per time slot' %>
+    <%= f.text_field :max_per_slot, :value => @settings.max_per_slot, :style => 'width:15px' %> people
+    <br />
+    <%= "This setup allows a max of #{60 / @settings.interval * @settings.max_per_slot} online orders per hour<br />".html_safe if @settings.interval && @settings.max_per_slot%>
     <%= f.submit 'Save' %>
   <% end %>
 </div>

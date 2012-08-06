@@ -6,15 +6,7 @@
       <div style="height:20px;"></div>
 
       <h1 style="color:black" style="font-size:15px">Pickup Time </h1>
-      <%= format_time @order.pickup_time %> 
-      <% if @order.pickup_time.nil? && @order.completed && @order.id == session[:order]%>
-        <% form_for @order do |f| %>
-          <%= f.select(:pickup_time, options_for_select(available_times), :style => 'height:20px') %>
-          <%= link_to "Finish", "$(this).up('form').submit()", :class=>'link' %>
-        <% end %>
-      <% elsif @order.pickup_time.nil? %>
-        <%= select_tag :pickup_time, options_for_select(available_times), :style => 'height:20px', :disabled => true %>
-      <% end %>
+      <%= render "pickup_time_select", :@order => @order %>
       <% unless @order.completed || @order.price <= 0 || @order.id != session[:order]%>
         <% form_tag APP_CONFIG['paypal_url'] do %>
           <%= hidden_field_tag :cmd, "_s-xclick" %>
@@ -52,3 +44,4 @@
     <% end %>
   </div>
 </div>
+<%=render 'how-to-order'%>

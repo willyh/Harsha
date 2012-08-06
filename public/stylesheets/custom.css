@@ -20,14 +20,14 @@ html {
 
 .header {
   top:0;
-  font-size:150%;
-  padding: 10px;
+  font-size:130%;
+  padding: 8px;
   text-align: center;
   font-weight: bold;
   color: #fff;
   background-color: #6699cc;
   border-style: solid;
-  border-width: 10px;
+  border-width: 8px;
   border-color: #336699;
   z-index:99;
 }
@@ -41,6 +41,10 @@ html {
   padding-right:0;
 }
 
+a:hover {
+  cursor:pointer;
+  background:transparent;
+}
 h1 {
   color: #eee;
   border-bottom: 5px solid #225588;
@@ -53,21 +57,6 @@ h2 {
   background: #e3c542;
   box-shadow: 0 0 4px 4px #b7a420;
   margin-bottom: 5px;
-}
-
-a {
-  cursor: pointer;
-  color: #eee;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #fff;
-  background-color:transparent;
-}
-
-a:active {
-  color: #fff;
 }
 
 table {
@@ -114,6 +103,19 @@ li.item-name.selected {
   z-index:1000;
 }
 
+.nav_item {
+  color:#ccc;
+  display:table-cell;
+  background-color: #333;
+  cursor:pointer;
+  padding:10px;
+}
+
+.nav_item:hover {
+  background: #222;
+  color:#fff;
+}
+
 p {
   font-style: italic;
 }
@@ -147,7 +149,7 @@ p {
 
 .description {
   text-align: left;
-  background: #99bbff;
+  background: #a7caff;
   margin: 10px;
   padding: 5px;
   box-shadow: 2px 2px 4px 3px #003366;
@@ -156,22 +158,6 @@ p {
 .item-names {
   text-align:left;
   width: 40%;
-}
-
-p.large-item-info {
-}
-
-.nav_item {
-  color:#ccc;
-  display:table-cell;
-  background-color: #333;
-  cursor:pointer;
-  padding:10px;
-}
-
-.nav_item:hover {
-  background: #222;
-  color:#fff;
 }
 
  .category {
@@ -192,10 +178,6 @@ other:hover {background: #666600;}
 .field {
   width: 100%;
   padding:0;
-}
-
-.entry {
-  width: 25%;
 }
 
 .dim {
@@ -353,4 +335,13 @@ hidden {
   vertical-align:top;
   overflow:hidden;
   word-wrap:break-word;
+}
+
+#how-to-order {
+  top:20%;
+  left:50%;
+  margin-left: -155px;
+  position: fixed;
+  width:300px;
+  display:none;
 }

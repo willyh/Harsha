@@ -1,9 +1,11 @@
 class OrdersController < ApplicationController
   helper_method :build_menu
   before_filter :completed_yet, :except => [:new, :create, :show, :complete ]
+  before_filter :website_active?, :only => [:new, :create]
   def new
-    if session[:order] && Order.exists?(session[:order]) && !Order.find(session[:order]).completed
+    if session[:order] && Order.exists?(session[:order])
       @order = Order.find(session[:order]) 
+        @order = Order.create() if @order.completed && !@order.pickup_time.nil?
     else
       @order = Order.create()
     end
@@ -15,6 +17,7 @@ class OrdersController < ApplicationController
     }
     @head = "Check Out Our Menu!"
   end
+
   def index
     redirect_to new_order_path
   end
@@ -161,6 +164,12 @@ class OrdersController < ApplicationController
   end
 
 protected
+  def website_active?
+    unless active?
+      flash[:notice] = "Sorry, our website is not currently active"
+      redirect_to (admin? ? edit_setting_path(1) : home_path)
+    end
+  end
   def authorize_order
     if Order.find(params[:id]).completed
       unless session[:order] == params[:id] || admin?
@@ -190,10 +199,15 @@ protected
     if params[:id].nil?
       redirect_to new_order_path
     elsif !Order.exists?(params[:id])
-      flash[:error] = "404:error order not found "
+      flash[:error] = "404:Not Found"
       redirect_to home_path
     else
-      unless  admin? || !Order.find(params[:id]).completed
+      @order = Order.find(params[:id])
+      if params[:order] && params[:order][:pickup_time] && @order.completed
+        Order.find(params[:id]).update_attributes(:pickup_time => params[:order][:pickup_time])
+        flash[:success] = "Thank you, Please come down at blah to pick up your order"
+        redirect_to order_path(params[:id])
+      elsif  !admin? && Order.find(params[:id]).completed
         flash[:error] = "Cannot change an order once it has been placed"
         redirect_to home_path
         false
@@ -221,4 +235,7 @@ protected
     return missing.count > 0
   end
   
+  def active?
+    return Setting.first.last_activation_date < Time.now && Time.now < Setting.first.closes_at
+  end
 end

@@ -14,7 +14,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes"/>
 <script src="/javascripts/swipe.js" type="text/javascript"></script>
 <script src="/javascripts/scrollable.js" type="text/javascript"></script>
+<input type="hidden" id="refreshed" value="no">
 <script type="text/javascript">
+  onload = function(){
+    var ref = document.getElementById("refreshed");
+    if(ref.value == "no")
+      ref.value = "yes";
+    else
+    {
+      ref.value = "no";
+      location.reload();
+    }
+  }
   function bindListElements() {
       jQuery(".item-name").bind('hover tap', function(event) {
          jQuery(".item-info").addClass('hidden');
@@ -209,7 +220,7 @@
       
       window.setTimeout(function(){
         jQuery(".flash").hide('slow');
-      },1500);
+      },2000);
 
       fixFocusForMobile();
 

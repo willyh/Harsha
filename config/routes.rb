@@ -31,7 +31,10 @@ DinerApp::Application.routes.draw do
 
   resources :sessions, :only => [:new, :create, :destroy]
 
-  resources :settings
+  resources :settings do
+    put 'activate', :on => :member
+    put 'turn_off', :on => :member
+  end
 
   match '/payment_notifications',	:to => 'payment_notification#create'
   match '/home',	:to => 'menu_items#home'

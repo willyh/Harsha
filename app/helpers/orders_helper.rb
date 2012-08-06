@@ -7,39 +7,38 @@ module OrdersHelper
     end
   end
   def available_times
+    @settings = Setting.first
     times = {}
-    now = round_up Time.now.utc - 4.hours
+    now = round_up Time.now
+    if now.hour < @settings.opens_at.hour
+      now = Time.local(now.year, now.month, now.day, @settings.opens_at.hour, @settings.opens_at.min)
+    end
     (1..24).each do |n|
       prospective_time = (now + (n*time_interval).minutes)
-      times[format_time prospective_time] = prospective_time unless has_pickup_time? Order.all, prospective_time
+      times[format_time prospective_time] = prospective_time if has_pickup_time? prospective_time
     end 
-    times["Sorry We're Too Busy at the Moment"] = "-1" if times.empty?
-    times.sort
+    times["Sorry, there are no available time slots"] = "-1" if times.empty?
+    times.sort_by{ |string, val| val }
   end
+
   def round_up time
     dif = time.min - time.min / time_interval * time_interval
     time + (time_interval-dif).minutes
   end
-  def has_pickup_time? orders, time
-    orders.each do |o|
-      return true if o.pickup_time == time
+
+  def has_pickup_time? time
+    @settings = Setting.first
+    valid = Order.all.select{|o|o.pickup_time == time}.count <= @settings.max_per_slot
+    if @settings.closes_at.hour == time.hour
+      valid = valid && @settings.closes_at.min > time.min
+    else
+      valid = valid && @settings.closes_at.hour > time.hour
     end
-    return false
-  end
-  def remove_item order, item
-    arr = order.items.split("\n")
-    if arr.delete_at arr.index(item)
-      items = arr.join("\n")
-      price = order.price - item.split(" ").first.delete("$").to_f
-      order.update_attributes(:items => items, :price => price)
+    if @settings.opens_at.hour == time.hour
+      valid = valid && @settings.opens_at.min < time.min
+    else
+      valid = valid && @settings.opens_at.hour < time.hour
     end
-  end
-  def calculate_price items
-    p = 0
-    items.each do |item|
-      p += MenuItem.find_by_name(item).price
-    end
-    p
   end
 
   def format_time time
@@ -50,7 +49,16 @@ module OrdersHelper
   end
 
   def time_interval
-    5
+    Setting.first.interval
   end
+
+  def next_time
+    now = round_up Time.now.utc - 4.hours
+    prospective_time = (now + (1*time_interval).minutes)
+    times = {(format_time prospective_time) => prospective_time}
+    times["Sorry, there are no available time slots"] = "-1" if times.empty?
+    return times
+  end
+
 
 end
