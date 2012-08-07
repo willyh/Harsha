@@ -72,13 +72,17 @@
   <div class="nav_item" onclick="location.href='<%=admin? ? edit_setting_url(1) : home_url%>';">
     Home
   </div>
-<% unless admin? %>
+<% if admin? %>
+  <div class="nav_item" onclick="location.href='<%=new_menu_item_url%>';">
+    Edit Menu
+  </div>
+<% elsif active? %>
 	<div class="nav_item" onclick="location.href='<%=new_order_url%>';">
-    Menu
+    Create Order
   </div>
 <% else %>
 	<div class="nav_item" onclick="location.href='<%=menu_url%>';">
-     Edit Menu
+     Menu
   </div>
 <% end %>
 <div class="nav_item" onclick="location.href='<%= (admin?) ? new_post_url : posts_url%>';">

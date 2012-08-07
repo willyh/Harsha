@@ -1,0 +1,26 @@
+  <div class="scrollable">
+    <% @order.selections.each do |s| %>
+      <span class="description" style="vertical-align:top;display:block;overflow:auto">
+        <div style="display:inline-block;float:left;">
+          <h1 style="color:black"><%= s.menu_item.name %> </h1>
+          <%= format_price s.price %>
+          <% unless s.options.empty? %>
+            <div style="margin:5px;">
+              <strong>With:</strong>
+              <% s.options.each do |o| %>
+                <div style="font-style:italic">
+                  <%= (o.price > 0) ? "- #{o.name}" : "- NO #{o.name}" %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+        <% if s.menu_item.photo.exists? %>
+          <div style="display:inline-block;float:right;">
+            <%= image_tag s.menu_item.photo.url(:icon), :class => 'mobile', :align => 'top'%>
+            <%= image_tag s.menu_item.photo.url(:small), :class => 'regular', :align => 'top'%>
+          </div>
+        <% end %>
+      </span>
+    <% end %>
+  </div>

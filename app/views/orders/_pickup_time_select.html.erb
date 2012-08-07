@@ -1,3 +1,4 @@
+<div style="display:inline-block">
 <%= format_time @order.pickup_time %> 
 <% if @order.pickup_time.nil? && @order.completed && @order.id == session[:order]%>
   <% form_for @order do |f| %>
@@ -8,3 +9,4 @@
   <%= select_tag :pickup_time, options_for_select(next_time), :style => 'height:20px', :disabled => true %>
   <a onclick="jQuery('#how-to-order').show()">?</a>
 <% end %>
+</div>

@@ -7,19 +7,8 @@
 
       <h1 style="color:black" style="font-size:15px">Pickup Time </h1>
       <%= render "pickup_time_select", :@order => @order %>
-      <% unless @order.completed || @order.price <= 0 || @order.id != session[:order]%>
-        <% form_tag APP_CONFIG['paypal_url'] do %>
-          <%= hidden_field_tag :cmd, "_s-xclick" %>
-          <% if @order.customer_name %>
-            <% names = @order.customer_name.split(" ") %>
-            <%= hidden_field_tag :first_name, names[0] if names.count > 0%>
-            <%= hidden_field_tag :last_name, names[-1] if names.count > 1%>
-          <% end %>
-          <%= hidden_field_tag :encrypted, @order.paypal_encrypted(payment_notifications_url+"?id=#{@order.id}&key=#{@order.secret}", payment_notifications_url(:secret => APP_CONFIG['paypal_secret'])) %>
-          <%= link_to_function "Pay Now", "$(this).up('form').submit()", :class => 'link' unless @order.customer_name.blank?%>
-          <%= link_to_function "Pay Now", "alert('Please enter your name so we know who this is for')", :class => 'link' if @order.customer_name.blank?%>
-        <% end %>
-      <% end %>
+
+			<%= render "paypal", :@order => @order %>
 
       <div style="height:20px;"></div>
       <%= "<h2 style='font-size:15px;text-align:center'>Payment Accepted</h2>".html_safe if @order.completed%>
@@ -27,21 +16,6 @@
   </div>
 </div>
 <div style="display:inline-block;vertical-align:top;width:59%;">
-  <div class="scrollable">
-    <% @order.selections.each do |s| %>
-      <span class="description" style="vertical-align:top;display:block;overflow:auto">
-        <div style="display:inline-block;float:left;">
-          <h1 style="color:black"><%= s.menu_item.name %> </h1>
-          <%= format_price s.menu_item.price %>
-        </div>
-        <% if s.menu_item.photo.exists? %>
-          <div style="display:inline-block;float:right;">
-            <%= image_tag s.menu_item.photo.url(:icon), :class => 'mobile', :align => 'top'%>
-            <%= image_tag s.menu_item.photo.url(:small), :class => 'regular', :align => 'top'%>
-          </div>
-        <% end %>
-      </span>
-    <% end %>
-  </div>
+  <%= render "completed_order", :@order => @order %>
 </div>
 <%=render 'how-to-order'%>

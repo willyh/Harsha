@@ -2,7 +2,7 @@ class CreateOrders < ActiveRecord::Migration
   def self.up
     create_table :orders do |t|
       t.string :customer_name
-      t.time :pickup_time
+      t.datetime :pickup_time
       t.float :price
 
       t.timestamps

@@ -10,6 +10,17 @@ class OrdersController < ApplicationController
       @order = Order.create()
     end
     session[:order] = @order.id
+		@settings = Setting.first
+		if params[:feature] == "yes" && MenuItem.exists?(@settings.feature)
+			@feature = MenuItem.find(@settings.feature)
+			if @order.selections.empty?
+				@order.selections << 
+				@order.selections << Selection.new(:menu_item => @feature)
+				@order.update_price!
+				@order.save
+			end
+		end
+
     @categories = Category.all.select{|c|
       c.menu_items.select{|m|
         m.out_of_stock == false
@@ -29,13 +40,15 @@ class OrdersController < ApplicationController
   end
 
   def update
-    @option = Option.find(params[:id])
-    if @option.update_attributes(params[:order])
-      flash[:success] = "Your pickup time is #{format_time @option.pickup_time}. See you soon!"
+    @order = Order.find(params[:id])
+    if @order.completed && params[:order] && params[:order][:pickup_time] && (has_pickup_time? (Time.parse params[:order][:pickup_time]))
+      @order.update_attributes(:pickup_time => params[:order][:pickup_time])
+      flash[:success] = "Thank you, Please come down at #{format_time @order.pickup_time.to_time.localtime} to pick up your order"
+      redirect_to order_path(params[:id])
     else
       flash[:error] = "That pickup time is either full or invalid. Please choose another"
+      redirect_to @order
     end
-    redirect_to @order
   end
 
   def update_name
@@ -179,14 +192,6 @@ protected
     end
   end
 
-  def time_to_prepare pickup_time
-    return (time_from_string(pickup_time) - (Time.now.utc.hour.hours-4.hours) - Time.now.utc.min.minutes)/60
-  end
-
-  def waited_too_long order
-    time_from_string(@order.pickup_time) <= (Time.now.utc.hour.hours - 4.hours) + Time.now.utc.min.minutes + 3.minutes
-  end
-
   def time_from_string time_string
     arr = time_string.split(":")
     pm = 12.hours if arr.last.include?("PM")
@@ -203,11 +208,7 @@ protected
       redirect_to home_path
     else
       @order = Order.find(params[:id])
-      if params[:order] && params[:order][:pickup_time] && @order.completed
-        Order.find(params[:id]).update_attributes(:pickup_time => params[:order][:pickup_time])
-        flash[:success] = "Thank you, Please come down at blah to pick up your order"
-        redirect_to order_path(params[:id])
-      elsif  !admin? && Order.find(params[:id]).completed
+      if  !admin? && @order.completed && params[:order] && !params[:order][:pickup_time]
         flash[:error] = "Cannot change an order once it has been placed"
         redirect_to home_path
         false
@@ -235,7 +236,19 @@ protected
     return missing.count > 0
   end
   
-  def active?
-    return Setting.first.last_activation_date < Time.now && Time.now < Setting.first.closes_at
+  def format_time time
+    return "" unless time
+    time_s = time.localtime.strftime("%I:%M%p")
+    return time_s.slice(1,6) if time_s.first == "0"
+    time_s
+  end
+
+  def has_pickup_time? time
+    @settings = Setting.first
+		closes_at = @settings.closes_at.localtime
+		opens_at = @settings.opens_at.localtime
+    valid = Order.all.select{|o|o.pickup_time == time}.count < @settings.max_per_slot || @settings.max_per_slot < 0
+		valid = valid && time < closes_at
+		valid = valid && opens_at < time
   end
 end

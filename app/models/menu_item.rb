@@ -27,6 +27,10 @@ class MenuItem < ActiveRecord::Base
   def toggle_stock
     self.out_of_stock = !self.out_of_stock
   end
+
+	def in_stock
+		return !out_of_stock
+	end
   
   def available_options
     ops = {}

@@ -2,12 +2,16 @@
     <div class="description">
       <h2>Your Order</h2>
       <label>Your Name:</label>
-      <input class="field" id="order_customer_name" name="order[customer_name]"
-      size="30" style="width:120px"type="text" value="<%=@order.customer_name%>"
-      onblur="jQuery.ajax({url:'<%= update_name_order_url(@order) %>',
-        datatype: 'script',
-        type: 'PUT',
-        data: 'order[customer_name]='+jQuery(this).val()})">
+			<% if @order.completed %>
+				<%= @order.customer_name %>
+			<% else %>
+				<input class="field" id="order_customer_name" name="order[customer_name]"
+				size="30" style="width:120px"type="text" value="<%=@order.customer_name%>"
+				onblur="jQuery.ajax({url:'<%= update_name_order_url(@order) %>',
+					datatype: 'script',
+					type: 'PUT',
+					data: 'order[customer_name]='+jQuery(this).val()})">
+			<% end %>
       <br />
 
     <%= label_tag "Total:" %>
@@ -16,24 +20,18 @@
 
     <%= label_tag "Pick-up:" %>
     <%= render "pickup_time_select", :@order => @order %>
+		<%= link_to "View Order", @order, :class => 'link' if @order.completed %>
+    <br />
 
-    <% @order.selections.each do |s|%>
-      <%= render 'orders/order_item',
-                  {:s => s, :order => @order} %>
-    <% end %>
-    <% unless @order.completed || @order.price <= 0 %>
-      <% form_tag APP_CONFIG['paypal_url'] do %>
-        <%= hidden_field_tag :cmd, "_s-xclick" %>
-        <% if @order.customer_name %>
-          <% names = @order.customer_name.split(" ") %>
-          <%= hidden_field_tag :first_name, names[0] if names.count > 0%>
-          <%= hidden_field_tag :last_name, names[-1] if names.count > 1%>
-        <% end %>
-        <%= hidden_field_tag :encrypted, @order.paypal_encrypted(payment_notifications_url+"?id=#{@order.id}&key=#{@order.secret}", payment_notifications_url(:secret => APP_CONFIG['paypal_secret'])) %>
-        <%= link_to_function "Pay Now", "$(this).up('form').submit()", :class => 'link' unless @order.customer_name.blank?%>
-        <%= link_to_function "Pay Now", "alert('Please enter your name so we know who this is for')", :class => 'link' if @order.customer_name.blank?%>
-      <% end %>
-    <% end %>
-    <%= link_to "View Order", @order, :class => 'link' if @order.completed %>
+		<%= render 'paypal', :@order => @order %>
+
+    <% if @order.completed %>
+			<%= render 'completed_order', :@order => @order %>
+		<% else %>
+			<% @order.selections.each do |s|%>
+				<%= render 'orders/order_item',
+										{:s => s, :order => @order} %>
+			<% end %>
+		<% end %>
     </div>
   </ul>

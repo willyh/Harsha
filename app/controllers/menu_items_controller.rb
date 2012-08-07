@@ -1,13 +1,13 @@
 class MenuItemsController < ApplicationController
-  before_filter :authorize, :except =>  [:home, :add_to_order, :remove_from_order]
+  before_filter :authorize, :except =>  [:home, :index]
   def index
-    @new_item = MenuItem.new
-    @menu_item = @new_item
-    @new_option = Option.new
-    @category = Category.new
-    @head = "Check Out Your Menu"
-    @categories = Category.all
-    @options = Option.all
+		redirect_to new_order_path if active?
+    @head = "Check Out Our Menu!"
+    @categories = Category.all.select{|c|
+      c.menu_items.select{|m|
+        m.out_of_stock == false
+      }.empty? == false
+    }
   end
 
   def create
@@ -25,13 +25,13 @@ class MenuItemsController < ApplicationController
     if category.empty?
       @new_item.save
       @head = "Error"
-      return render 'index' 
+      return render 'new' 
     end
     if !Category.exists?(:name => category)
       @category =  Category.new(:name => category, :display_order => Category.count+1)
       if !@category.save
         @head = "Error"
-        return render 'index'
+        return render 'new'
       end
     end
     @category = Category.find_by_name(category)
@@ -41,10 +41,10 @@ class MenuItemsController < ApplicationController
     if @new_item.save
       @category.menu_items << @new_item
       flash[:success] = "#{@new_item.name} successfully added to menu!"
-      redirect_to menu_path
+			redirect_to new_menu_item_path(:id => @menu_item.id)
     else
       @head = "Error"
-      render 'index'
+      render 'new'
     end
   end
 
@@ -76,21 +76,26 @@ class MenuItemsController < ApplicationController
         end
       end
       flash[:success] = "Successful change"
-      redirect_to menu_path(:id => @menu_item.id)
+			redirect_to new_menu_item_path(:id => @menu_item.id)
     else
       @head = "Error"
-      redirect_to menu_path(:id => @menu_item.id)
+			redirect_to new_menu_item_path(:id => @menu_item.id)
     end
   end
 
   def show
     @menu_item = MenuItem.find(params[:id])
-    flash[:notice] = "you prolly didn't mean to come here";
-    redirect_to menu_path(@menu_item)
+		redirect_to new_menu_item_path(:id => @menu_item.id)
   end
 
-  def edit
-    redirect_to menu_path
+  def new
+    @new_item = MenuItem.new
+    @menu_item = @new_item
+    @new_option = Option.new
+    @category = Category.new
+    @head = "Check Out Your Menu"
+    @categories = Category.all
+    @options = Option.all
   end
 
   def destroy
@@ -100,12 +105,13 @@ class MenuItemsController < ApplicationController
     category.destroy if category.menu_items.count == 0
     
     flash[:success] = "#{item.name} deleted"
-    redirect_to menu_path
+		redirect_to new_menu_item_path
   end
 
   def home
     @head = "Moto Cafe"
     @settings = Setting.first
+		@feature = MenuItem.find(@settings.feature) if MenuItem.exists?(@settings.feature)
   end
 
   def toggle_stock 

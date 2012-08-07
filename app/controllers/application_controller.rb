@@ -1,17 +1,11 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  helper_method :admin?, :get_categories
+  helper_method :admin?, :active?
 
-  def get_categories
-    menu = {}
-    MenuItem.all.each do |item|
-      menu[item.category] ||= []
-      menu[item.category] << item
-    end
-    menu
+  def active?
+    return Setting.first.last_activation_date < Time.now && Time.now < Setting.first.closes_at
   end
-
 
   protected
 

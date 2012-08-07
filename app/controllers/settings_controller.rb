@@ -32,6 +32,9 @@ class SettingsController < ApplicationController
     @settings = Setting.first
     now = Time.now
     @settings.last_activation_date = now
+    @settings.opens_at = Time.local(now.year,now.month,now.day,
+                                   @settings.opens_at.localtime.hour,
+                                   @settings.opens_at.localtime.min)
     @settings.closes_at = Time.local(now.year,now.month,now.day,
                                    @settings.closes_at.localtime.hour,
                                    @settings.closes_at.localtime.min)

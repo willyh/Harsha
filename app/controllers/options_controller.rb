@@ -13,7 +13,7 @@ class OptionsController < ApplicationController
     else
       flash[:error] = "Problem creating #{@option.name}"
     end
-      redirect_to menu_items_path
+      redirect_to new_menu_item_path
   end
   def update
     @option = Option.find(params[:id])
@@ -22,13 +22,13 @@ class OptionsController < ApplicationController
     else
       flash[:error] = "Problem updating #{@option.name}"
     end
-      redirect_to menu_items_path
+      redirect_to new_menu_item_path
   end
   def destroy
     @option = Option.find(params[:id])
     flash[:success] = "Deleted #{@option.name}"
     @option.destroy
-    redirect_to menu_items_path
+    redirect_to new_menu_item_path
   end
   def toggle_stock 
     @option = Option.find(params[:id])

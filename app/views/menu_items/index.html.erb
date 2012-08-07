@@ -1,236 +1,101 @@
+<script type="text/javascript">
+  function hideItems(list, index) {
+    for(i = index+1; jQuery(list.get(i)).is('div') && i < list.length; i++)
+      jQuery(list.get(i)).hide();
+  }
+  function toggleItems(list, index) {
+    for(i = index+1; jQuery(list.get(i)).is('div') && i < list.length; i++)
+    {
+      var item = jQuery(list.get(i));
+      if(item.is(':visible')){
+        item.slideUp();
+      }
+      else
+      {
+        item.slideDown();
+      }
+    }
+  }
+  jQuery(document).ready(function() {
+      var slider = jQuery('.item-names').children().get(0);
+      var sliderList = jQuery(jQuery(slider).children().get(0)).children();
+      jQuery(sliderList.parent()).find('h1').each(function(index){
+        if(index > 0)hideItems(sliderList, sliderList.index(this));
+        jQuery(this).css('cursor','default');
+        jQuery(this).bind('click', function() {
+          toggleItems(sliderList, sliderList.index(this));
+          });
+      });
+  });
+</script>
+
 <div style="display:table;width:100%;table-layout:fixed;">
   <div class="item-names page-divider" style="width:40%;">
-    <div id="item_list" class='scrollable'>
-    <% form_for(@menu_item) do |f| %>
-      <%= render 'shared/error_messages', :object => f.object %>
-    <% end %>
-      <%= render 'item_list', :@categories => @categories %>
-      <%= render 'options/option_list', :@options => @options %>
+    <div class='scrollable'>
+      <ul>
+      <% @categories.each do |cat| %>
+        <h1><%=cat.name%><%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
+        <% cat.menu_items.select{|m|m.out_of_stock == false}.each do |item| %>
+          <div name="Make the Animation Smoother">
+            <div style="display:table;overflow:auto;width:100%;padding:5px;">
+              <li id="<%= item.id %>" class="item-name" style='width:100%;display:table-cell;'>
+                <%= item.name %>
+              </li>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+      </ul>
     </div>
   </div>
 
+<!-- floaty display -->
   <div class="page-divider">
     <div id="item-view" class="floaty-box">
-      
-      <div class="new-item_info scrollable item-info">
-        <% form_for(@new_item, :html => {:multipart => true}) do |f| %>
-
-          <div class="description">
-            <h2>New Item</h2>
-            Select a Category:
-            <% options = {'New Category' => ''} %>
-            <% @categories.each do |key| %>
-              <% options[key.name] = key.name %>
-            <% end %>
-            <%= select_tag(:category_selector, options_for_select(options), :class => 'category_selector') %>
-            <hidden class="new_category_field" >
-            <%=f.text_field :category, :class => 'field' %>
-            </hidden>
-              <div>
-                <%= f.label "Photo:" %>
-                <%= f.file_field :photo %>
-                <span></span>
-              </div>
-            <div><%=f.submit %></div>
-          </div>
-          <div class="description">
-            <h2>
-              <%= f.text_field :name, :class=>"field", :value=>@new_item.name %>
-            </h2>
-            <div style="display:table;width:100%;">
-              <div class="page-divider">$</div>
-              <div class="page-divider">
-                <%= f.text_field :price, :class=>"field", :style=>"margin:0", :value=>@new_item.price %>
-              </div>
-            </div>
-            <%= f.text_area :description, :class=>"field", :style=>"height:27px;", :value=>@new_item.description %>
-          </div>
-
-        <% end %>
-      </div>
-
       <% @categories.each do |cat| %>
-        <% cat.menu_items.each do |item| %>
-          <div class="<%= item.id%>_info item-info scrollable">
-            <% form_for(item, :html => {:multipart => true}) do |f| %>
-            <%= render 'shared/error_messages', :object => f.object %>
-
-              <div class="description">
-                <h2><%=item.name%></h2>
-                Select a Category:
-                <% options = {'New Category' => ''} %>
-                <% @categories.each do |key| %>
-                  <% options[key.name] = key.name %>
-                <% end %>
-                <%= select_tag(:category_selector, options_for_select(options,cat.name), :class => 'category_selector') %>
-                <hidden class="new_category_field" >
-                <%=f.text_field :category, :class => "field", :value=>cat.name %>
-                </hidden>
-                <div>
-                  <div id="in_stock_<%=item.id%>" class="<%= item.out_of_stock ? "disabled" : "in_stock"%>"
-                    onclick="jQuery.ajax({url:'<%=toggle_stock_menu_item_url(item)%>',
-                                      datatype: 'script',
-                                      type: 'PUT'});">
-                    In Stock
-                  </div>
-                  <div id="out_of_stock_<%=item.id%>" class="<%= item.out_of_stock ? "out_of_stock" : "disabled"%>"
-                    onclick="jQuery.ajax({url:'<%=toggle_stock_menu_item_url(item)%>',
-                          datatype: 'script',
-                          type: 'PUT'});">
-                    Out of Stock
-                  </div>
-                </div>
-                <div>
-                  <%= f.label "Photo:" %>
-                  <%= f.file_field :photo %>
-                  <span><%= item.photo.path %></span>
-                </div>
+        <% cat.menu_items.select{|m|m.out_of_stock == false}.each do |item| %>
+          <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info scrollable hidden">
+            <% if item.photo.exists? %>
+              <div class="frame">
+                <%= image_tag item.photo.url(:small), :class => 'mobile' %>
+                <%= image_tag item.photo.url(:medium), :class => 'regular' %>
               </div>
-              <% if item.photo.exists? %>
-                <div class="frame">
-                  <%= image_tag item.photo.url(:small), :class => 'mobile' %>
-                  <%= image_tag item.photo.url(:medium), :class => 'regular' %>
+            <% end %>
+
+            <div class="description">
+              <h2>
+                <%= item.name %>
+              </h2>
+              <%= format_price item.price %>
+              <p>
+                <%= item.description %>
+              </p>
+              <% unless item.free_options.empty? %>
+                <div style="margin:5px;">
+                  <strong>Comes With:</strong>
+                  <% item.free_options.each do |o| %>
+                    <div style="font-style:italic">
+                      <%= "- #{o.name}" %>
+                    </div>
+                  <% end %>
                 </div>
               <% end %>
-
-              <div class="description">
-                <h2>
-                  <%= f.text_field :name, :class=>"field", :value=>item.name %>
-                </h2>
-                <div style="display:table;width:100%;">
-                  <div class="page-divider">$</div>
-                  <div class="page-divider">
-                    <%= f.text_field :price, :class=>"field", :style=>"margin:0", :value=>item.price %>
-                  </div>
+              <% unless item.non_free_options.empty? %>
+                <div style="margin:5px;">
+                  <strong>Additional Options:</strong>
+                  <% item.non_free_options.each do |o| %>
+                    <div style="font-style: italic">
+                        <%= "- #{o.name} #{format_price o.price}" %>
+                    </div>
+                  <% end %>
                 </div>
-                <%= f.text_area :description, :class=>"field", :style=>"height:27px;", :value=>item.description %>
-                <div><%=f.submit%></div>
-              </div>
-
-              <div class="description">
-                <ul id="<%= item.id %>_options">
-                  <%= render 'editable_options', :item => item %>
-                </ul>
-              </div>
-
-            <% end %>
-            <%=button_to "Delete", item, :method => :delete, :confirm => "Are you sure?" %>
-          </div>
-
-        <% end %>
-      <% end %>
-
-      <div class="new-option_info scrollable item-info">
-        <% form_for(@new_option, :html => {:multipart => true}) do |f| %>
-
-          <div class="description">
-            <h2>New option</h2>
-          </div>
-          <div class="description">
-            <h2>
-              <%= f.text_field :name, :class=>"field" %>
-            </h2>
-            <div style="display:table;width:100%;">
-              <div class="page-divider">$</div>
-              <div class="page-divider">
-                <%= f.text_field :price, :class=>"field", :style=>"margin:0" %>
-              </div>
+              <% end %>
             </div>
-            <div><%=f.submit %></div>
-          </div>
 
+          </div>
         <% end %>
-      </div>
-
-      <% @options.each do |option| %>
-        
-          <div class="o<%= option.id%>_info item-info scrollable">
-            <% form_for(option, :html => {:multipart => true}) do |f| %>
-            <%= render 'shared/error_messages', :object => f.object %>
-
-              <div class="description">
-                <h2><%=option.name%></h2>
-                <div>
-                  <div id="in_stock_o<%=option.id%>" class="<%= option.out_of_stock ? "disabled" : "in_stock"%>"
-                    onclick="jQuery.ajax({url:'<%=toggle_stock_option_url(option)%>',
-                                      datatype: 'script',
-                                      type: 'PUT'});">
-                    In Stock
-                  </div>
-                  <div id="out_of_stock_o<%=option.id%>" class="<%= option.out_of_stock ? "out_of_stock" : "disabled"%>"
-                    onclick="jQuery.ajax({url:'<%=toggle_stock_option_url(option)%>',
-                          datatype: 'script',
-                          type: 'PUT'});">
-                    Out of Stock
-                  </div>
-                </div>
-              </div>
-
-              <div class="description">
-                <h2>
-                  <%= f.text_field :name, :class=>"field", :value=>option.name %>
-                </h2>
-                <div style="display:table;width:100%;">
-                  <div class="page-divider">$</div>
-                  <div class="page-divider">
-                    <%= f.text_field :price, :class=>"field", :style=>"margin:0", :value=>option.price %>
-                  </div>
-                </div>
-                <div><%=f.submit%></div>
-              </div>
-
-            <% end %>
-            <%=button_to "Delete", option, :method => :delete, :confirm => "Are you sure?" %>
-          </div>
       <% end %>
     </div>
   </div>
-
+<!-- floaty display -->
 </div>
-
-
-<script type="text/javascript">
-  jQuery("#new-item").mouseup(function() {
-    jQuery(".item-info").addClass('hidden');
-    jQuery(".new-item_info").removeClass('hidden');
-  });
-
-  jQuery(".category_selector").change(function() {
-      hidden = jQuery(this).parent().find('.new_category_field');
-      hidden.find("#menu_item_category").val(jQuery(this).val());
-    if (jQuery(this).val().length == 0) {
-      hidden.show();
-    }
-    else {
-      hidden.hide();
-    }
-  });
-
-  function addDisplayOrderListeners() {
-    jQuery(".category-order").bind('keydown', function(e) {
-        if(e.keyCode == 13) {
-          window.scrollTo(0,0);
-          var pId = jQuery(this).parent().attr('id').substring(1);
-          jQuery.ajax({
-                url:'<%=categories_url%>\/'+pId+'\/change_order',
-                data: 'display_order='+this.value,
-                datatype: 'script',
-                type: 'PUT'
-          });
-        }
-      });
-
-    jQuery(".item-order").bind('keydown', function(e) {
-        if(e.keyCode == 13) {
-          window.scrollTo(0,0);
-            jQuery.ajax({
-                  url:'<%=menu_items_url%>\/'+jQuery(this).parent().attr('id')+'\/change_order',
-                  data: 'display_order='+this.value,
-                  datatype: 'script',
-                  type: 'PUT'
-            });
-        }
-      });
-    }
-  addDisplayOrderListeners();
-</script>

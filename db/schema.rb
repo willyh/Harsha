@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120806195633) do
+ActiveRecord::Schema.define(:version => 20120807201500) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20120806195633) do
     t.string   "name"
     t.float    "price"
     t.boolean  "out_of_stock"
+    t.integer  "menu_item_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -63,8 +64,6 @@ ActiveRecord::Schema.define(:version => 20120806195633) do
     t.boolean  "completed"
     t.string   "secret"
   end
-
-  add_index "orders", ["pickup_time"], :name => "index_orders_on_pickup_time", :unique => true
 
   create_table "payment_notifications", :force => true do |t|
     t.text     "params"
@@ -99,6 +98,11 @@ ActiveRecord::Schema.define(:version => 20120806195633) do
     t.integer  "interval"
     t.integer  "max_per_slot"
     t.datetime "last_activation_date"
+    t.integer  "feature"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
   end
 
 end

@@ -1,1 +1,55 @@
-      <%= @settings.home_page_text.html_safe %>
+<div style="display:table;width:100%;table-layout:fixed;">
+	<div class="scrollable">
+		<div class="description" style="vertical-align:top;display:block;overflow:auto">
+			<% if @feature && @feature.photo && @feature.in_stock %>
+          <div style="display:inline-block;float:right;margin-left:5px;">
+						<%= image_tag @feature.photo.url(:small), :class => 'mobile' %>
+						<%= image_tag @feature.photo.url(:medium), :class => 'regular' %>
+					</div>
+					<div style="margin:5px">
+						<h1 style="color:black">Today's Feature</h1>
+						<%= "#{@feature.name} #{format_price @feature.price}" %>
+						<br />
+						<% unless @feature.description.blank? %>
+							<p>
+								<%= "#{@feature.description}" %>
+							</p>
+						<% end %>
+						<div class="regular">
+              <% unless @feature.free_options.empty? %>
+                <div style="margin:10px;display:inline-block">
+                  <strong>Comes With:</strong>
+                  <% @feature.free_options.each do |o| %>
+                    <div style="font-style:italic">
+                      <%= "- #{o.name}" %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+              <% unless @feature.non_free_options.empty? %>
+                <div style="margin:10px;display:inline-block">
+                  <strong>Additional Options:</strong>
+                  <% @feature.non_free_options.each do |o| %>
+                    <div style="font-style: italic">
+                        <%= "- #{o.name} #{format_price o.price}" %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+						</div>
+						<%= link_to "Order Now", new_order_path(:feature => "yes"), :class=>"link" if active?%>
+					</div>
+			<% elsif @settings.photo.exists? %>
+				<%= image_tag @settings.photo.url(:medium), :class => 'mobile' %>
+				<%= image_tag @settings.photo.url(:large), :class => 'regular' %>
+			<% end %>
+		</div>
+		<% unless @settings.home_page_text.blank? %>
+			<div class="description" style="padding:10px;-webkit-border-radius: 4px;-moz-border-radius: 4px;border-radius: 4px;">
+				<div style="background:white;padding:6px;border:solid 2px rgba(0,0,0,.2)">
+					<%= @settings.home_page_text.gsub("\n","<br />").gsub("  ","&nbsp&nbsp").html_safe %>
+				</div>
+			</div>
+		<% end %>
+	</div>
+</div>

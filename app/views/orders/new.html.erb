@@ -51,16 +51,18 @@
               <li id="<%= item.id %>" class="item-name" style='width:100%;display:table-cell;'>
                 <%= item.name %>
               </li>
-              <div style="display:table-cell;padding-left:9px;">
-                <%= link_to('+','#',{
-                    :class => 'link',
-                    :style => 'height:20px;line-height:20px;',
-                    :onclick => "jQuery.ajax({url:'#{add_item_to_order_url(@order)}',
-                                      datatype: 'script',
-                                      data: 'item=#{item.id}',
-                                      type: 'PUT'
-                });"})%>
-              </div>
+							<% unless @order.completed %>
+								<div style="display:table-cell;padding-left:9px;">
+									<%= link_to('+','#',{
+											:class => 'link',
+											:style => 'height:20px;line-height:20px;',
+											:onclick => "jQuery.ajax({url:'#{add_item_to_order_url(@order)}',
+																				datatype: 'script',
+																				data: 'item=#{item.id}',
+																				type: 'PUT'
+									});"})%>
+								</div>
+							<% end %>
             </div>
           </div>
         <% end %>
@@ -72,9 +74,11 @@
 <!-- floaty display -->
   <div class="page-divider">
     <div id="item-view" class="floaty-box">
-      <div id="order_info" class="item-info order_info scrollable" >
-        <%=render 'editable_order', {:@order => @order} %>
-      </div>
+			<div class="scrollable">
+				<div id="order_info" class="item-info order_info" >
+					<%=render 'editable_order', {:@order => @order} %>
+				</div>
+			</div>
       <% @categories.each do |cat| %>
         <% cat.menu_items.select{|m|m.out_of_stock == false}.each do |item| %>
           <div id="<%= item.id %>_info" class="<%= item.id %>_info item-info scrollable hidden">
