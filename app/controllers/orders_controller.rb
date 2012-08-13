@@ -179,8 +179,11 @@ class OrdersController < ApplicationController
 protected
   def website_active?
     unless active?
-      flash[:notice] = "Sorry, our website is not currently active"
-      redirect_to (admin? ? edit_setting_path(1) : home_path)
+			@settings = Setting.first
+      flash[:notice] = (Time.now > @settings.closes_at) ?
+			"Sorry, we're closed. Store hours are from #{format_time @settings.opens_at} to #{format_time @settings.closes_at}" :
+			"Sorry, we're not currently accepting online orders"
+      redirect_to menu_path
     end
   end
   def authorize_order
@@ -250,5 +253,6 @@ protected
     valid = Order.all.select{|o|o.pickup_time == time}.count < @settings.max_per_slot || @settings.max_per_slot < 0
 		valid = valid && time < closes_at
 		valid = valid && opens_at < time
+		valid = valid && time > Time.now + @settings.interval.minutes
   end
 end

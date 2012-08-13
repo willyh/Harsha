@@ -12,7 +12,7 @@ class CategoriesController < ApplicationController
       @category.save
 
       render(:update) {|page|
-        page.replace_html 'item_list', :partial => 'menu_items/item_list', :locals => {:@categories => Category.all}
+        page.replace_html 'item_list', :partial => 'menu_items/item_list', :locals => {:@categories => Category.all, :@options => @options, :@menu_item => @menu_item}
         page << 'window.scrollTo(0,0)'
         page << 'fixFocusForMobile()'
         page << 'bindListElements()'

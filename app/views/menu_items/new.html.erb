@@ -1,11 +1,7 @@
 <div style="display:table;width:100%;table-layout:fixed;">
   <div class="item-names page-divider" style="width:40%;">
     <div id="item_list" class='scrollable'>
-    <% form_for(@menu_item) do |f| %>
-      <%= render 'shared/error_messages', :object => f.object %>
-    <% end %>
-      <%= render 'item_list', :@categories => @categories %>
-      <%= render 'options/option_list', :@options => @options %>
+			<%= render 'item_list', :@categories => @categories, :@options => @options, :@menu_item => @menu_item %>
     </div>
   </div>
 

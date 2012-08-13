@@ -1,7 +1,8 @@
+<script type="application/javascript" src="/javascripts/add2home.js" charset="utf-8"></script>
 <div style="display:table;width:100%;table-layout:fixed;">
 	<div class="scrollable">
 		<div class="description" style="vertical-align:top;display:block;overflow:auto">
-			<% if @feature && @feature.photo && @feature.in_stock %>
+			<% if @feature && @feature.photo.exists? && @feature.in_stock %>
           <div style="display:inline-block;float:right;margin-left:5px;">
 						<%= image_tag @feature.photo.url(:small), :class => 'mobile' %>
 						<%= image_tag @feature.photo.url(:medium), :class => 'regular' %>
@@ -45,12 +46,15 @@
 				<%= image_tag @settings.photo.url(:large), :class => 'regular' %>
 			<% end %>
 		</div>
-		<% unless @settings.home_page_text.blank? %>
 			<div class="description" style="padding:10px;-webkit-border-radius: 4px;-moz-border-radius: 4px;border-radius: 4px;">
 				<div style="background:white;padding:6px;">
+					<div style="font-size:18px">
+						<strong>Hours:</strong> <%= format_time @settings.opens_at %> - <%= format_time @settings.closes_at %>
+					</div>
+				<% unless @settings.home_page_text.blank? %>
 					<%= @settings.home_page_text.gsub("\n","<br />").gsub("  ","&nbsp&nbsp").html_safe %>
+				<% end %>
 				</div>
 			</div>
-		<% end %>
 	</div>
 </div>

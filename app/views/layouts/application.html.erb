@@ -43,7 +43,11 @@
 </script>
 <head>
   <link rel="shortcut icon" href="/favicon.ico"/>
-  <title><%= "MotoCafe | #{@head}" %></title>
+  <title><%= "#{@head}" %></title>
+	<% if Setting.first && Setting.first.photo.exists? %>
+		<link rel="apple-touch-icon" href="<%= Setting.first.photo.url %>"/>
+		<link rel="apple-touch-icon-precomposed" href="icon" />
+	<% end %>
 </head>
 
 <body> 
@@ -233,7 +237,7 @@
         onResize();
       });
 
-      jQuery('html').css('visibility','visible');
+      jQuery('body').css('visibility','visible');
     });
 </script>
 </html>

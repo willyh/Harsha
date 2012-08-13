@@ -1,3 +1,6 @@
+<% form_for(@menu_item) do |f| %>
+	<%= render 'shared/error_messages', :object => f.object %>
+<% end %>
 <ul>
   <h1>
     New Item
@@ -36,3 +39,4 @@
     <% end %>
 <% end %>
 </ul>
+<%= render 'options/option_list', :@options => @options %>
