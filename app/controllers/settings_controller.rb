@@ -18,6 +18,7 @@ class SettingsController < ApplicationController
       params[:closes_at_hour].to_i % 12 + (12*((params[:closes_at_ampm] == "AM") ? 0 : 1)),
       params[:closes_at_min].to_i)
     attrs[:closes_at] = close
+		logger.info("DEBUG@@@@@@@@@: #{attrs}")
 
     if @settings.update_attributes(attrs)
       flash[:success] = "Save successful"

@@ -1,12 +1,10 @@
 class Setting < ActiveRecord::Base
   after_initialize :init
 
-  attr_accessible :photo
-
   has_attached_file :photo,
     :styles => {
 			:small => "100x100",
-      :medium => "300x",
+      :medium => "280x",
       :large => "640x" }
 
   def init

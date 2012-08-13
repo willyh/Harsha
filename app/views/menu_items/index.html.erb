@@ -36,11 +36,12 @@
       <% @categories.each do |cat| %>
         <h1><%=cat.name%><%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
         <% cat.menu_items.select{|m|m.out_of_stock == false}.each do |item| %>
-          <div name="Make the Animation Smoother">
-            <div style="display:table;overflow:auto;width:100%;padding:5px;">
+          <div name="Make the Animation Smoother" style="width:100%">
+            <div style="display:table;overflow:auto;padding:5px;">
               <li id="<%= item.id %>" class="item-name" style='width:100%;display:table-cell;'>
                 <%= item.name %>
               </li>
+								<div style="display:table-cell;width:1px;"></div>
             </div>
           </div>
         <% end %>
