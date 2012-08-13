@@ -1,4 +1,4 @@
-<% unless @order.completed || @order.price <= 0 || @order.customer_name.blank? || @order.id != session[:order] %>
+<% unless @order.completed || @order.price <= 0 ||  @order.id != session[:order] %>
 	<% form_tag APP_CONFIG['paypal_url'] do %>
 		<%= hidden_field_tag :cmd, "_s-xclick" %>
 		<% if @order.customer_name %>
@@ -7,7 +7,14 @@
 			<%= hidden_field_tag :last_name, names[-1] if names.count > 1%>
 		<% end %>
 		<%= hidden_field_tag :encrypted, @order.paypal_encrypted(payment_notifications_url+"?id=#{@order.id}&key=#{@order.secret}", payment_notifications_url(:secret => APP_CONFIG['paypal_secret'])) %>
-		<%= link_to_function "Pay Now", "$(this).up('form').submit()", :class => 'link' unless @order.customer_name.blank?%>
-		<%= link_to_function "Pay Now", "alert('Please enter your name so we know who this is for')", :class => 'link' if @order.customer_name.blank?%>
+		<script type="text/javascript">
+			function checkName(_this) {
+				if(jQuery("#order_customer_name").val().length > 0)
+					$(_this).up('form').submit();
+				else
+					alert('Please enter your name');
+				}
+		</script>
+		<%= link_to_function "Pay Now", "checkName(this)", :class => 'link'%>
 	<% end %>
 <% end %>

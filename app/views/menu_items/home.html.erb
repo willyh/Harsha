@@ -10,6 +10,7 @@
 						<h1 style="color:black">Today's Feature</h1>
 						<%= "#{@feature.name} #{format_price @feature.price}" %>
 						<br />
+						<br />
 						<% unless @feature.description.blank? %>
 							<p>
 								<%= "#{@feature.description}" %>
