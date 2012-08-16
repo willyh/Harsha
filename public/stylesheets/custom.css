@@ -28,7 +28,7 @@ html {
 	background: #7FBB00;
   z-index:99;
 	width:100%;
-  box-shadow: 0 4px 4px 0px rgba(0,0,0,.4);
+  box-shadow: 0 4px 4px -2px rgba(0,0,0,.4);
 }
 
 #content {
@@ -47,17 +47,17 @@ h1 {
 	padding:3px;
   font-size: 20px;
 	color: #333;
-	background-image: linear-gradient(bottom, rgb(222,222,222) 0%, rgb(242,242,242) 58%);
-	background-image: -o-linear-gradient(bottom, rgb(222,222,222) 0%, rgb(242,242,242) 58%);
-	background-image: -moz-linear-gradient(bottom, rgb(222,222,222) 0%, rgb(242,242,242) 58%);
-	background-image: -webkit-linear-gradient(bottom, rgb(222,222,222) 0%, rgb(242,242,242) 58%);
-	background-image: -ms-linear-gradient(bottom, rgb(222,222,222) 0%, rgb(242,242,242) 58%);
+	background-image: linear-gradient(bottom, rgb(207,207,207) 0%, rgb(242,242,242) 58%);
+	background-image: -o-linear-gradient(bottom, rgb(207,207,207) 0%, rgb(242,242,242) 58%);
+	background-image: -moz-linear-gradient(bottom, rgb(207,207,207) 0%, rgb(242,242,242) 58%);
+	background-image: -webkit-linear-gradient(bottom, rgb(207,207,207) 0%, rgb(242,242,242) 58%);
+	background-image: -ms-linear-gradient(bottom, rgb(207,207,207) 0%, rgb(242,242,242) 58%);
 
 	background-image: -webkit-gradient(
 		linear,
 			left bottom,
 				left top,
-					color-stop(0, rgb(222,222,222)),
+					color-stop(0, rgb(207,207,207)),
 						color-stop(0.58, rgb(242,242,242))
 						);
 }
@@ -275,12 +275,12 @@ hidden {
 }
 
 .post {
-  border-radius:10px;
-  -moz-border-radius:10px;
+  border-radius:3px;
+  -moz-border-radius:3px;
   margin-left:5%;
   margin-right:5%;
   margin-bottom: 30px;
-  box-shadow: 1px 2px 3px 2px rgba(0,0,0,.4);
+  box-shadow: 0 1px 2px 1px rgba(0,0,0,.4);
 }
 
 .question {
@@ -298,7 +298,7 @@ hidden {
   border-bottom-right-radius:5px;
   -moz-border-bottom-left-radius:5px;
   -moz-border-bottom-right-radius:5px;
-  background: #d3e3ff;
+	background: #BFFB90;
   padding:10px;
 }
 
@@ -370,4 +370,13 @@ hidden {
   position: fixed;
   width:300px;
   display:none;
+}
+
+.tab {
+  -webkit-border-top-left-radius: 6px;
+  -moz-border-top-left-radius: 6px;
+  border-top-left-radius: 6px;
+  -webkit-border-top-right-radius: 6px;
+  -moz-border-top-right-radius: 6px;
+  border-top-right-radius: 6px;
 }

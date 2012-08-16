@@ -1,28 +1,35 @@
-  <ul id="order_items">
-      <h2>Your Order</h2>
-      <label>Your Name:</label>
-			<% if @order.completed %>
-				<%= @order.customer_name %>
-			<% else %>
-				<input class="field" id="order_customer_name" name="order[customer_name]"
-				size="30" style="width:120px"type="text" value="<%=@order.customer_name%>"
-				onblur="jQuery.ajax({url:'<%= update_name_order_url(@order) %>',
-					datatype: 'script',
-					type: 'PUT',
-					data: 'order[customer_name]='+jQuery(this).val()})">
-			<% end %>
-      <br />
+<div class="description">
+	<h2>Your Order</h2>
+	<label>Your Name:</label>
+	<% if @order.completed %>
+		<%= @order.customer_name %>
+	<% else %>
+		<input class="field" id="order_customer_name" name="order[customer_name]"
+		size="30" style="width:120px"type="text" value="<%=@order.customer_name%>"
+		onblur="jQuery.ajax({url:'<%= update_name_order_url(@order) %>',
+			datatype: 'script',
+			type: 'PUT',
+			data: 'order[customer_name]='+jQuery(this).val()})">
+	<% end %>
+	<br />
 
-    <%= label_tag "Total:" %>
-    <%= format_price @order.price %>
-    <br />
+	<%= label_tag "Total:" %>
+	<%= format_price @order.price %>
+	<br />
 
-    <%= label_tag "Pick-up:" %>
-    <%= render "pickup_time_select", :@order => @order %>
-		<%= link_to "View Order", @order, :class => 'link' if @order.completed %>
-    <br />
+	<%= label_tag "Pick-up:" %>
+	<%= render "pickup_time_select", :@order => @order %>
+	<%= link_to "View Order", @order, :class => 'link' if @order.completed %>
+	<br />
 
+	<div style="display:inline-block">
 		<%= render 'paypal', :@order => @order %>
+	</div>
+	<div style="display:inline-block">
+		30¢  paypal fee
+	</div>
+</div>
+  <ul id="order_items">
 
     <% if @order.completed %>
 			<%= render 'completed_order', :@order => @order %>

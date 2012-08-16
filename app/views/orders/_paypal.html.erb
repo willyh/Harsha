@@ -2,11 +2,12 @@
 	function checkName(_this) {
 		if(jQuery("#order_customer_name").val().length > 0)
 			$(_this).up('form').submit();
+			//alert("These are not the droids you're looking for");
 		else
 			alert('Please enter your name');
 		}
 </script>
-<% unless @order.completed || @order.price <= 0 ||  @order.id != session[:order] %>
+<% unless @order.completed || @order.selections.count <= 0 ||  @order.id != session[:order] %>
 	<% form_tag APP_CONFIG['paypal_url'] do %>
 		<%= hidden_field_tag :cmd, "_s-xclick" %>
 		<% if @order.customer_name %>

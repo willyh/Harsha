@@ -1,23 +1,6 @@
-development: 
-  paypal_email: willyh_1312317819_biz@gmail.com 
-  paypal_secret: I_JUST_LOVE_CATS_SO_MUCH
-  paypal_cert_id: 3X8SEW3ARU9JS
-  paypal_url: "https://www.sandbox.paypal.com/cgi-bin/webscr"
-  admin_pass: kittens
-  time_interval_between_orders: 15
-  number_of_orders_per_time_slot: 3
-  open_hour: "11:30AM"
-  closing_hour: "10:00PM"
-  minimum_wait_time: 10
-
 production:
-  paypal_email: willyh_1321572574_biz@gmail.com
+  paypal_email: sanitarydiner@angieslist.com
   paypal_secret: wah
-  paypal_cert_id: MCAVL726HSTJE
-  paypal_url:  "https://www.sandbox.paypal.com/cgi-bin/webscr"
-  admin_pass: kittens
-  time_interval_between_orders: 15
-  number_of_orders_per_time_slot: 3
-  open_hour: "11:30AM"
-  closing_hour: "3:00PM"
-  minimum_wait_time: 15
+  paypal_cert_id: RRASE7RMA9DCW
+  paypal_url:  "https://www.paypal.com/cgi-bin/webscr"
+  admin_pass: motocafe1

@@ -20,8 +20,8 @@ class Order < ActiveRecord::Base
       :notify_url => notify_url,
       :cert_id => APP_CONFIG['paypal_cert_id']
     }
-    items = {}
-    index = 1
+    items = {:amount_1 => 0.3, :item_name_1 => "Paypal fee", :item_number_1 => 0, :quantity_1 => 1}
+    index = 2
     selections.each do |s|
       item = s.menu_item
       items["amount_#{index}"] = item.price
@@ -62,7 +62,7 @@ class Order < ActiveRecord::Base
   end
 
   def update_price!
-    p = 0
+    p = 0.3
     self.selections.each do |s|
       p += s.menu_item.price
       s.options.each do |o|
@@ -89,14 +89,28 @@ class Order < ActiveRecord::Base
   end
 
   def print
-    self.completed = true
-    self.save(false)
+		File.open("receipts/#{id}",'w') {|f| f.write(self)}
   end
 
+	def to_s
+		s = "Order: ##{id}\n"
+		s += "Name: #{customer_name}\n"
+		s += "Total: #{format_price price}\n"
+		s += "Pickup: #{pickup_time.localtime.strftime("%I:%M%p")}\n"
+		selections.each do |sel|
+			s += "  #{sel.menu_item.name}\n"
+			sel.options.each do |o|
+				s += "  - NO #{o.name}\n" if o.price <= 0
+				s += "  - #{o.name}\n" if o.price > 0
+			end
+		end
+		30.times do s += "-" end
+		return s
+	end
   private
 
   def init
-    self.price ||= 0
+    self.price ||= 0.3
     self.secret ||= rand(36**8).to_s(36)
     self.completed ||= false
   end
@@ -104,4 +118,5 @@ class Order < ActiveRecord::Base
   def validate_pickup_time
     self.pickup_time = nil unless self.completed
   end
+
 end

@@ -37,14 +37,14 @@
   <div class="item-names page-divider" style="width:40%;">
     <div class='scrollable'>
       <ul>
-        <h1>Order<%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
+        <h1 class='tab'>Order<%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
         <div id="dont_touch_me">
           <li id="order" class="item-name">
             Your Order
           </li>
         </div>
       <% @categories.each do |cat| %>
-        <h1><%=cat.name%><%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
+        <h1 class='tab'><%=cat.name%><%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
         <% cat.menu_items.select{|m|m.out_of_stock == false}.each do |item| %>
           <div name="Make the Animation Smoother" style="width:100%">
             <div style="display:table;overflow:auto;padding:5px;">
@@ -74,8 +74,8 @@
 <!-- floaty display -->
   <div class="page-divider">
     <div id="item-view" class="floaty-box">
-			<div class="">
-				<div id="order_info" class="item-info order_info scrollable" >
+			<div class="scrollable">
+				<div id="order_info" class="item-info order_info " >
 					<%=render 'editable_order', {:@order => @order} %>
 				</div>
 			</div>
@@ -90,7 +90,10 @@
             <% end %>
 
             <div class="description">
-              <h2>
+              <h2 style="cursor:pointer" onclick = "jQuery.ajax({url:'<%=add_item_to_order_url(@order)%>',
+                                      datatype: 'script',
+																			data: 'item=<%=item.id%>',
+                                      type: 'PUT'});">
                 <%= item.name %>
               </h2>
               <%= format_price item.price %>

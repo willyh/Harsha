@@ -43,10 +43,21 @@ class MenuItemsController < ApplicationController
       flash[:success] = "#{@new_item.name} successfully added to menu!"
 			redirect_to new_menu_item_path(:id => @menu_item.id)
     else
+			@category.delete if @category.menu_item.count == 0
       @head = "Error"
       render 'new'
     end
   end
+
+	def edit
+    @new_item = MenuItem.new
+    @menu_item = MenuItem.find(params[:id])
+    @new_option = Option.new
+    @category = Category.new
+    @head = "Check Out Your Menu"
+    @categories = Category.all
+    @options = Option.all
+	end
 
   def update
     @new_item = MenuItem.new
@@ -78,8 +89,13 @@ class MenuItemsController < ApplicationController
       flash[:success] = "Successful change"
 			redirect_to new_menu_item_path(:id => @menu_item.id)
     else
-      @head = "Error"
-			redirect_to new_menu_item_path(:id => @menu_item.id)
+			@new_item = MenuItem.new
+			@new_option = Option.new
+			@category = Category.new
+			@head = "Check Out Your Menu"
+			@categories = Category.all
+			@options = Option.all
+			render 'new'
     end
   end
 
@@ -130,29 +146,30 @@ class MenuItemsController < ApplicationController
   end
 
   def change_order
-    unless(params[:display_order].nil?)
       @menu_item = MenuItem.find(params[:id])
       @swap_item = Category.find(@menu_item.category_id).menu_items.find_by_display_order(params[:display_order])
-      unless(@menu_item.display_order.nil? || @swap_item.nil?)
-        temp = @menu_item.display_order
-        @swap_item.display_order = temp
-        @swap_item.save
-      end
-      @menu_item.display_order = params[:display_order]
-      @menu_item.save
+			unless(params[:display_order].blank?)
+				unless(@menu_item.display_order.nil? || @swap_item.nil?)
+					temp = @menu_item.display_order
+					@swap_item.display_order = temp
+					@swap_item.save
+				end
+				@menu_item.display_order = params[:display_order]
+				@menu_item.save
+			end
 
       render(:update) {|page|
-        page << "jQuery('##{@swap_item.id}').find('input').val('#{@swap_item.display_order}')"
-        page << "jQuery('##{@menu_item.id}').swap('##{@swap_item.id}')"
+        page << "jQuery('##{@menu_item.id}').swap('##{@swap_item.id}')" if @swap_item
+				page << "jQuery('##{@menu_item.id}').find('input').val('#{@menu_item.display_order}')"
+        page << "jQuery('##{@swap_item.id}').find('input').val('#{@swap_item.display_order}')" if @swap_item
       }
-    end
   end
 
   def add_option
     if Option.exists?(params[:option]) && MenuItem.exists?(params[:id])
       @option = Option.find(params[:option])
       @menu_item = MenuItem.find(params[:id])
-      @menu_item.options << @option
+      @menu_item.options << @option unless @menu_item.options.include?(@option)
     end
     render(:update) {|page|
       page.replace_html "#{@menu_item.id}_options", {:partial => "editable_options", :locals => {:item => @menu_item}}
@@ -164,7 +181,7 @@ class MenuItemsController < ApplicationController
     if Option.exists?(params[:option]) && MenuItem.exists?(params[:id])
       @option = Option.find(params[:option])
       @menu_item = MenuItem.find(params[:id])
-      @menu_item.options.delete @option
+      @menu_item.options.delete @option if @menu_item.options.include?(@option)
     end
     render(:update) {|page|
       page.replace_html "#{@menu_item.id}_options", {:partial => "editable_options", :locals => {:item => @menu_item}}

@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
 
   def create
     session[:password] = params[:session][:password]
-    if session[:password] == "kittens"
+    if session[:password] == APP_CONFIG['admin_pass']
       flash[:success] = "Welcome Back Captain!"
       redirect_to edit_setting_path(1)
     else

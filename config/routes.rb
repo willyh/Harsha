@@ -17,13 +17,16 @@ DinerApp::Application.routes.draw do
     put 'change_order', :on => :member
   end
 
+
   resources :orders do
+		put 'add_feature', :on => :member
     put 'update_name', :on => :member
     put 'complete', :on => :member
     put 'add_item_to', :on => :member
     put 'remove_item_from', :on => :member
     put 'alter_option', :on => :member
   end
+
 
   resources :options do
     put 'toggle_stock', :on => :member

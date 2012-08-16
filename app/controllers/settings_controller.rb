@@ -8,12 +8,12 @@ class SettingsController < ApplicationController
   def update
     @settings = Setting.first
     attrs = params[:setting]
-    o = @settings.opens_at
+    o = @settings.opens_at.localtime
     open = Time.local(o.year,o.month,o.day,
       params[:opens_at_hour].to_i % 12 + (12*((params[:opens_at_ampm] == "AM") ? 0 : 1)),
       params[:opens_at_min].to_i)
     attrs[:opens_at] = open
-    c = @settings.closes_at
+    c = @settings.closes_at.localtime
     close = Time.local(c.year,c.month,c.day,
       params[:closes_at_hour].to_i % 12 + (12*((params[:closes_at_ampm] == "AM") ? 0 : 1)),
       params[:closes_at_min].to_i)

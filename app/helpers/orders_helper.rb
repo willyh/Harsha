@@ -53,7 +53,7 @@ module OrdersHelper
   end
 
   def next_time
-    now = round_up Time.now
+    now = round_up Time.now.localtime
 		opens_at = Setting.first.opens_at.localtime
     if now < opens_at
       now = Time.local(now.year, now.month, now.day, opens_at.hour, opens_at.min)

@@ -34,7 +34,7 @@
     <div class='scrollable'>
       <ul>
       <% @categories.each do |cat| %>
-        <h1><%=cat.name%><%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
+        <h1 class='tab'><%=cat.name%><%=image_tag('circle-arrow-down.png', :style => 'float:right;margin-right:5px;margin-top:5px;')%></h1>
         <% cat.menu_items.select{|m|m.out_of_stock == false}.each do |item| %>
           <div name="Make the Animation Smoother" style="width:100%">
             <div style="display:table;overflow:auto;padding:5px;">

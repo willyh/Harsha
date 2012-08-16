@@ -18,6 +18,6 @@ class ApplicationController < ActionController::Base
   end
 
   def admin?
-    session[:password] == "kittens"
+    session[:password] == APP_CONFIG['admin_pass']
   end
 end

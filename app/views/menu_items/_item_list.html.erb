@@ -1,15 +1,12 @@
-<% form_for(@menu_item) do |f| %>
-	<%= render 'shared/error_messages', :object => f.object %>
-<% end %>
 <ul>
-  <h1>
+  <h1 class='tab'>
     New Item
   </h1>
   <li id="new-item" class="item-name">
     New Item
   </li>
 <% @categories.each do |cat| %>
-  <h1 id="c<%=cat.id%>">
+  <h1 id="c<%=cat.id%>" class='tab item-name'>
     <%= text_field_tag :display_order, cat.display_order,
       {:onBlur => "jQuery.ajax({
                       url:'#{change_order_category_url(cat)}',
@@ -39,4 +36,3 @@
     <% end %>
 <% end %>
 </ul>
-<%= render 'options/option_list', :@options => @options %>

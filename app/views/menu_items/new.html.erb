@@ -1,8 +1,14 @@
 <div style="display:table;width:100%;table-layout:fixed;">
   <div class="item-names page-divider" style="width:40%;">
-    <div id="item_list" class='scrollable'>
-			<%= render 'item_list', :@categories => @categories, :@options => @options, :@menu_item => @menu_item %>
-    </div>
+		<div class="scrollable">
+			<% form_for(@menu_item) do |f| %>
+				<%= render 'shared/error_messages', :object => f.object %>
+			<% end %>
+			<div id="item_list">
+				<%= render 'item_list', :@categories => @categories, :@options => @options, :@menu_item => @menu_item %>
+			</div>
+			<%= render 'options/option_list', :@options => @options %>
+		</div>
   </div>
 
   <div class="page-divider">
@@ -20,7 +26,7 @@
             <% end %>
             <%= select_tag(:category_selector, options_for_select(options), :class => 'category_selector') %>
             <hidden class="new_category_field" >
-            <%=f.text_field :category, :class => 'field' %>
+						<%=f.text_field :category, :value => "#{@category.nil? ? '' : @category.name}", :class => 'field' %>
             </hidden>
               <div>
                 <%= f.label "Photo:" %>
@@ -46,6 +52,18 @@
       </div>
 
       <% @categories.each do |cat| %>
+				<div class="c<%= cat.id%>_info item-info scrollable">
+					<div class="description">
+						<% form_for(cat) do |f| %>
+							<h2>
+								Change Category Name
+							</h2> 
+							<%= f.text_field :name %>
+							<%= link_to_function "Submit", "$(this).up('form').submit()", :class => 'link' %>
+						<% end %>
+            <%=button_to "Delete", cat, :method => :delete, :confirm => "Are you sure?" if cat.menu_items.count == 0%>
+					</div>
+				</div>
         <% cat.menu_items.each do |item| %>
           <div class="<%= item.id%>_info item-info scrollable">
             <% form_for(item, :html => {:multipart => true}) do |f| %>
@@ -203,6 +221,9 @@
   });
 
   function addDisplayOrderListeners() {
+		jQuery(".category-order").bind('focus',function() {
+			jQuery(this).val('');
+		});
     jQuery(".category-order").bind('keydown', function(e) {
         if(e.keyCode == 13) {
           window.scrollTo(0,0);
@@ -216,6 +237,9 @@
         }
       });
 
+		jQuery(".item-order").bind('focus',function() {
+			jQuery(this).val('');
+		});
     jQuery(".item-order").bind('keydown', function(e) {
         if(e.keyCode == 13) {
           window.scrollTo(0,0);

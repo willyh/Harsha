@@ -3,9 +3,10 @@ class Setting < ActiveRecord::Base
 
   has_attached_file :photo,
     :styles => {
-			:small => "57x57!",
-      :medium => "280x",
-      :large => "640x" }
+			:fav => "16x16!",
+			:iphone => "57x57!",
+      :ipad => "72x72!",
+      :highRes => "114x114!" }
 
   def init
     self.home_page_text ||= ""

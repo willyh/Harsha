@@ -42,11 +42,13 @@
   });
 </script>
 <head>
-  <link rel="shortcut icon" href="/favicon.ico"/>
   <title><%= "#{@head}" %></title>
 	<% if Setting.first && Setting.first.photo.exists? %>
-		<link rel="apple-touch-icon" href="<%= Setting.first.photo.url %>"/>
-		<link rel="apple-touch-icon-precomposed" href="icon" />
+		<% @setting = Setting.first %>
+		<link rel="shortcut icon" href="<%= @setting.photo.url(:fav) %>"/>
+		<link rel="apple-touch-icon" href="<%= @setting.photo.url(:iphone) %>"/>
+		<link rel="apple-touch-icon" sizes="72x72" href="<%= @setting.photo.url(:ipad) %>"/>
+		<link rel="apple-touch-icon" sizes="114x114" href="<%= @setting.photo.url(:highRes) %>"/>
 	<% end %>
 </head>
 
@@ -73,9 +75,15 @@
   <%= yield %>
 </div>
 <div class="sticky navigation-bar">
-  <div class="nav_item" onclick="location.href='<%=admin? ? edit_setting_url(1) : home_url%>';">
+<% if admin? %>
+  <div class="nav_item" onclick="location.href='<%= edit_setting_url(1) %>';">
+    Settings
+  </div>
+<% else %>
+  <div class="nav_item" onclick="location.href='<%= home_url%>';">
     Home
   </div>
+<% end %>
 <% if admin? %>
   <div class="nav_item" onclick="location.href='<%=new_menu_item_url%>';">
     Edit Menu
@@ -95,6 +103,13 @@
 </div>
 </body>
 
+<!--[if IE]>
+	<script type='text/javascript'>
+		jQuery(document).ready(function() {
+      jQuery('body').css('visibility','visible');
+		});
+	</script>
+<![endif]-->
 <script type="text/javascript">
     var $window = jQuery(window);
 
@@ -153,7 +168,6 @@
       document.addEventListener('touchmove', stopScrolling, false);
       window.scrollTo(0, 0);
       var body = jQuery("body");
-      jQuery('html').css('visibility','hidden');
       if(window.screen.width >= 700) {
         body.width('700');
         jQuery(".mobile").hide();

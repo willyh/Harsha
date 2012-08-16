@@ -7,12 +7,13 @@ module SettingsHelper
   end
 
 	def feature_options
-		ops = {"none" => 0}
+		ops = {}
 		Category.all.each do |c|
-			c.menu_items.each do |i|
-				ops[i.name] = i.id
+			c.menu_items.select{|i|i.in_stock}.each do |i|
+				ops.merge!({i.name => i.id})
 			end
 		end
+		ops = ops.sort.unshift(["none", 0])
 		return ops
 	end
 end

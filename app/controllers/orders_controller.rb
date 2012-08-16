@@ -1,25 +1,15 @@
 class OrdersController < ApplicationController
   helper_method :build_menu
-  before_filter :completed_yet, :except => [:new, :create, :show, :complete ]
-  before_filter :website_active?, :only => [:new, :create]
+  before_filter :completed_yet, :except => [:new, :create, :show, :complete, :add_feature ]
+  before_filter :website_active?, :only => [:new, :create, :add_feature]
   def new
     if session[:order] && Order.exists?(session[:order])
       @order = Order.find(session[:order]) 
-        @order = Order.create() if @order.completed && !@order.pickup_time.nil?
+			@order = Order.create() if @order.completed && !@order.pickup_time.nil?
     else
       @order = Order.create()
     end
     session[:order] = @order.id
-		@settings = Setting.first
-		if params[:feature] == "yes" && MenuItem.exists?(@settings.feature)
-			@feature = MenuItem.find(@settings.feature)
-			if @order.selections.empty?
-				@order.selections << 
-				@order.selections << Selection.new(:menu_item => @feature)
-				@order.update_price!
-				@order.save
-			end
-		end
 
     @categories = Category.all.select{|c|
       c.menu_items.select{|m|
@@ -28,6 +18,27 @@ class OrdersController < ApplicationController
     }
     @head = "Check Out Our Menu!"
   end
+
+	def add_feature
+    if session[:order] && Order.exists?(session[:order])
+      @order = Order.find(session[:order]) 
+			@order = Order.create() if @order.completed && !@order.pickup_time.nil?
+    else
+      @order = Order.create()
+    end
+		@settings = Setting.first
+		if MenuItem.exists?(@settings.feature)
+			@feature = MenuItem.find(@settings.feature)
+			if @order.selections.empty?
+				@order.selections << Selection.new(:menu_item => @feature)
+				@order.update_price!
+				@order.save
+			end
+		end
+    session[:order] = @order.id
+		redirect_to new_order_path
+
+	end
 
   def index
     redirect_to new_order_path
@@ -44,6 +55,7 @@ class OrdersController < ApplicationController
     if @order.completed && params[:order] && params[:order][:pickup_time] && (has_pickup_time? (Time.parse params[:order][:pickup_time]))
       @order.update_attributes(:pickup_time => params[:order][:pickup_time])
       flash[:success] = "Thank you, Please come down at #{format_time @order.pickup_time.to_time.localtime} to pick up your order"
+			@order.print
       redirect_to order_path(params[:id])
     else
       flash[:error] = "That pickup time is either full or invalid. Please choose another"
