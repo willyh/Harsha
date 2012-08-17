@@ -90,6 +90,7 @@ class Order < ActiveRecord::Base
 
   def print
 		File.open("receipts/#{id}",'w') {|f| f.write(self)}
+		%x[lp receipts/#{id}]
   end
 
 	def to_s

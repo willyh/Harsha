@@ -1,8 +1,6 @@
 == Diner App ==
-This app is being made for the MotoCafe so they can have an online ordering system.
-Stage 1:
-Create an editable menu
-Stage 2:
-Make it possible to place orders
-Stage 3:
-Payment
+Website is ready, but hardware is not
+
+Someone needs to hook up the receipt printer to the network then add it as the default printer for the server
+
+Then online ordering will be ready!
