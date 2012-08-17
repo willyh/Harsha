@@ -259,6 +259,8 @@ protected
   end
 
   def has_pickup_time? time
+		time = time.change(:sec => 0)
+		time = time.change(:usec => 0)
     @settings = Setting.first
 		closes_at = @settings.closes_at.localtime
 		opens_at = @settings.opens_at.localtime

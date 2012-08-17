@@ -15,7 +15,7 @@
 			<%= hidden_field_tag :first_name, names[0] if names.count > 0%>
 			<%= hidden_field_tag :last_name, names[-1] if names.count > 1%>
 		<% end %>
-		<%= hidden_field_tag :encrypted, @order.paypal_encrypted(payment_notifications_url+"?id=#{@order.id}&key=#{@order.secret}", payment_notifications_url(:secret => APP_CONFIG['paypal_secret'])) %>
+		<%= hidden_field_tag :encrypted, @order.paypal_encrypted(payment_notifications_url+"?id=#{@order.id}&key=#{@order.secret}", payment_notifications_url+"?id=#{@order.id}&key=#{@order.secret}") %>
 		<%= link_to_function "Pay Now", "checkName(this)", :class => 'link'%>
 	<% end %>
 <% end %>
