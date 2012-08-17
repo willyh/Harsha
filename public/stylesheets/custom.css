@@ -20,11 +20,11 @@ html {
 
 .header {
   top:0;
+	color: white;
   font-size:130%;
   padding: 8px;
 	margin-bottom:10px;
   text-align: center;
-  font-weight: bold;
 	background: #7FBB00;
   z-index:99;
 	width:100%;
